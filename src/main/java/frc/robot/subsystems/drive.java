@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.automations.Vision;
 import frc.robot.subsystems.automations.autoAlign;
 
 import static edu.wpi.first.units.Units.Meters;
@@ -238,6 +239,18 @@ public class drive extends SubsystemBase {
 
     public void resetRobotPose(Pose2d pose){
         swerveDrive.resetOdometry(pose);
+    }
+
+    public void updateSwervePoseEstimator() {
+        swerveDrive.updateOdometry();
+
+        var estPoseOption = Vision.getInstance().getVisionPose();
+        
+        if (estPoseOption.isPresent()) {
+            var estPose = estPoseOption.get();
+            swerveDrive.addVisionMeasurement(estPose.estimatedPose.toPose2d(), estPose.timestampSeconds);
+        }
+        
     }
 
     //Update advantage scope periodically

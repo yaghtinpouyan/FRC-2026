@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 //Vision imports
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -130,6 +131,18 @@ public class Vision extends SubsystemBase{
         visionSim.resetRobotPose(resetPose);
         visionSim.clearCameras(); //Problematic line
         visionSim.clearVisionTargets(); //Problematic line
+    }
+
+    public Optional<EstimatedRobotPose> getVisionPose() {
+        var result = camera.getLatestResult();
+        Optional<EstimatedRobotPose> estPose = poseEstimator.estimateCoprocMultiTagPose(result);
+
+        if (estPose.isEmpty()) {
+            estPose = poseEstimator.estimateLowestAmbiguityPose(result);
+            camera.getAllUnreadResults();
+        }
+
+        return estPose;
     }
 
     public static Vision getInstance(){

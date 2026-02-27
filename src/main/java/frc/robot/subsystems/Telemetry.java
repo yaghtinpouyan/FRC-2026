@@ -31,6 +31,9 @@ public class Telemetry extends SubsystemBase{
         currentVelocity = drivetrain.getRobotSpeed();
         double botVelocity = Math.hypot(currentVelocity.vxMetersPerSecond, currentVelocity.vyMetersPerSecond);
         SmartDashboard.putNumber("Velocity", botVelocity);
+
+        // update odemetry
+        drivetrain.updateSwervePoseEstimator();
     }
 
     public static Telemetry getInstance(){
