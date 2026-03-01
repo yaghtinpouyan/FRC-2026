@@ -129,7 +129,7 @@ public class Vision extends SubsystemBase{
                 visionEst = poseEstimator.estimateLowestAmbiguityPose(result);
             }
             updateEstimationStdDevs(visionEst, result.getTargets());
-            
+
             if (Robot.isSimulation()) {
                 visionEst.ifPresentOrElse(
                         est ->

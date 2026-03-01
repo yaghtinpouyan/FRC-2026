@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Meters;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
@@ -24,13 +25,16 @@ import frc.robot.subsystems.drive;
 public class autoAlign extends SubsystemBase{
     private static autoAlign align = null;
     private drive drivetrain = drive.getInstance();
-    Map<Pose2d, Pose2d> pathMap = new HashMap<>();
+    Map<Pose2d, Pose2d> intermediatePoseMap = new HashMap<>();
     Map<Integer, Pose2d> tagMap = new HashMap<>();
 
     //Commented out because all of the auto align paths haven't been made yet
 
     private autoAlign(){
-  
+        intermediatePoseMap.put(autoConstants.BlueTrenchLeft, autoConstants.BlueTrenchLeftI);
+        intermediatePoseMap.put(autoConstants.RedTrenchLeft, autoConstants.RedTrenchLeftI);
+        intermediatePoseMap.put(autoConstants.RedTrenchRight, autoConstants.RedTrenchRightI);
+        intermediatePoseMap.put(autoConstants.BlueTrenchRight, autoConstants.BlueTrenchRightI);
     }
 
     public Rotation2d getHubYaw(){
@@ -74,10 +78,48 @@ public class autoAlign extends SubsystemBase{
         AutoBuilder.followPath(path).schedule();  //Follow path
     }
 
-    public void travelToTower(){
-        Pose2d towerPos = (Constants.currentAlliance.get() == Alliance.Blue) ? autoConstants.TowerB : autoConstants.TowerR;
-        Pose2d towerIPos = (Constants.currentAlliance.get() == Alliance.Blue) ? autoConstants.TowerBI : autoConstants.TowerRI;
-        followGeneratedPath(towerIPos, towerPos);
+    public void travelToTower(boolean confirmAlign){
+        if(confirmAlign){
+            Pose2d towerPos = (Constants.currentAlliance.get() == Alliance.Blue) ? autoConstants.TowerB : autoConstants.TowerR;
+            Pose2d towerIPos = (Constants.currentAlliance.get() == Alliance.Blue) ? autoConstants.TowerBI : autoConstants.TowerRI;
+            followGeneratedPath(towerIPos, towerPos);
+        }
+    }
+
+    public void alignToTrench(boolean confirmAlign){
+        Optional<Pose2d> trenchPose = getTrenchToAlign();
+
+        if(trenchPose.isPresent() && confirmAlign){
+            Pose2d targetTrench = trenchPose.get();
+            Pose2d targetTrenchI = intermediatePoseMap.get(targetTrench);
+            followGeneratedPath(targetTrench, targetTrenchI);
+        }
+    }
+
+    public Optional<Pose2d> getTrenchToAlign() {
+        Pose2d botPose = drivetrain.getRobotPose();
+        if (botPose.getTranslation().getDistance(autoConstants.BlueTrenchLeft.getTranslation()) < 1) {
+            return Optional.of(autoConstants.BlueTrenchLeft);
+        }
+        if (botPose.getTranslation().getDistance(autoConstants.BlueTrenchRight.getTranslation()) < 1) {
+            return Optional.of(autoConstants.BlueTrenchRight);
+        }
+
+        if (botPose.getTranslation().getDistance(autoConstants.RedTrenchLeft.getTranslation()) < 1) {
+            return Optional.of(autoConstants.RedTrenchLeft);
+        }
+
+        if (botPose.getTranslation().getDistance(autoConstants.RedTrenchRight.getTranslation()) < 1) {
+            return Optional.of(autoConstants.RedTrenchRight);
+        }
+
+        return Optional.empty();
+
+        // Pose2d botPose = drivetrain.getRobotPose();
+        // return botPose.getTranslation().getDistance(autoConstants.BlueTrenchLeft.getTranslation()) < 1 ||
+        //        botPose.getTranslation().getDistance(autoConstants.BlueTrenchRight.getTranslation()) < 1 ||
+        //        botPose.getTranslation().getDistance(autoConstants.RedTrenchRight.getTranslation()) < 1 ||
+        //        botPose.getTranslation().getDistance(autoConstants.RedTrenchLeft.getTranslation()) < 1;
     }
 
     public static autoAlign getInstance(){

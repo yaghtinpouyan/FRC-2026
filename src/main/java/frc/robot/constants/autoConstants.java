@@ -18,6 +18,19 @@ public final class autoConstants {
     public static final Pose2d TowerR = new Pose2d(15.5, 3.7, Rotation2d.fromDegrees(0)); //red
     public static final Pose2d TowerRI = new Pose2d(14.5, 3.7, Rotation2d.fromDegrees(0));
 
+    //Trench Poses
+    public static final Pose2d RedTrenchRight = new Pose2d(11.9, 7.4, Rotation2d.fromDegrees(0));
+    public static final Pose2d RedTrenchRightI = new Pose2d(12.4, 7.4, Rotation2d.fromDegrees(0));
+    public static final Pose2d RedTrenchLeft = new Pose2d(11.9, 0.7, Rotation2d.fromDegrees(0));
+    public static final Pose2d RedTrenchLeftI = new Pose2d(12.4, 0.7, Rotation2d.fromDegrees(0));
+
+    //point1: blue trench right is x = 4.6, y = 7.4
+    // point2: blue trench right x = 4.6, y = 0.6
+    public static final Pose2d BlueTrenchRight = new Pose2d(4.6, 7.4, Rotation2d.fromDegrees(0));
+    public static final Pose2d BlueTrenchRightI = new Pose2d(5.1, 7.4, Rotation2d.fromDegrees(0));
+    public static final Pose2d BlueTrenchLeft = new Pose2d(4.6, 0.6, Rotation2d.fromDegrees(0));
+    public static final Pose2d BlueTrenchLeftI = new Pose2d(5.1, 0.6, Rotation2d.fromDegrees(0));
+
     //Blue april tags (Outpost = O, Climbing Area = C, Trench = T, Hub = H, B = blue)
     public static final int tagBH1 = 18;
     public static final int tagBH2 = 19;
