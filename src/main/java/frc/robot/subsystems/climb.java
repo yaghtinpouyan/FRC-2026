@@ -7,6 +7,9 @@ import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
+
 
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -82,6 +85,10 @@ public class climb extends SubsystemBase{
         else{
             climbingSystem.setHeight(Meter.of(.0)).schedule();
         }
+    }
+
+    public void sysId(double voltage,double step,double duration){
+        climbingSystem.sysId(Volts.of(voltage), Volts.of(step).per(Second), Seconds.of(duration)).schedule();
     }
 
     public void climbInputHandler(int dPad){

@@ -214,8 +214,12 @@ public class shooter extends SubsystemBase{
     }
   }
 
-  public void sysId() {
-    mainShooter.sysId(Volts.of(10), Volts.of(1).per(Second), Seconds.of(5));
+  public void flyWheelSysId(double voltage,double step,double duration) {
+    mainShooter.sysId(Volts.of(voltage), Volts.of(step).per(Second), Seconds.of(duration)).schedule();;
+  }
+
+  public void hoodSysId(double voltage,double step,double duration) {
+    hood.sysId(Volts.of(voltage), Volts.of(step).per(Second), Seconds.of(duration)).schedule();;
   }
 
   @Override

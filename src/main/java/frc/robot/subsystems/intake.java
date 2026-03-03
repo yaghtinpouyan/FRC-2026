@@ -10,6 +10,7 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -121,6 +122,7 @@ public class intake extends SubsystemBase{
     //Pivot Code
     ArmConfig pivotConfig = new ArmConfig(pivotingSystem)
       .withLength(Meters.of(0.3366))
+      .withSoftLimits(Degrees.of(-60), Degrees.of(60)) 
       .withHardLimit(Degrees.of(-62), Degrees.of(62)) //IMPORTANT FIND ANGLE LIMITS
       .withTelemetry("Pivot", TelemetryVerbosity.HIGH)
       .withMass(Pounds.of(1))
@@ -166,6 +168,10 @@ public class intake extends SubsystemBase{
         }
     } 
 
+    public void sysId(double voltage,double step,double duration){
+        pivot.sysId(Volts.of(voltage), Volts.of(step).per(Second), Seconds.of(duration)).schedule();
+    }
+
     public void intakeInputHandler(boolean input1, double input2){
         changeIntakeState(input1);
         if(input2 > 0.3){
@@ -175,6 +181,7 @@ public class intake extends SubsystemBase{
         }
     }
 
+    
     public static intake getInstance(){
         if (ballIntake == null){
             ballIntake = new intake();
