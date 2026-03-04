@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MMR 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MMR 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MMR 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MMR 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MMR 5"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "2026",
+  "choreoAuto": false
+}

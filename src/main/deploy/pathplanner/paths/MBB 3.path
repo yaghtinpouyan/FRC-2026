@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": 91.16913932790752
   },
   "reversed": false,
   "folder": "2026 Main Bottom Blue",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 93.04477844419401
+    "rotation": 93.04477844419402
   },
   "useDefaultConstraints": true
 }
