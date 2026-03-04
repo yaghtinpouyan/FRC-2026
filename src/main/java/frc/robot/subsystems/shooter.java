@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
@@ -29,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.autoConstants;
 import frc.robot.constants.idConstants;
 import frc.robot.subsystems.automations.autoAlign;
+import frc.robot.constants.Constants;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -102,7 +104,7 @@ public class shooter extends SubsystemBase{
     //YAMS
     krakenConfig = new SmartMotorControllerConfig(this)
     .withClosedLoopController(0.00016541, 0, 0, RPM.of(6000), RotationsPerSecondPerSecond.of(2500))
-    .withGearing(new MechanismGearing(GearBox.fromReductionStages(0)))
+    .withGearing(new MechanismGearing(GearBox.fromReductionStages(1)))
     .withIdleMode(MotorMode.COAST)
     .withTelemetry("ShooterMotor", TelemetryVerbosity.HIGH)
     .withStatorCurrentLimit(Amps.of(40))
@@ -154,7 +156,10 @@ public class shooter extends SubsystemBase{
     hoodConfig = new ArmConfig(hoodSystem)
     .withTelemetry("Hood", TelemetryVerbosity.HIGH)
     .withSoftLimits(Degrees.of(5), Degrees.of(10))
-    .withHardLimit(Degrees.of(0), Degrees.of(15));
+    .withHardLimit(Degrees.of(0), Degrees.of(15))
+    .withLength(Constants.hoodArmLength)
+    .withStartingPosition(Degrees.of(67)) // TODO: placeholder #
+    .withMass(Kilograms.of(1)); // TODO: placeholder #
 
     mainShooter = new FlyWheel(shooterConfig);
     hood = new Arm(hoodConfig);
@@ -214,8 +219,12 @@ public class shooter extends SubsystemBase{
     }
   }
 
-  public void sysId() {
-    mainShooter.sysId(Volts.of(10), Volts.of(1).per(Second), Seconds.of(5));
+  public void flyWheelSysId(double voltage,double step,double duration) {
+    mainShooter.sysId(Volts.of(voltage), Volts.of(step).per(Second), Seconds.of(duration)).schedule();;
+  }
+
+  public void hoodSysId(double voltage,double step,double duration) {
+    hood.sysId(Volts.of(voltage), Volts.of(step).per(Second), Seconds.of(duration)).schedule();;
   }
 
   @Override
