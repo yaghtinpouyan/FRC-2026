@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.5,
-        "y": 5.399850171232877
+        "x": 7.8120111111111115,
+        "y": 5.564877777777777
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.499999999999993,
-        "y": 5.399850171232877
+        "x": 7.8120111111111115,
+        "y": 5.954655555555555
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "MBTE 2"
     },
     {
       "anchor": {
-        "x": 3.277900232027844,
-        "y": 1.215371229701708
+        "x": 7.8120111111111115,
+        "y": 7.513766666666667
       },
       "prevControl": {
-        "x": 2.277900232027844,
-        "y": 1.2153712297017083
+        "x": 7.782777777777778,
+        "y": 6.588044444444445
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "MBTE 3"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "2025",
+  "folder": "2026 Main Top Blue",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -87.13759477388837
   },
   "useDefaultConstraints": true
 }

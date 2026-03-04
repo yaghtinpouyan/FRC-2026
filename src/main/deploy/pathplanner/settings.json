@@ -5,9 +5,16 @@
   "pathFolders": [
     "2 Coral L4 Blue",
     "2 Coral L4 Red",
-    "3 Coral L4 Blue"
+    "2025",
+    "2026 Main Mid Blue",
+    "2026 Main Top Blue",
+    "3 Coral L4 Blue",
+    "2026 Main Bottom Blue"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "2025",
+    "2026"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 540.0,

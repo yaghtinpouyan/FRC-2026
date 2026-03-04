@@ -7,31 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Cycle 1R"
+            "pathName": "MB 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Pickup 1R"
+            "pathName": "MB 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Cycle 2R"
+            "pathName": "MB 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Pickup 2R"
+            "pathName": "MB 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MB 5"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "2025",
+  "folder": "2026",
   "choreoAuto": false
 }
