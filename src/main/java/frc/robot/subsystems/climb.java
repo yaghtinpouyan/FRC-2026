@@ -89,7 +89,7 @@ public class climb extends SubsystemBase{
         if(dPad == 180) setArmPos(false);
         if(dPad == 270) {
             ballIntake.stateIntaking = false;
-            align.travelToTower();
+            align.travelToTower(true);
         }
     }
 
