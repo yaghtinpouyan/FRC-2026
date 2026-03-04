@@ -155,11 +155,11 @@ public class shooter extends SubsystemBase{
 
     hoodConfig = new ArmConfig(hoodSystem)
     .withTelemetry("Hood", TelemetryVerbosity.HIGH)
-    .withSoftLimits(Degrees.of(5), Degrees.of(10))
+    .withSoftLimits(Degrees.of(0.5), Degrees.of(14.5))
     .withHardLimit(Degrees.of(0), Degrees.of(15))
     .withLength(Constants.hoodArmLength)
-    .withStartingPosition(Degrees.of(67)) // TODO: placeholder #
-    .withMass(Kilograms.of(1)); // TODO: placeholder #
+    .withStartingPosition(Degrees.of(Constants.startingHoodAngle)) 
+    .withMass(Constants.hoodMass); 
 
     mainShooter = new FlyWheel(shooterConfig);
     hood = new Arm(hoodConfig);

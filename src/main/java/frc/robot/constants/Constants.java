@@ -2,9 +2,12 @@ package frc.robot.constants;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
+import static edu.wpi.first.units.Units.Kilogram;
+import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 
 import java.util.Optional;
@@ -43,7 +46,7 @@ public final class Constants {
   public static final double climbSysIdStep = 1.0;
   public static final double climbSysIdDuration = 5.0;
   
-  //Shooter Subsystem
+  //Flywheel Subsystem
   public static final double flyWheelSysIdMaxVoltage = 10;
   public static final double flyWheelSysIdStep = 1;
   public static final double flyWheelSysIdDuration = 5;
@@ -52,6 +55,8 @@ public final class Constants {
   public static final double hoodSysIdMaxVoltage = 10;
   public static final double hoodSysIdStep = 1;
   public static final double hoodSysIdDuration = 5;
-
+  public static final double startingHoodAngle = 5.019;
   public static final Distance hoodArmLength = Meters.of(0.33176);
+  public static final Mass hoodMass = Kilograms.of(1.451496);
+
 }
