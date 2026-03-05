@@ -157,6 +157,7 @@ public class drive extends SubsystemBase {
 
     public void driveInputHandler(double x, double y, double theta, boolean toggle1, boolean toggle2){
         switchModes(toggle1, toggle2);
+        LEDS.teleopBlink();
         if(driveLock){
             rotateToYaw(x, y);
             ballIntake.stateIntaking = false;
