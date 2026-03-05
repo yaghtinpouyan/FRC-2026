@@ -48,7 +48,7 @@
   "folder": "2026 Main Mid Red",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.07852362378645
   },
   "useDefaultConstraints": true
 }
