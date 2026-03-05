@@ -29,6 +29,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.autoConstants;
 import frc.robot.constants.idConstants;
+import frc.robot.constants.velocityMap;
 import frc.robot.subsystems.automations.autoAlign;
 import frc.robot.constants.Constants;
 import frc.robot.constants.angleMap;
@@ -190,7 +191,7 @@ public class shooter extends SubsystemBase{
   
   private AngularVelocity getFlyWheelVel(){
     double targetDist = getVirtualTarget(align.getHubDist()); 
-    AngularVelocity targetVelocity = RotationsPerSecond.of(autoConstants.velocityMap.get(targetDist));
+    AngularVelocity targetVelocity = RotationsPerSecond.of(velocityMap.mainMap.get(targetDist));
     return targetVelocity;
   }
 

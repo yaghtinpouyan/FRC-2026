@@ -16,6 +16,7 @@ import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -60,7 +61,7 @@ public class autoAlign extends SubsystemBase{
     }
 
     private Pose2d getHubPos(){
-        Pose2d hubPos = (Constants.currentAlliance.get() == Alliance.Blue) ? autoConstants.HubB : autoConstants.HubR;
+        Pose2d hubPos = (DriverStation.getAlliance().get() == Alliance.Blue) ? autoConstants.HubB : autoConstants.HubR;
         return hubPos;
     }
 

@@ -72,8 +72,4 @@ public final class autoConstants {
     
     public static final int tagRO1 = 13;
     public static final int tagRO2 = 14;
-
-    //Shooting Map
-    public static InterpolatingDoubleTreeMap velocityMap = new InterpolatingDoubleTreeMap();
-    public static InterpolatingDoubleTreeMap AngleMap = new InterpolatingDoubleTreeMap();
 }
