@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.892782258064516,
-        "y": 7.502080645161291
+        "x": 0.5239274193548396,
+        "y": 5.600306451612903
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.807096774193549,
-        "y": 7.202185483870968
+        "x": 1.533330645161291,
+        "y": 5.644193548387097
       },
       "isLocked": false,
-      "linkedName": "EGE2"
+      "linkedName": "MMBE 9"
     },
     {
       "anchor": {
-        "x": 7.757983870967742,
-        "y": 6.814516129032259
+        "x": 1.8990564516129038,
+        "y": 5.600306451612903
       },
       "prevControl": {
-        "x": 8.174911290322582,
-        "y": 6.602395161290324
+        "x": 2.2574677419354847,
+        "y": 5.636879032258065
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MMBE 3"
+      "linkedName": "MMBE 10"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 2.0,
-    "rotation": -89.24615166692918
+    "velocity": 0,
+    "rotation": -40.763605200941115
   },
   "reversed": false,
   "folder": "2026 Main Mid Blue",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -91.48786752882776
   },
   "useDefaultConstraints": false
 }
