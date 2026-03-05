@@ -27,7 +27,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.autoConstants;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
 import frc.robot.subsystems.automations.autoAlign;
@@ -82,6 +81,8 @@ public class shooter extends SubsystemBase{
   private autoAlign align = autoAlign.getInstance();
   private intake ballIntake = intake.getInstance();
   private Telemetry telemetry;
+  private angleMap shootingAMap;
+  private velocityMap shootingVMap;
 
   private shooter() {
     //Motor inits
@@ -191,13 +192,15 @@ public class shooter extends SubsystemBase{
   
   private AngularVelocity getFlyWheelVel(){
     double targetDist = getVirtualTarget(align.getHubDist()); 
-    AngularVelocity targetVelocity = RotationsPerSecond.of(velocityMap.mainMap.get(targetDist));
+    shootingVMap = velocityMap.getInstance();
+    AngularVelocity targetVelocity = RotationsPerSecond.of(shootingVMap.mainMap.get(targetDist));
     return targetVelocity;
   }
 
   public Angle getHoodAngle(){
-    double targetDist = getVirtualTarget(align.getHubDist()); 
-    Angle targetAngle = Degrees.of(angleMap.mainMap.get(targetDist));
+    double targetDist = getVirtualTarget(align.getHubDist());
+    shootingAMap = angleMap.getInstance();
+    Angle targetAngle = Degrees.of(shootingAMap.mainMap.get(targetDist));
     return targetAngle;
   }
 

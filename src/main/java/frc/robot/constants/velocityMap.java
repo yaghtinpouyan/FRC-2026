@@ -3,10 +3,10 @@ package frc.robot.constants;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class velocityMap {
-    public static InterpolatingDoubleTreeMap mainMap = new InterpolatingDoubleTreeMap();
+    private static velocityMap vMap = null;
+    public InterpolatingDoubleTreeMap mainMap = new InterpolatingDoubleTreeMap();
 
     public velocityMap(){
-        mainMap = new InterpolatingDoubleTreeMap();
         mainMap.put(1.0,4.0);
         mainMap.put(2.0,4.0);
         mainMap.put(3.0,4.0);
@@ -24,5 +24,12 @@ public class velocityMap {
         mainMap.put(15.0,4.0);
         mainMap.put(16.0,4.0);
         mainMap.put(17.0,4.0);
-;    }
+    }
+
+    public static velocityMap getInstance(){
+        if (vMap == null){
+            vMap = new velocityMap();
+        }
+        return vMap;
+    }
 }
