@@ -33,6 +33,12 @@
           "data": {
             "pathName": "MB 5"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MB 6"
+          }
         }
       ]
     }
