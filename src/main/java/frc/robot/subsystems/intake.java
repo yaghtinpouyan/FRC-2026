@@ -180,6 +180,7 @@ public class intake extends SubsystemBase{
 
     public void intakeInputHandler(boolean input1, double input2){
         changeIntakeState(input1);
+        LEDS.intakeSolid();
         if(input2 > 0.3){
             setIntakePivot();
             runHopper(false);
