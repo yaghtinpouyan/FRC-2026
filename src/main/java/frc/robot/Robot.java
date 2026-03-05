@@ -9,24 +9,38 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.RobotContainer;
+import frc.robot.subsystems.climb;
 import frc.robot.subsystems.drive;
+import frc.robot.subsystems.intake;
 import frc.robot.subsystems.operatorinterface;
+import frc.robot.subsystems.shooter;
+import frc.robot.subsystems.automations.Vision;
+import frc.robot.subsystems.automations.autoAlign;
 
 public class Robot extends TimedRobot {
   public drive drivetrain;
   public operatorinterface oi;
+  public shooter ballShooter;
+  public intake ballIntake;
+  public climb climber;
+  public autoAlign align;
+  public Vision vision;
   public RobotContainer rc;
-
   public Command getAutonomousCommand;
 
   public Robot() {
+    drivetrain = drive.getInstance();
+    vision = Vision.getInstance();
+    ballIntake = intake.getInstance();
+    align = autoAlign.getInstance();
+    ballShooter = shooter.getInstance();
+    climber = climb.getInstance();
+    oi = operatorinterface.getInstance();
+    rc = new RobotContainer();
   }
 
   @Override
   public void robotInit() {
-    drivetrain = drive.getInstance();
-    oi = operatorinterface.getInstance();
-    rc = new RobotContainer();
     DataLogManager.start();
   }
 

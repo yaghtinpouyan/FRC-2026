@@ -31,7 +31,7 @@ import frc.robot.constants.autoConstants;
 import frc.robot.constants.idConstants;
 import frc.robot.subsystems.automations.autoAlign;
 import frc.robot.constants.Constants;
-
+import frc.robot.constants.angleMap;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import yams.gearing.GearBox;
@@ -80,7 +80,7 @@ public class shooter extends SubsystemBase{
 
   private autoAlign align = autoAlign.getInstance();
   private intake ballIntake = intake.getInstance();
-  private Telemetry telemetry = Telemetry.getInstance();
+  private Telemetry telemetry;
 
   private shooter() {
     //Motor inits
@@ -158,8 +158,8 @@ public class shooter extends SubsystemBase{
     .withSoftLimits(Degrees.of(5), Degrees.of(10))
     .withHardLimit(Degrees.of(0), Degrees.of(15))
     .withLength(Constants.hoodArmLength)
-    .withStartingPosition(Degrees.of(67)) // TODO: placeholder #
-    .withMass(Kilograms.of(1)); // TODO: placeholder #
+    .withStartingPosition(Degrees.of(5.019)) 
+    .withMass(Kilograms.of(1.45)); 
 
     mainShooter = new FlyWheel(shooterConfig);
     hood = new Arm(hoodConfig);
@@ -177,6 +177,7 @@ public class shooter extends SubsystemBase{
   }
 
   private double getVirtualTarget(Distance hubDistance){
+    telemetry = Telemetry.getInstance();
     ChassisSpeeds chassisVel = telemetry.currentVelocity;
     double xVel = chassisVel.vxMetersPerSecond;
     double yVel = chassisVel.vyMetersPerSecond;
@@ -195,7 +196,7 @@ public class shooter extends SubsystemBase{
 
   public Angle getHoodAngle(){
     double targetDist = getVirtualTarget(align.getHubDist()); 
-    Angle targetAngle = Degrees.of(autoConstants.AngleMap.get(targetDist));
+    Angle targetAngle = Degrees.of(angleMap.mainMap.get(targetDist));
     return targetAngle;
   }
 
