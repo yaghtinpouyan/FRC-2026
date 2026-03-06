@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.8839,
-        "y": 5.623344444444444
+        "x": 15.0,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.770644444444445,
-        "y": 6.3152
+        "x": 16.0753,
+        "y": 6.987566666666667
       },
       "isLocked": false,
-      "linkedName": "MMRE 3"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 10.891255555555556,
-        "y": 7.387088888888888
+        "x": 13.103244444444444,
+        "y": 7.406577777777777
       },
       "prevControl": {
-        "x": 10.053233333333333,
-        "y": 6.568555555555556
+        "x": 12.119055555555555,
+        "y": 7.484533333333333
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MMRE 4"
+      "linkedName": "MMTE1"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": -116.89623696549343
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "2026 Main Mid Red",
+  "folder": "2026 Main Top Red",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -91.1691393279073
+    "rotation": -90.07852362378645
   },
   "useDefaultConstraints": true
 }

@@ -7,31 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MMR 1"
+            "pathName": "MMT 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MMR 2"
+            "pathName": "MMT 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MMR 3"
+            "pathName": "MMT 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MMR 4"
+            "pathName": "MMT 4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MMR 5"
+            "pathName": "MMT 5"
           }
         }
       ]
