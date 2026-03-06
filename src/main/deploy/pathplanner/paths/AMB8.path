@@ -3,33 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.780767592818649,
-        "y": 0.6822392589427806
+        "x": 2.6775704266583484,
+        "y": 1.0466401559335212
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7265230790099277,
-        "y": 0.9262833793834409
+        "x": 2.391633912616446,
+        "y": 1.2834208909247058
       },
       "isLocked": false,
-      "linkedName": "AMBE3"
+      "linkedName": "AMBE7"
     },
     {
       "anchor": {
-        "x": 2.2530487535264765,
-        "y": 1.6089644504123273
+        "x": 1.026785852502894,
+        "y": 2.7147684642650463
       },
       "prevControl": {
-        "x": 2.382356843319441,
-        "y": 1.3694647162832119
+        "x": 1.21806361901198,
+        "y": 2.5537938822985273
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "AMBE4"
+      "linkedName": "AMBE8"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.6528888081395354,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -42,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": 51.49566058180768
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Actual Main Bottom - Tr",
   "idealStartingState": {
     "velocity": 2.0,
-    "rotation": -1.678323844730185
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }
