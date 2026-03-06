@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    // led.AutonWave();
+    LEDS.autonWave();
   }
 
   @Override
@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // led.Wave();
+    LEDS.teleopBlink();
   }
 
   @Override

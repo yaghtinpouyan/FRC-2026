@@ -98,6 +98,7 @@ public class climb extends SubsystemBase{
         if(dPad == 270) {
             ballIntake.stateIntaking = false;
             align.travelToTower(true);
+            LEDS.climbWave();
         }
     }
 

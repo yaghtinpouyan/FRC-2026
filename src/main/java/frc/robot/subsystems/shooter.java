@@ -217,10 +217,12 @@ public class shooter extends SubsystemBase{
     if(charge){
       setHoodAngle(getHoodAngle());
       setFlyWheelVel(getFlyWheelVel());
+      LEDS.shooterChargingWave();
     }
     else if(fire > 0.3){
       runKicker(true);
       ballIntake.setShootingPivot();
+      LEDS.shooterReadyBlink();
     }
   }
 
