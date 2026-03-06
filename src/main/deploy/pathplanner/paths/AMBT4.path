@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.271100000000001,
-        "y": 7.328622222222221
+        "x": 2.705922222222222,
+        "y": 7.309133333333333
       },
       "isLocked": false,
       "linkedName": "AMBTE 3"
@@ -20,8 +20,8 @@
         "y": 7.328622222222221
       },
       "prevControl": {
-        "x": 0.6924999999999999,
-        "y": 7.328622222222221
+        "x": 2.3161444444444443,
+        "y": 7.309133333333333
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": -43.26429541107155
   },
   "reversed": false,
   "folder": "ACTUAL Main Blue Top",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": 0.0
   },
   "useDefaultConstraints": true
