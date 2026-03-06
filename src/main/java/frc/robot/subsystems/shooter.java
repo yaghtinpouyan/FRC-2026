@@ -26,6 +26,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
@@ -169,7 +170,7 @@ public class shooter extends SubsystemBase{
     hood = new Arm(hoodConfig);
   }
 
-  private void runKicker(boolean kickUp){
+  public void runKicker(boolean kickUp){
     if(kickUp) kickingSystem.setVoltage(Volts.of(3));
     else{
       kickingSystem.setVoltage(Volts.of(-3));
@@ -192,7 +193,7 @@ public class shooter extends SubsystemBase{
     return Math.hypot(virtualTargetX, virtualTargetY);
   }
   
-  private AngularVelocity getFlyWheelVel(){
+  public AngularVelocity getFlyWheelVel(){
     double targetDist = getVirtualTarget(align.getHubDist()); 
     shootingVMap = velocityMap.getInstance();
     AngularVelocity targetVelocity = RotationsPerSecond.of(shootingVMap.mainMap.get(targetDist));
@@ -213,6 +214,8 @@ public class shooter extends SubsystemBase{
   public void setFlyWheelVel(AngularVelocity speed) {
     mainShooter.setSpeed(speed).schedule();
   }
+
+
 
   public void shooterInputManager(boolean charge, double fire){
     //Richard make dis a toggle pls

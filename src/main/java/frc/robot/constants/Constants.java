@@ -17,7 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public final class Constants {
   //Global
   public static final Optional<Alliance> currentAlliance = DriverStation.getAlliance();
-
+  
   //Math/Calculations 
   public static final double secondsPerMinute = 60.0;
   public static final double driveCircumferenceMeters = 0.2393893602;

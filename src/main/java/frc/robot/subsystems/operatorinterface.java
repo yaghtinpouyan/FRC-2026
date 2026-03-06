@@ -21,7 +21,7 @@ public class operatorinterface extends SubsystemBase{
     }
 
     private void updateDrive(){
-        drivetrain.driveInputHandler(controller1.getRawAxis(1), controller1.getRawAxis(0), controller1.getRawAxis(2), controller1.getYButtonPressed(), controller1.getAButtonPressed());
+        drivetrain.driveInputHandler(-controller1.getRawAxis(1), -controller1.getRawAxis(0), -controller1.getRawAxis(4), controller1.getYButtonPressed(), controller1.getAButtonPressed());
         drivetrain.updatePoseEstimator();
     }
 
@@ -35,7 +35,8 @@ public class operatorinterface extends SubsystemBase{
 
     private void updateShooter(){
         ballShooter.shooterInputManager(controller1.getRightBumperButtonPressed(), controller1.getRightTriggerAxis());
-        shooterTest.SetTestVelocity(controller1.getBButtonPressed());
+        // shooterTest.SetTestVelocity(controller1.getBButtonPressed());
+        shooterTest.runFlyWheelSysID(controller1.getBButtonPressed());
     }
 
     private void updateTelemetry(){
