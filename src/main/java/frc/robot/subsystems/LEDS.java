@@ -47,7 +47,7 @@ public class LEDS extends SubsystemBase{
     }
 
     //Blink effect during teleop
-    public static void teleopBlink(){
+    public void teleopBlink(){
         //Initialization for this pattern
         // change pattern
         base = LEDPattern.solid(Color.kMediumBlue);
@@ -57,7 +57,7 @@ public class LEDS extends SubsystemBase{
         strip.setData(Buffer);
     }
     //Solid colour during intake
-    public static void intakeSolid() {
+    public void intakeSolid() {
         // Initialization for this pattern
         base = LEDPattern.solid(Color.kYellow);
         //Apply effect
@@ -65,7 +65,7 @@ public class LEDS extends SubsystemBase{
         strip.setData(Buffer);
     }
     //Wave effect during climb
-    public static void climbWave() {
+    public void climbWave() {
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, Color.kDarkOrange, Color.kBisque);
         pattern = base.breathe(Seconds.of(2)); //.progressMaskLayer(() -> getheightofclimb() / getmaxheightofclimb());
         //Apply effect
@@ -73,7 +73,7 @@ public class LEDS extends SubsystemBase{
         strip.setData(Buffer);
     }
 
-    public static void shooterChargingWave() {
+    public void shooterChargingWave() {
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, Color.kForestGreen, Color.kLightSeaGreen);
         pattern = base.breathe(Seconds.of(2));
         //Apply effect
@@ -81,7 +81,7 @@ public class LEDS extends SubsystemBase{
         strip.setData(Buffer);
     }
 
-    public static void shooterReadyBlink() {
+    public void shooterReadyBlink() {
         base = LEDPattern.solid(Color.kRed);
         pattern = base.blink(Seconds.of(1));
         //Apply effect
@@ -90,7 +90,7 @@ public class LEDS extends SubsystemBase{
     }
 
     //Wave effect during auton
-    public static void autonWave(){
+    public void autonWave(){
         //Initialization for this pattern
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, Color.kViolet, Color.kWhiteSmoke);
         pattern = base.breathe(Seconds.of(2));

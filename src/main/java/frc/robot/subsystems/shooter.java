@@ -78,6 +78,8 @@ public class shooter extends SubsystemBase{
   private final Arm hood;
   private final FlyWheel mainShooter;
 
+  private LEDS leds = LEDS.getInstance();
+  
   private autoAlign align = autoAlign.getInstance();
   private intake ballIntake = intake.getInstance();
   private Telemetry telemetry;
@@ -217,12 +219,12 @@ public class shooter extends SubsystemBase{
     if(charge){
       setHoodAngle(getHoodAngle());
       setFlyWheelVel(getFlyWheelVel());
-      LEDS.shooterChargingWave();
+      leds.shooterChargingWave();
     }
     else if(fire > 0.3){
       runKicker(true);
       ballIntake.setShootingPivot();
-      LEDS.shooterReadyBlink();
+      leds.shooterReadyBlink();
     }
   }
 

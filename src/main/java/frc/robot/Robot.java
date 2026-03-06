@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
   public Vision vision;
   public RobotContainer rc;
   public Command getAutonomousCommand;
+  private LEDS leds = LEDS.getInstance();
+
 
   public Robot() {
     drivetrain = drive.getInstance();
@@ -68,7 +70,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    LEDS.autonWave();
+    leds.autonWave();
   }
 
   @Override
@@ -80,7 +82,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    LEDS.teleopBlink();
+    leds.teleopBlink();
   }
 
   @Override
