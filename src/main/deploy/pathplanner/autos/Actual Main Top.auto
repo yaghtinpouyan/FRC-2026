@@ -31,7 +31,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 6.0
+            "waitTime": 3.0
           }
         },
         {
@@ -49,13 +49,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 6.0
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "AMBT 7"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
           }
         }
       ]
