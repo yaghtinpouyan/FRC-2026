@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.7635515667950665,
-        "y": 5.344497550116645
+        "x": 6.239809195059317,
+        "y": 1.3672275695800784
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.427041055961102,
-        "y": 5.378737287422184
+        "x": 6.169635116380033,
+        "y": 1.976449531328461
       },
       "isLocked": false,
-      "linkedName": "AMBE6"
+      "linkedName": "AMBE5"
     },
     {
       "anchor": {
-        "x": 2.3594587854456024,
-        "y": 5.145589482060186
+        "x": 5.7635515667950665,
+        "y": 5.344497550116645
       },
       "prevControl": {
-        "x": 3.442343707614475,
-        "y": 5.195522172715929
+        "x": 5.819673949838734,
+        "y": 4.881134185970535
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "AMBBE1"
+      "linkedName": "AMBE6"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.7042278089021379,
-      "rotationDegrees": 88.886
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -43,17 +38,17 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
-    "velocity": 3.0,
-    "rotation": -35.8714376297736
+    "velocity": 1.0,
+    "rotation": 88.88609835068831
   },
   "reversed": false,
   "folder": "Actual Main Bottom - Bump ",
   "idealStartingState": {
-    "velocity": 3.0,
-    "rotation": 88.886
+    "velocity": 1.0,
+    "rotation": 87.38957865493713
   },
   "useDefaultConstraints": true
 }
