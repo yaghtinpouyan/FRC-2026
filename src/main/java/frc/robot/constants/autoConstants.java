@@ -2,7 +2,6 @@ package frc.robot.constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public final class autoConstants {
     //IMPORTANT Note I stands for intermediate pose for pathplanner
@@ -72,8 +71,4 @@ public final class autoConstants {
     
     public static final int tagRO1 = 13;
     public static final int tagRO2 = 14;
-
-    //Shooting Map
-    public static InterpolatingDoubleTreeMap velocityMap = new InterpolatingDoubleTreeMap();
-    public static InterpolatingDoubleTreeMap AngleMap = new InterpolatingDoubleTreeMap();
 }

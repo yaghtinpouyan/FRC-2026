@@ -27,11 +27,11 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.autoConstants;
 import frc.robot.constants.idConstants;
+import frc.robot.constants.velocityMap;
 import frc.robot.subsystems.automations.autoAlign;
 import frc.robot.constants.Constants;
-
+import frc.robot.constants.angleMap;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import yams.gearing.GearBox;
@@ -80,7 +80,9 @@ public class shooter extends SubsystemBase{
 
   private autoAlign align = autoAlign.getInstance();
   private intake ballIntake = intake.getInstance();
-  private Telemetry telemetry = Telemetry.getInstance();
+  private Telemetry telemetry;
+  private angleMap shootingAMap;
+  private velocityMap shootingVMap;
 
   private shooter() {
     //Motor inits
@@ -155,11 +157,11 @@ public class shooter extends SubsystemBase{
 
     hoodConfig = new ArmConfig(hoodSystem)
     .withTelemetry("Hood", TelemetryVerbosity.HIGH)
-    .withSoftLimits(Degrees.of(5), Degrees.of(10))
+    .withSoftLimits(Degrees.of(0.5), Degrees.of(14.5))
     .withHardLimit(Degrees.of(0), Degrees.of(15))
     .withLength(Constants.hoodArmLength)
-    .withStartingPosition(Degrees.of(67)) // TODO: placeholder #
-    .withMass(Kilograms.of(1)); // TODO: placeholder #
+    .withStartingPosition(Degrees.of(Constants.startingHoodAngle)) 
+    .withMass(Constants.hoodMass); 
 
     mainShooter = new FlyWheel(shooterConfig);
     hood = new Arm(hoodConfig);
@@ -177,6 +179,7 @@ public class shooter extends SubsystemBase{
   }
 
   private double getVirtualTarget(Distance hubDistance){
+    telemetry = Telemetry.getInstance();
     ChassisSpeeds chassisVel = telemetry.currentVelocity;
     double xVel = chassisVel.vxMetersPerSecond;
     double yVel = chassisVel.vyMetersPerSecond;
@@ -189,13 +192,15 @@ public class shooter extends SubsystemBase{
   
   private AngularVelocity getFlyWheelVel(){
     double targetDist = getVirtualTarget(align.getHubDist()); 
-    AngularVelocity targetVelocity = RotationsPerSecond.of(autoConstants.velocityMap.get(targetDist));
+    shootingVMap = velocityMap.getInstance();
+    AngularVelocity targetVelocity = RotationsPerSecond.of(shootingVMap.mainMap.get(targetDist));
     return targetVelocity;
   }
 
   public Angle getHoodAngle(){
-    double targetDist = getVirtualTarget(align.getHubDist()); 
-    Angle targetAngle = Degrees.of(autoConstants.AngleMap.get(targetDist));
+    double targetDist = getVirtualTarget(align.getHubDist());
+    shootingAMap = angleMap.getInstance();
+    Angle targetAngle = Degrees.of(shootingAMap.mainMap.get(targetDist));
     return targetAngle;
   }
 

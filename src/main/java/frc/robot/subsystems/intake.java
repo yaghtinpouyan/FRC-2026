@@ -113,6 +113,7 @@ public class intake extends SubsystemBase{
 
     //For scaling intake speed with drive speed
     public double calcIntakingVolts(){
+        telemetry = Telemetry.getInstance();
         ChassisSpeeds chassisVel = telemetry.currentVelocity;
         double botVelocity = Math.hypot(chassisVel.vxMetersPerSecond, chassisVel.vyMetersPerSecond);
         double maxVelocity = Constants.maxDriveSpeed;

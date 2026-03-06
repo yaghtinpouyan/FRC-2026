@@ -60,7 +60,7 @@ public class climb extends SubsystemBase{
         .withFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
         .withSimFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
         .withControlMode(ControlMode.CLOSED_LOOP)
-        .withMechanismCircumference(Meters.of(67)); // TODO: placeholder #
+        .withMechanismCircumference(Meters.of(0.06)); 
 
         climbingMotor = new SparkWrapper(climbMotor, DCMotor.getNeoVortex(1), vortexConfig);
 

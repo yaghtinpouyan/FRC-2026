@@ -69,7 +69,7 @@ public class drive extends SubsystemBase {
 
     //Driving modes
     private boolean driveLock = false;
-    intake ballIntake;
+    intake ballIntake = intake.getInstance();
 
     private drive(){
         try
@@ -112,6 +112,10 @@ public class drive extends SubsystemBase {
                 this
             )
         );
+
+        /*
+         * 
+         */
 
         //Pathplanner
         try {
