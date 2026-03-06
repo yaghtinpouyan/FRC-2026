@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.081284922277965,
-        "y": 0.7788640950457852
+        "x": 6.239809195059317,
+        "y": 1.3672275695800784
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.037634440104167,
-        "y": 1.3146038219310616
+        "x": 6.169635116380033,
+        "y": 1.976449531328461
       },
       "isLocked": false,
       "linkedName": "AMBE5"
@@ -20,12 +20,12 @@
         "y": 5.344497550116645
       },
       "prevControl": {
-        "x": 5.87349841647678,
-        "y": 4.781652472036857
+        "x": 5.819673949838734,
+        "y": 4.881134185970535
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ABME6"
+      "linkedName": "AMBE6"
     }
   ],
   "rotationTargets": [],
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": 88.88609835068831
   },
   "reversed": false,
-  "folder": "Actual Main Bottom",
+  "folder": "Actual Main Bottom - Tr",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": 87.38957865493713
   },
   "useDefaultConstraints": true

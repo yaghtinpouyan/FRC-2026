@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.368687613028068,
-        "y": 0.9944910594798899
+        "x": 7.069938610479837,
+        "y": 1.219368434617969
       },
       "isLocked": false,
       "linkedName": "AMBE2"
     },
     {
       "anchor": {
-        "x": 6.119023280390987,
-        "y": 0.6822392589427806
+        "x": 6.134419201886212,
+        "y": 0.7867414595992477
       },
       "prevControl": {
-        "x": 6.854075152327006,
-        "y": 0.7164219103593221
+        "x": 6.515294236545536,
+        "y": 0.9396329383261164
       },
       "nextControl": {
-        "x": 5.28621546540437,
-        "y": 0.643510591860171
+        "x": 5.410780412094541,
+        "y": 0.4962571942434693
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 0.6822392589427806
       },
       "prevControl": {
-        "x": 3.756781671594691,
-        "y": 0.5983838727032695
+        "x": 3.2785617648432988,
+        "y": 0.7439903282420597
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,13 +62,13 @@
     "unlimited": true
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": -1.678323844730185
   },
   "reversed": false,
-  "folder": "Actual Main Bottom",
+  "folder": "Actual Main Bottom - Tr",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": 89.167
   },
   "useDefaultConstraints": true
