@@ -5,11 +5,13 @@
   "pathFolders": [
     "2025",
     "2026 Main Bottom Red",
-    "2026 Main Top Blue"
+    "2026 Main Top Blue",
+    "ACTUAL Main Blue Top"
   ],
   "autoFolders": [
     "2025",
-    "2026"
+    "2026",
+    "ACTUAL 2026"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 2.0,
