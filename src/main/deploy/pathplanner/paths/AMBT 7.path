@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8989451220477074,
-        "y": 4.873343703658493
+        "x": 1.819177777777778,
+        "y": 4.960722222222222
       },
       "isLocked": false,
       "linkedName": "AMBTE 6"
     },
     {
       "anchor": {
-        "x": 1.1629784528944234,
-        "y": 4.787191948784723
+        "x": 1.0883444444444443,
+        "y": 4.795066666666667
       },
       "prevControl": {
-        "x": 1.6379510373716006,
-        "y": 4.8713143903944225
+        "x": 1.5463333333333336,
+        "y": 4.9314888888888895
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": 178.79981989681946
+    "rotation": 179.2042764472609
   },
   "reversed": false,
   "folder": "ACTUAL Main Blue Top",
