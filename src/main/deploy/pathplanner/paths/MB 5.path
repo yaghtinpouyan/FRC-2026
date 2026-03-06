@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": -0.5115558665870233
+    "rotation": -0.5115558665870235
   },
   "reversed": false,
-  "folder": "2026 Main Mid Blue",
+  "folder": "2026 Main Top Blue",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -91.30329225413746
