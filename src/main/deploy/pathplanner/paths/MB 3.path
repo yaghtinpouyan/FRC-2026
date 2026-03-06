@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.807096774193549,
-        "y": 7.202185483870968
+        "x": 7.172822580645161,
+        "y": 7.077838709677419
       },
       "isLocked": false,
       "linkedName": "EGE2"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 7.757983870967742,
-        "y": 6.814516129032259
+        "y": 6.887661290322581
       },
       "prevControl": {
-        "x": 8.174911290322582,
-        "y": 6.602395161290324
+        "x": 6.609604838709678,
+        "y": 7.268016129032258
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 3.0,
     "rotation": -89.24615166692918
   },
   "reversed": false,
   "folder": "2026 Main Top Blue",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": 0.0
   },
   "useDefaultConstraints": false

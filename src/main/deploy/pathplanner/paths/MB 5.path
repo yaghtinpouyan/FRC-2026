@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.829040322580645,
-        "y": 6.638967741935484
+        "x": 6.799782258064516,
+        "y": 6.309814516129032
       },
       "isLocked": false,
       "linkedName": "EGE4"
@@ -20,8 +20,8 @@
         "y": 7.3923629032258065
       },
       "prevControl": {
-        "x": 6.397483870967743,
-        "y": 6.814516129032259
+        "x": 6.346282258064516,
+        "y": 6.741370967741935
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,16 +38,16 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 3.0,
     "rotation": -0.5115558665870235
   },
   "reversed": false,
   "folder": "2026 Main Top Blue",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": -91.30329225413746
   },
   "useDefaultConstraints": true

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.526016129032259,
-        "y": 7.14366935483871
+        "x": 1.3212096774193554,
+        "y": 7.253387096774194
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.526016129032259,
-        "y": 7.14366935483871
+        "x": 1.0798306451612911,
+        "y": 7.165612903225807
       },
       "isLocked": false,
       "linkedName": "MMBE 7"
@@ -20,8 +20,8 @@
         "y": 7.033951612903226
       },
       "prevControl": {
-        "x": -0.3736693548387089,
-        "y": 7.033951612903226
+        "x": 0.9042822580645167,
+        "y": 7.099782258064517
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "2026 Main Top Blue",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -44.999999999999964
+    "rotation": -41.855042535301884
   },
   "useDefaultConstraints": false
 }

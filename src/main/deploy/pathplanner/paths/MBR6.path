@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.744832183770239,
-        "y": 1.0139348417284797
+        "x": 13.821717741935483,
+        "y": 0.9117016129032265
       },
       "isLocked": false,
       "linkedName": "MBRE5"
@@ -20,8 +20,8 @@
         "y": 1.3652016129032267
       },
       "prevControl": {
-        "x": 14.689703171030473,
-        "y": 1.1825277220643315
+        "x": 14.436137096774194,
+        "y": 1.1603951612903234
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 1.5,
     "rotation": 137.68661399029563
   },
   "reversed": false,

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 16.608548387096775,
-        "y": 2.828104838709678
+        "x": 15.357766129032257,
+        "y": 3.025596774193549
       },
       "isLocked": false,
       "linkedName": "MBRE8"
@@ -20,8 +20,8 @@
         "y": 3.149943548387098
       },
       "prevControl": {
-        "x": 13.931435483870967,
-        "y": 3.1938306451612912
+        "x": 14.72140322580645,
+        "y": 3.0694838709677423
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,7 +38,7 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
     "velocity": 2.0,

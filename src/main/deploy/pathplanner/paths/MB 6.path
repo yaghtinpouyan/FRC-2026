@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.669162186379929,
-        "y": 7.358634408602152
+        "x": 4.671258064516129,
+        "y": 7.377733870967742
       },
       "isLocked": false,
       "linkedName": "EGE5"
@@ -20,8 +20,8 @@
         "y": 7.3923629032258065
       },
       "prevControl": {
-        "x": 2.7109677419354847,
-        "y": 7.292803763440861
+        "x": 4.108040322580646,
+        "y": 7.37041935483871
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,7 +38,7 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
     "velocity": 1.0,

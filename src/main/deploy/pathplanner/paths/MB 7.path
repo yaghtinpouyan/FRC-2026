@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.247016129032258,
-        "y": 7.721516129032258
+        "x": 2.389129032258065,
+        "y": 7.289959677419355
       },
       "isLocked": false,
       "linkedName": "MMBE 6"
     },
     {
       "anchor": {
-        "x": 1.526016129032259,
-        "y": 7.14366935483871
+        "x": 1.3212096774193554,
+        "y": 7.253387096774194
       },
       "prevControl": {
-        "x": 0.6994758064516141,
-        "y": 6.799887096774193
+        "x": 2.213580645161291,
+        "y": 7.289959677419355
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,11 +38,11 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": -44.999999999999964
+    "rotation": -41.855042535301884
   },
   "reversed": false,
   "folder": "2026 Main Top Blue",
