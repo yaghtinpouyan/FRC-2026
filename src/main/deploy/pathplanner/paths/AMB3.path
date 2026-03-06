@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4360657456009482,
-        "y": 1.8725926954481338
+        "x": 7.68642199367947,
+        "y": 2.8682643048321754
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.513312921025614,
-        "y": 0.5471174429360832
+        "x": 7.368687613028068,
+        "y": 0.9944910594798899
       },
       "isLocked": false,
-      "linkedName": "ABMBE4"
+      "linkedName": "AMBE2"
     },
     {
       "anchor": {
-        "x": 4.546730944029086,
-        "y": 0.6559222592891285
+        "x": 6.119023280390987,
+        "y": 0.6822392589427806
       },
       "prevControl": {
-        "x": 3.408772660948091,
-        "y": 0.6348092567905673
+        "x": 6.854075152327006,
+        "y": 0.7164219103593221
       },
       "nextControl": {
-        "x": 5.360247212154851,
-        "y": 0.6710157572291906
+        "x": 5.28621546540437,
+        "y": 0.643510591860171
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.081284922277965,
-        "y": 0.7788640950457852
+        "x": 2.780767592818649,
+        "y": 0.6822392589427806
       },
       "prevControl": {
-        "x": 5.717082907213585,
-        "y": 0.7029496335567091
+        "x": 3.756781671594691,
+        "y": 0.5983838727032695
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ABMBE5"
+      "linkedName": "AMBE3"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0144518400493423,
+      "waypointRelativePos": 1.3988647460937504,
       "rotationDegrees": 0.0
     }
   ],
@@ -59,17 +59,17 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 87.38957865493713
+    "rotation": -1.678323844730185
   },
   "reversed": false,
   "folder": "Actual Main Bottom",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 45.159555469878704
+    "rotation": 89.167
   },
   "useDefaultConstraints": true
 }
