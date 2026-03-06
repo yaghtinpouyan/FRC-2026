@@ -1,4 +1,4 @@
-package frc.robot.subsystem;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -15,12 +15,12 @@ public class LEDS extends SubsystemBase{
     private static LEDS led = null;
 
     //Objects
-    private AddressableLED strip;
-    private AddressableLEDBuffer Buffer;
+    private static AddressableLED strip;
+    private static AddressableLEDBuffer Buffer;
     // private AddressableLEDBufferView leftStrip;
     // private AddressableLEDBufferView rightStrip;
-    private LEDPattern base;
-    private LEDPattern pattern;
+    private static LEDPattern base;
+    private static LEDPattern pattern;
     // private TimeUnit Seconds;
 
 // colours: 
@@ -47,7 +47,7 @@ public class LEDS extends SubsystemBase{
     }
 
     //Blink effect during teleop
-    public void teleopBlink(){
+    public static void teleopBlink(){
         //Initialization for this pattern
         // change pattern
         base = LEDPattern.solid(Color.kMediumBlue);
@@ -57,7 +57,7 @@ public class LEDS extends SubsystemBase{
         strip.setData(Buffer);
     }
     //Solid colour during intake
-    public void intakeSolid() {
+    public static void intakeSolid() {
         // Initialization for this pattern
         base = LEDPattern.solid(Color.kYellow);
         //Apply effect
@@ -65,7 +65,7 @@ public class LEDS extends SubsystemBase{
         strip.setData(Buffer);
     }
     //Wave effect during climb
-    public void climbWave() {
+    public static void climbWave() {
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, Color.kDarkOrange, Color.kBisque);
         pattern = base.breathe(Seconds.of(2)); //.progressMaskLayer(() -> getheightofclimb() / getmaxheightofclimb());
         //Apply effect
@@ -73,7 +73,7 @@ public class LEDS extends SubsystemBase{
         strip.setData(Buffer);
     }
 
-    public void shooterChargingWave() {
+    public static void shooterChargingWave() {
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, Color.kForestGreen, Color.kLightSeaGreen);
         pattern = base.breathe(Seconds.of(2));
         //Apply effect
@@ -81,7 +81,7 @@ public class LEDS extends SubsystemBase{
         strip.setData(Buffer);
     }
 
-    public void shooterReadyBlink() {
+    public static void shooterReadyBlink() {
         base = LEDPattern.solid(Color.kRed);
         pattern = base.blink(Seconds.of(1));
         //Apply effect
@@ -90,7 +90,7 @@ public class LEDS extends SubsystemBase{
     }
 
     //Wave effect during auton
-    public void autonWave(){
+    public static void autonWave(){
         //Initialization for this pattern
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, Color.kViolet, Color.kWhiteSmoke);
         pattern = base.breathe(Seconds.of(2));
