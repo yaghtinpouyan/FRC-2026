@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.513312921025614,
-        "y": 0.5471174429360834
+        "y": 0.5471174429360832
       },
       "isLocked": false,
       "linkedName": "ABMBE4"
@@ -66,7 +66,7 @@
     "rotation": 87.38957865493713
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Actual Main Bottom",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 45.159555469878704
