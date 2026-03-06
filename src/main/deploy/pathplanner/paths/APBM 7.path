@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.755933333333334,
+        "y": 2.6610333333333336
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.755933333333334,
+        "y": 2.661033333333334
+      },
+      "isLocked": false,
+      "linkedName": "APBME 6"
+    },
+    {
+      "anchor": {
+        "x": 1.8679000000000001,
+        "y": 2.427166666666666
+      },
+      "prevControl": {
+        "x": 2.168138888888889,
+        "y": 2.4125499999999995
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "APBME 7"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6149377593361034,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": true
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": 25.0
+  },
+  "reversed": false,
+  "folder": "Actual Passive Blue Top",
+  "idealStartingState": {
+    "velocity": 3.0,
+    "rotation": -88.26429541107156
+  },
+  "useDefaultConstraints": true
+}
