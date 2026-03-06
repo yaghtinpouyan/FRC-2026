@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5342000000000002,
-        "y": 7.474788888888888
+        "x": 0.5426555555502504,
+        "y": 4.960722222222273
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.5342,
-        "y": 7.474788888888888
+        "x": 1.5426555555502504,
+        "y": 4.960722222222273
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AMBTE 5"
     },
     {
       "anchor": {
-        "x": 7.695077777777778,
-        "y": 7.162966666666666
+        "x": 2.2479333333333336,
+        "y": 4.960722222222273
       },
       "prevControl": {
-        "x": 6.9544999999999995,
-        "y": 7.348111111111109
+        "x": 1.2479333333333336,
+        "y": 4.960722222222273
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "AMBTE 1"
+      "linkedName": "AMBTE 6"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5385892116182555,
-      "rotationDegrees": -20.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -43,17 +38,17 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
-    "velocity": 3.0,
-    "rotation": -90.0
+    "velocity": 2.0,
+    "rotation": -32.7352262721128
   },
   "reversed": false,
   "folder": "ACTUAL Main Blue Top",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 3.0,
+    "rotation": -89.1449026037333
   },
   "useDefaultConstraints": true
 }
