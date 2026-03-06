@@ -65,15 +65,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "MBR10"
-          }
-        },
-        {
           "type": "wait",
           "data": {
             "waitTime": 6.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MBR10"
           }
         }
       ]

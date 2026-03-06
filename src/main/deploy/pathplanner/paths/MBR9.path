@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 14.638063960322627,
-        "y": 3.003132905183015
+        "x": 16.038016129032258,
+        "y": 2.9670806451612908
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.60724136239511,
-        "y": 4.076556583545826
+        "x": 16.608548387096775,
+        "y": 2.828104838709678
       },
       "isLocked": false,
       "linkedName": "MBRE8"
     },
     {
       "anchor": {
-        "x": 14.786626708984375,
-        "y": 5.326263973094799
+        "x": 14.19475806451613,
+        "y": 3.149943548387098
       },
       "prevControl": {
-        "x": 14.691393021195024,
-        "y": 4.554142312509042
+        "x": 13.931435483870967,
+        "y": 3.1938306451612912
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -179.98845630039523
+    "velocity": 2.0,
+    "rotation": 167.9694039034621
   },
   "reversed": false,
   "folder": "2026 Main Bottom Red",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 149.07819066759487
+    "rotation": 178.78112476486865
   },
   "useDefaultConstraints": true
 }
