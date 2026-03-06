@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.785166666666666,
+        "y": 3.109277777777777
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.9898,
+        "y": 2.4953777777777773
+      },
+      "isLocked": false,
+      "linkedName": "APE 5"
+    },
+    {
+      "anchor": {
+        "x": 6.204177777777778,
+        "y": 1.8522444444444432
+      },
+      "prevControl": {
+        "x": 6.058011111111111,
+        "y": 2.1738111111111107
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "APE 6"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": 144.2933085993971
+  },
+  "reversed": false,
+  "folder": "Actual Passer",
+  "idealStartingState": {
+    "velocity": 3.0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}
