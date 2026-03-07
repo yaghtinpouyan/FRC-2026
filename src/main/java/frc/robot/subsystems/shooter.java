@@ -215,8 +215,6 @@ public class shooter extends SubsystemBase{
     mainShooter.setSpeed(speed).schedule();
   }
 
-
-
   public void shooterInputManager(boolean charge, double fire){
     //Richard make dis a toggle pls
     if(charge){
