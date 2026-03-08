@@ -9,14 +9,15 @@
     "ACTUAL Main Blue Top",
     "Actual Main Bottom - Bump ",
     "Actual Main Bottom - Tr",
+    "Actual Main Bottom WC",
     "Actual Passer",
-    "Actual Passive Mid",
-    "Actual Main Bottom 2.0"
+    "Actual Passive Mid"
   ],
   "autoFolders": [
     "2025",
     "2026",
-    "ACTUAL 2026"
+    "ACTUAL 2026",
+    "Actuall 2026 WC"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 2.0,
