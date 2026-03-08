@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.2530487535264765,
-        "y": 1.6089644504123273
+        "x": 2.440579545197664,
+        "y": 1.4209277400264033
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3149220484980835,
-        "y": 0.4240361848054115
+        "x": 2.502452840169271,
+        "y": 0.23599947441948754
       },
       "isLocked": false,
       "linkedName": "AMBE4"
@@ -37,7 +37,7 @@
       },
       "prevControl": {
         "x": 5.879677083333333,
-        "y": 0.6159654450593176
+        "y": 0.6159654450593175
       },
       "nextControl": null,
       "isLocked": false,
@@ -69,7 +69,7 @@
   "folder": "Actual Main Bottom - Tr",
   "idealStartingState": {
     "velocity": 2.0,
-    "rotation": 51.49566058180768
+    "rotation": 51.036034326971716
   },
   "useDefaultConstraints": true
 }
