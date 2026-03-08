@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AMTWC"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AMTWC 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AMTWC 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AMTWC 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AMTWC 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AMTWC 6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AMTWC 7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AMTWC 8"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Actuall 2026 WC",
+  "choreoAuto": false
+}

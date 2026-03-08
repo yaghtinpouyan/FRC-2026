@@ -1,0 +1,63 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.4842177419354847,
+        "y": 6.807201612903226
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.596024193548388,
+        "y": 8.109185483870966
+      },
+      "isLocked": false,
+      "linkedName": "MTWCE 3"
+    },
+    {
+      "anchor": {
+        "x": 7.677524193548386,
+        "y": 6.858403225806452
+      },
+      "prevControl": {
+        "x": 7.560491935483871,
+        "y": 7.202185483870968
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MTWCE1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.17600896860986573,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 0.5470852017937216,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": true
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "Actual Main Top WC",
+  "idealStartingState": {
+    "velocity": 3.0,
+    "rotation": -53.28579702395373
+  },
+  "useDefaultConstraints": true
+}
