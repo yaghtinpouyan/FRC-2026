@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.RobotContainer;
+import frc.robot.subsystems.LEDS;
 import frc.robot.subsystems.climb;
 import frc.robot.subsystems.drive;
 import frc.robot.subsystems.intake;
@@ -27,6 +28,8 @@ public class Robot extends TimedRobot {
   public Vision vision;
   public RobotContainer rc;
   public Command getAutonomousCommand;
+  private LEDS leds = LEDS.getInstance();
+
 
   public Robot() {
     drivetrain = drive.getInstance();
@@ -67,7 +70,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    // led.AutonWave();
+    leds.autonWave();
   }
 
   @Override
@@ -79,7 +82,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // led.Wave();
+    leds.teleopBlink();
   }
 
   @Override

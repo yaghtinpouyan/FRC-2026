@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
@@ -48,6 +50,8 @@ public class intake extends SubsystemBase{
     private SmartMotorController hopperSystem;
     private SmartMotorController intakingSystem;
 
+    private LEDS leds = LEDS.getInstance();
+
      public boolean stateIntaking;
 
     private intake(){
@@ -86,9 +90,10 @@ public class intake extends SubsystemBase{
 
         pivotConfig = new ArmConfig(pivotingSystem)
         .withLength(Meters.of(0.3366))
-        .withHardLimit(Degrees.of(-62), Degrees.of(62)) //IMPORTANT FIND ANGLE LIMITS
+        .withSoftLimits(Degrees.of(26.5), Degrees.of(152))
+        .withHardLimit(Degrees.of(26.5), Degrees.of(152))
         .withTelemetry("Pivot", TelemetryVerbosity.HIGH)
-        .withMass(Pounds.of(1))
+        .withMass(Kilograms.of(2.714))
         .withStartingPosition(Degrees.of(0));
 
         pivot = new Arm(pivotConfig);
@@ -180,6 +185,7 @@ public class intake extends SubsystemBase{
 
     public void intakeInputHandler(boolean input1, double input2){
         changeIntakeState(input1);
+        leds.intakeSolid();
         if(input2 > 0.3){
             setIntakePivot();
             runHopper(false);

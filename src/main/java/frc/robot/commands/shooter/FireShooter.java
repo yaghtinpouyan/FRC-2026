@@ -1,0 +1,43 @@
+package frc.robot.commands.shooter;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.intake;
+import frc.robot.subsystems.shooter;
+
+public class FireShooter extends Command {
+    private final shooter m_shooter;
+    private final intake m_intake;
+    private double duration; 
+    private final Timer m_Timer;
+
+    public FireShooter(shooter shooterSubsystem, intake intakeSubsystem, double duration) {
+        m_shooter = shooterSubsystem;
+        m_intake = intakeSubsystem;
+        m_Timer = new Timer();
+        this.duration = duration;
+        addRequirements(shooterSubsystem, intakeSubsystem);
+    }
+
+    @Override
+    public void initialize(){
+        m_Timer.reset();
+        m_Timer.start();
+    }
+
+    @Override
+    public void execute() {
+        m_shooter.runKicker(true);
+        m_intake.setShootingPivot();
+    }
+
+    @Override
+    public boolean isFinished(){
+        return m_Timer.hasElapsed(duration);
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        m_shooter.runKicker(false);
+    }
+}

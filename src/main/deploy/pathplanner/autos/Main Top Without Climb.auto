@@ -11,15 +11,47 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "AMTWC 2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "AMTWC 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "AMTWC 3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ChargeShooter"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "AMTWC 3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -29,15 +61,47 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "AMTWC 5"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "AMTWC 5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "AMTWC 6"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ChargeShooter"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "AMTWC 6"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -47,9 +111,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "AMTWC 8"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "AMTWC 8"
+                }
+              }
+            ]
           }
         }
       ]

@@ -3,6 +3,11 @@ plugins {
     id "edu.wpi.first.GradleRIO" version "2026.2.1"
 }
 
+// Add PathPlanner maven repo for the Pathplanner Java library
+repositories {
+    maven { url 'https://3015rangerrobotics.github.io/pathplannerlib/repo' }
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
@@ -56,6 +61,8 @@ dependencies {
     annotationProcessor wpi.java.deps.wpilibAnnotations()
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
+    // PathPlanner Java library (explicit) - ensures PathPlannerServer and related classes are on the compile classpath
+    implementation 'com.pathplanner.lib:PathplannerLib-java:2026.1.2'
 
     roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
     roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)

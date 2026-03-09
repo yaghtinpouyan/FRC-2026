@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
@@ -44,6 +45,8 @@ public class climb extends SubsystemBase{
     private ElevatorConfig climbConfig;
     private MechanismPositionConfig robotProperties;
     private Elevator climbingSystem;
+    
+    private LEDS leds = LEDS.getInstance();
 
     private climb(){
         climbMotor = new SparkFlex(idConstants.vortex_C1, MotorType.kBrushless);
@@ -70,11 +73,12 @@ public class climb extends SubsystemBase{
         .withRelativePosition(new Translation3d(Meters.of(0.3127375), Meters.of(-0.05785), Meters.of(0.05855431)));
 
         climbConfig = new ElevatorConfig(climbingMotor)
-        .withStartingHeight(Meters.of(0.536762))
-        .withHardLimits(Meters.of(0), Meters.of(0.241935))
+        .withStartingHeight(Meters.of(0.429))
+        .withSoftLimits(Meters.of(0.429), Meters.of(0.536))
+        .withHardLimits(Meters.of(0.429), Meters.of(0.6))
         .withTelemetry("Climb", TelemetryVerbosity.HIGH)
         .withMechanismPositionConfig(robotProperties)
-        .withMass(Pounds.of(3));
+        .withMass(Kilograms.of(0.7632));
 
         climbingSystem = new Elevator(climbConfig);
     }
@@ -98,6 +102,7 @@ public class climb extends SubsystemBase{
         if(dPad == 270) {
             ballIntake.stateIntaking = false;
             align.travelToTower(true);
+            leds.climbWave();
         }
     }
 
