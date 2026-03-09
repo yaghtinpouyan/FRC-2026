@@ -6,9 +6,9 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
 public class VisionConstants {
-    public static final double camPosX = -0.220431;
-    public static final double camPosY = -0.07508068;
-    public static final double camPosZ = -543.20660;
+    public static final double camPosX = -0.0407;
+    public static final double camPosY = -0.2065;
+    public static final double camPosZ = 0.38372;
     public static final double camRotPitch = 45;
 
     // The standard deviations of our vision estimated poses, which affect correction rate
