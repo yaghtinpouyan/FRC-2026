@@ -11,9 +11,16 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "AMTWC 2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "AMTWC 2"
+                }
+              }
+            ]
           }
         },
         {
@@ -29,9 +36,16 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "AMTWC 5"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "AMTWC 5"
+                }
+              }
+            ]
           }
         },
         {
