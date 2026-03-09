@@ -160,8 +160,8 @@ public class shooter extends SubsystemBase{
 
     hoodConfig = new ArmConfig(hoodSystem)
     .withTelemetry("Hood", TelemetryVerbosity.HIGH)
-    .withSoftLimits(Degrees.of(0.5), Degrees.of(14.5))
-    .withHardLimit(Degrees.of(0), Degrees.of(15))
+    .withSoftLimits(Degrees.of(20), Degrees.of(30))
+    .withHardLimit(Degrees.of(20), Degrees.of(30))
     .withLength(Constants.hoodArmLength)
     .withStartingPosition(Degrees.of(Constants.startingHoodAngle)) 
     .withMass(Constants.hoodMass); 
