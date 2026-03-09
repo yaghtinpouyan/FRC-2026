@@ -19,6 +19,12 @@
                 "data": {
                   "pathName": "AMTWC 2"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
               }
             ]
           }
@@ -43,6 +49,12 @@
                 "type": "path",
                 "data": {
                   "pathName": "AMTWC 5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
                 }
               }
             ]
