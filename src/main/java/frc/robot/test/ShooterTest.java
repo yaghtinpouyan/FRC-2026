@@ -16,9 +16,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ShooterTest extends SubsystemBase {
     private static ShooterTest shooterTest = null;
     private shooter ballShooter = shooter.getInstance();
-    double TestFlyWheelRPM = SmartDashboard.getNumber("RPM", 0);
-    AngularVelocity testFlyWheelVelocity = RotationsPerSecond.of(TestFlyWheelRPM/60);
-    Angle testHoodAngle = Degrees.of(SmartDashboard.getNumber("Hood Angle", 0));
+    double testHoodInput = 0;
+    
+    double testFlyWheelRPM = 0;
+    AngularVelocity testFlyWheelVelocity = RotationsPerSecond.of(testFlyWheelRPM/60);
+    Angle testHoodAngle = Degrees.of(testHoodInput);
+
+    private ShooterTest() {
+        SmartDashboard.putNumber("HoodAngle", 0.0);
+        testHoodInput = SmartDashboard.getNumber("HoodAngle", 0);
+
+        SmartDashboard.putNumber("RPM", 0.0);
+        testFlyWheelRPM = SmartDashboard.getNumber("RPM", 0.0);
+    }
+    
 
     public void SetTestVelocity(boolean SetTestVel){
         
@@ -29,12 +40,12 @@ public class ShooterTest extends SubsystemBase {
         if(SetTestHoodAngle) ballShooter.setHoodAngle(testHoodAngle);
     }
 
-    public void runFlyWheelSysID(){
-        ballShooter.flyWheelSysId(Constants.flyWheelSysIdMaxVoltage, Constants.flyWheelSysIdStep, Constants.flyWheelSysIdDuration);
+    public void runFlyWheelSysID(boolean run){
+        if(run) ballShooter.flyWheelSysId(Constants.flyWheelSysIdMaxVoltage, Constants.flyWheelSysIdStep, Constants.flyWheelSysIdDuration);
     }
 
-    public void runHoodSysID(){
-        ballShooter.hoodSysId(Constants.hoodSysIdMaxVoltage, Constants.hoodSysIdStep, Constants.hoodSysIdDuration);
+    public void runHoodSysID(boolean run){
+        if(run) ballShooter.hoodSysId(Constants.hoodSysIdMaxVoltage, Constants.hoodSysIdStep, Constants.hoodSysIdDuration);
     }
 
     public static ShooterTest getInstance(){

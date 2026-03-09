@@ -48,6 +48,8 @@ public class intake extends SubsystemBase{
     private SmartMotorController hopperSystem;
     private SmartMotorController intakingSystem;
 
+    private LEDS leds = LEDS.getInstance();
+
      public boolean stateIntaking;
 
     private intake(){
@@ -180,6 +182,7 @@ public class intake extends SubsystemBase{
 
     public void intakeInputHandler(boolean input1, double input2){
         changeIntakeState(input1);
+        leds.intakeSolid();
         if(input2 > 0.3){
             setIntakePivot();
             runHopper(false);

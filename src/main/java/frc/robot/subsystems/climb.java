@@ -44,6 +44,8 @@ public class climb extends SubsystemBase{
     private ElevatorConfig climbConfig;
     private MechanismPositionConfig robotProperties;
     private Elevator climbingSystem;
+    
+    private LEDS leds = LEDS.getInstance();
 
     private climb(){
         climbMotor = new SparkFlex(idConstants.vortex_C1, MotorType.kBrushless);
@@ -98,6 +100,7 @@ public class climb extends SubsystemBase{
         if(dPad == 270) {
             ballIntake.stateIntaking = false;
             align.travelToTower(true);
+            leds.climbWave();
         }
     }
 
