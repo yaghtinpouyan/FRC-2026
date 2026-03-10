@@ -11,21 +11,47 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "MBWC2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBWC2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "MBWC3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ChargeShooter"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBWC3"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 3.0
+            "name": "Shoot"
           }
         },
         {
@@ -35,21 +61,47 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "MBWC5"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBWC5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "MBWC6"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBWC6"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ChargeShooter"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 3.0
+            "name": "Shoot"
           }
         }
       ]
