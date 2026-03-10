@@ -11,9 +11,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "MBWC2"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBWC2"
+                }
+              }
+            ]
           }
         },
         {
@@ -23,9 +36,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 3.0
+            "name": "Shoot"
           }
         },
         {
@@ -35,9 +48,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "MBWC5"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBWC5"
+                }
+              }
+            ]
           }
         },
         {
@@ -47,9 +73,47 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 3.0
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ChargeShooter"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBWC7"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBWC8"
+                }
+              }
+            ]
           }
         }
       ]
