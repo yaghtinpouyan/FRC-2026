@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.83388888888889,
+        "y": 5.584366666666666
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.83388888888889,
+        "y": 5.584366666666666
+      },
+      "isLocked": false,
+      "linkedName": "ABTWCE 5"
+    },
+    {
+      "anchor": {
+        "x": 2.6571999999999996,
+        "y": 5.584366666666666
+      },
+      "prevControl": {
+        "x": 1.6571999999999996,
+        "y": 5.584366666666666
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ABTWCE 6"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5618257261410777,
+      "rotationDegrees": -123.00000000000001
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 2.0,
+    "rotation": -37.349349044640576
+  },
+  "reversed": false,
+  "folder": "Actual Bumper Top WC",
+  "idealStartingState": {
+    "velocity": 2.0,
+    "rotation": -123.43986920559479
+  },
+  "useDefaultConstraints": true
+}

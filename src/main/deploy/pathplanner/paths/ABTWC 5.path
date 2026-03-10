@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.4380444444444445,
+        "y": 3.2457000000000007
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.046726610811876,
+        "y": 3.6593039190927428
+      },
+      "isLocked": false,
+      "linkedName": "ABTWCE 4"
+    },
+    {
+      "anchor": {
+        "x": 6.798588888888889,
+        "y": 4.6878777777777785
+      },
+      "prevControl": {
+        "x": 6.982467413760476,
+        "y": 4.51850042365082
+      },
+      "nextControl": {
+        "x": 6.12437145165427,
+        "y": 5.308924556920743
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.83388888888889,
+        "y": 5.584366666666666
+      },
+      "prevControl": {
+        "x": 6.633795517620897,
+        "y": 4.712215734984565
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ABTWCE 5"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5095435684647412,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 1.4688796680497866,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 1.0,
+    "rotation": -123.43986920559479
+  },
+  "reversed": false,
+  "folder": "Actual Bumper Top WC",
+  "idealStartingState": {
+    "velocity": 1.0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
