@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
-import frc.robot.subsystems.automations.autoAlign;
+import frc.robot.subsystems.automations.AutoAlign;
 import frc.robot.constants.Constants;
 import frc.robot.constants.angleMap;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -49,8 +49,8 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
-public class shooter extends SubsystemBase{
-    private static shooter ballShooter = null;
+public class Shooter extends SubsystemBase{
+    private static Shooter ballShooter = null;
 
   private TalonFX Lshooter1;
   private TalonFX Lshooter2;
@@ -81,13 +81,13 @@ public class shooter extends SubsystemBase{
 
   private LEDS leds = LEDS.getInstance();
   
-  private autoAlign align = autoAlign.getInstance();
-  private intake ballIntake = intake.getInstance();
+  private AutoAlign align = AutoAlign.getInstance();
+  private Intake ballIntake = Intake.getInstance();
   private Telemetry telemetry;
   private angleMap shootingAMap;
   private velocityMap shootingVMap;
 
-  private shooter() {
+  private Shooter() {
     //Motor inits
     Lshooter1 = new TalonFX(idConstants.krakenx60_S1);
     Lshooter2 = new TalonFX(idConstants.krakenx60_S2);
@@ -247,9 +247,9 @@ public class shooter extends SubsystemBase{
     mainShooter.simIterate();
   }
 
-  public static shooter getInstance(){
+  public static Shooter getInstance(){
         if (ballShooter == null){
-            ballShooter = new shooter();
+            ballShooter = new Shooter();
         }
         return ballShooter;
     }

@@ -1,7 +1,7 @@
 package frc.robot.test;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.shooter;
+import frc.robot.subsystems.Shooter;
 import frc.robot.constants.Constants;
 
 import static edu.wpi.first.units.Units.Degrees;
@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterTest extends SubsystemBase {
     private static ShooterTest shooterTest = null;
-    private shooter ballShooter = shooter.getInstance();
+    private Shooter ballShooter = Shooter.getInstance();
     double testHoodInput = 0;
     
     double testFlyWheelRPM = 0;

@@ -2,16 +2,16 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.intake;
-import frc.robot.subsystems.shooter;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class FireShooter extends Command {
-    private final shooter m_shooter;
-    private final intake m_intake;
+    private final Shooter m_shooter;
+    private final Intake m_intake;
     private double duration; 
     private final Timer m_Timer;
 
-    public FireShooter(shooter shooterSubsystem, intake intakeSubsystem, double duration) {
+    public FireShooter(Shooter shooterSubsystem, Intake intakeSubsystem, double duration) {
         m_shooter = shooterSubsystem;
         m_intake = intakeSubsystem;
         m_Timer = new Timer();

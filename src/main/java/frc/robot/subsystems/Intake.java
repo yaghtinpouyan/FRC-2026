@@ -36,8 +36,8 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
-public class intake extends SubsystemBase{
-    private static intake ballIntake = null;
+public class Intake extends SubsystemBase{
+    private static Intake ballIntake = null;
 
     private TalonFX intakeMotor;
     private TalonFX hopperMotor;
@@ -54,7 +54,7 @@ public class intake extends SubsystemBase{
 
      public boolean stateIntaking;
 
-    private intake(){
+    private Intake(){
         hopperMotor = new TalonFX(idConstants.falcon500_I1);
         intakeMotor = new TalonFX(idConstants.falcon500_I2);
         pivotMotor = new SparkMax(idConstants.neo_I3, MotorType.kBrushless);
@@ -194,9 +194,9 @@ public class intake extends SubsystemBase{
     }
 
     
-    public static intake getInstance(){
+    public static Intake getInstance(){
         if (ballIntake == null){
-            ballIntake = new intake();
+            ballIntake = new Intake();
         }
         return ballIntake;
     }

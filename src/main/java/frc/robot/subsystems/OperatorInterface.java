@@ -5,18 +5,18 @@ import frc.robot.subsystems.automations.Vision;
 import frc.robot.test.ShooterTest;
 import edu.wpi.first.wpilibj.XboxController;
 
-public class operatorinterface extends SubsystemBase{
-    private static operatorinterface oi = null;
+public class OperatorInterface extends SubsystemBase{
+    private static OperatorInterface oi = null;
     private XboxController controller1;
-    private drive drivetrain = drive.getInstance();
+    private Drive drivetrain = Drive.getInstance();
     private Vision vision = Vision.getInstance();
-    private intake ballIntake = intake.getInstance();
-    private shooter ballShooter = shooter.getInstance();
-    private climb climber = climb.getInstance();
+    private Intake ballIntake = Intake.getInstance();
+    private Shooter ballShooter = Shooter.getInstance();
+    private Climb climber = Climb.getInstance();
     private Telemetry telemetry = Telemetry.getInstance();
     private ShooterTest shooterTest = ShooterTest.getInstance();
 
-    private operatorinterface(){
+    private OperatorInterface(){
         controller1 = new XboxController(0);
     }
 
@@ -57,9 +57,9 @@ public class operatorinterface extends SubsystemBase{
         updateClimb();
     }
 
-    public static operatorinterface getInstance(){
+    public static OperatorInterface getInstance(){
         if (oi == null){
-            oi = new operatorinterface();
+            oi = new OperatorInterface();
         }
         return oi;
     }

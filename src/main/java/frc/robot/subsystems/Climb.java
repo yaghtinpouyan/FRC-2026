@@ -20,7 +20,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.idConstants;
-import frc.robot.subsystems.automations.autoAlign;
+import frc.robot.subsystems.automations.AutoAlign;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
 import yams.mechanisms.config.ElevatorConfig;
@@ -33,22 +33,22 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 
-public class climb extends SubsystemBase{
-    private static climb climber = null;
+public class Climb extends SubsystemBase{
+    private static Climb climber = null;
 
     private SparkFlex climbMotor;
     private SmartMotorControllerConfig vortexConfig;
     private SmartMotorController climbingMotor;
 
-    private autoAlign align = autoAlign.getInstance();
-    private intake ballIntake = intake.getInstance();
+    private AutoAlign align = AutoAlign.getInstance();
+    private Intake ballIntake = Intake.getInstance();
     private ElevatorConfig climbConfig;
     private MechanismPositionConfig robotProperties;
     private Elevator climbingSystem;
     
     private LEDS leds = LEDS.getInstance();
 
-    private climb(){
+    private Climb(){
         climbMotor = new SparkFlex(idConstants.vortex_C1, MotorType.kBrushless);
 
         vortexConfig = new SmartMotorControllerConfig(this)
@@ -106,9 +106,9 @@ public class climb extends SubsystemBase{
         }
     }
 
-    public static climb getInstance(){
+    public static Climb getInstance(){
         if (climber == null){
-            climber = new climb();
+            climber = new Climb();
         }
         return climber;
     }
