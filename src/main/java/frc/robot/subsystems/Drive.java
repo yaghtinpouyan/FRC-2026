@@ -149,14 +149,9 @@ public class Drive extends SubsystemBase {
 
     }
 
-    //Main driving code
-    public void switchModes(boolean mode1, boolean mode2){
-        if(mode1) driveLock = false;
-        if(mode2) driveLock = true;
-    }
-
-    public void driveInputHandler(double x, double y, double theta, boolean toggle1, boolean toggle2){
-        switchModes(toggle1, toggle2);
+    //Main driving code, called in operator interface(should change to robot container if we have time)
+    public void driveInputHandler(double x, double y, double theta, boolean alignButton){
+        driveLock = alignButton;
         if(driveLock){
             rotateToYaw(x, y);
             ballIntake.stateIntaking = false;

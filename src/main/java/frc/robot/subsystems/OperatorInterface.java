@@ -21,7 +21,7 @@ public class OperatorInterface extends SubsystemBase{
     }
 
     private void updateDrive(){
-        drivetrain.driveInputHandler(-controller1.getRawAxis(1), -controller1.getRawAxis(0), -controller1.getRawAxis(4), controller1.getYButtonPressed(), controller1.getAButtonPressed());
+        drivetrain.driveInputHandler(-controller1.getRawAxis(1), -controller1.getRawAxis(0), -controller1.getRawAxis(4), controller1.getLeftBumperButton());
         drivetrain.updatePoseEstimator();
     }
 
