@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
@@ -19,7 +20,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.idConstants;
-import frc.robot.subsystems.automations.autoAlign;
+import frc.robot.subsystems.automations.AutoAlign;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
 import yams.mechanisms.config.ElevatorConfig;
@@ -32,22 +33,22 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 
-public class climb extends SubsystemBase{
-    private static climb climber = null;
+public class Climb extends SubsystemBase{
+    private static Climb climber = null;
 
     private SparkFlex climbMotor;
     private SmartMotorControllerConfig vortexConfig;
     private SmartMotorController climbingMotor;
 
-    private autoAlign align = autoAlign.getInstance();
-    private intake ballIntake = intake.getInstance();
+    private AutoAlign align = AutoAlign.getInstance();
+    private Intake ballIntake = Intake.getInstance();
     private ElevatorConfig climbConfig;
     private MechanismPositionConfig robotProperties;
     private Elevator climbingSystem;
     
     private LEDS leds = LEDS.getInstance();
 
-    private climb(){
+    private Climb(){
         climbMotor = new SparkFlex(idConstants.vortex_C1, MotorType.kBrushless);
 
         vortexConfig = new SmartMotorControllerConfig(this)
@@ -72,11 +73,12 @@ public class climb extends SubsystemBase{
         .withRelativePosition(new Translation3d(Meters.of(0.3127375), Meters.of(-0.05785), Meters.of(0.05855431)));
 
         climbConfig = new ElevatorConfig(climbingMotor)
-        .withStartingHeight(Meters.of(0.536762))
-        .withHardLimits(Meters.of(0), Meters.of(0.241935))
+        .withStartingHeight(Meters.of(0.429))
+        .withSoftLimits(Meters.of(0.429), Meters.of(0.536))
+        .withHardLimits(Meters.of(0.429), Meters.of(0.6))
         .withTelemetry("Climb", TelemetryVerbosity.HIGH)
         .withMechanismPositionConfig(robotProperties)
-        .withMass(Pounds.of(3));
+        .withMass(Kilograms.of(0.7632));
 
         climbingSystem = new Elevator(climbConfig);
     }
@@ -104,9 +106,9 @@ public class climb extends SubsystemBase{
         }
     }
 
-    public static climb getInstance(){
+    public static Climb getInstance(){
         if (climber == null){
-            climber = new climb();
+            climber = new Climb();
         }
         return climber;
     }

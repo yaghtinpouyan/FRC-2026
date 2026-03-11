@@ -4,14 +4,14 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import frc.robot.subsystems.shooter;
+import frc.robot.subsystems.Shooter;
 
 public class ChargeShooter extends Command {
-    private final shooter m_shooter;
+    private final Shooter m_shooter;
     private double duration; 
     private final Timer m_Timer;
 
-    public ChargeShooter(shooter shooterSubsystem, double duration) {
+    public ChargeShooter(Shooter shooterSubsystem, double duration) {
         m_shooter = shooterSubsystem;
         m_Timer = new Timer();
         this.duration = duration;

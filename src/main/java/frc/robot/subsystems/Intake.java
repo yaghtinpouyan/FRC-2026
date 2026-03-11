@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
@@ -34,8 +36,8 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
-public class intake extends SubsystemBase{
-    private static intake ballIntake = null;
+public class Intake extends SubsystemBase{
+    private static Intake ballIntake = null;
 
     private TalonFX intakeMotor;
     private TalonFX hopperMotor;
@@ -52,7 +54,7 @@ public class intake extends SubsystemBase{
 
      public boolean stateIntaking;
 
-    private intake(){
+    private Intake(){
         hopperMotor = new TalonFX(idConstants.falcon500_I1);
         intakeMotor = new TalonFX(idConstants.falcon500_I2);
         pivotMotor = new SparkMax(idConstants.neo_I3, MotorType.kBrushless);
@@ -88,9 +90,10 @@ public class intake extends SubsystemBase{
 
         pivotConfig = new ArmConfig(pivotingSystem)
         .withLength(Meters.of(0.3366))
-        .withHardLimit(Degrees.of(-62), Degrees.of(62)) //IMPORTANT FIND ANGLE LIMITS
+        .withSoftLimits(Degrees.of(26.5), Degrees.of(152))
+        .withHardLimit(Degrees.of(26.5), Degrees.of(152))
         .withTelemetry("Pivot", TelemetryVerbosity.HIGH)
-        .withMass(Pounds.of(1))
+        .withMass(Kilograms.of(2.714))
         .withStartingPosition(Degrees.of(0));
 
         pivot = new Arm(pivotConfig);
@@ -191,9 +194,9 @@ public class intake extends SubsystemBase{
     }
 
     
-    public static intake getInstance(){
+    public static Intake getInstance(){
         if (ballIntake == null){
-            ballIntake = new intake();
+            ballIntake = new Intake();
         }
         return ballIntake;
     }

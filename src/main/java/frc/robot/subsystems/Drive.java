@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.automations.Vision;
-import frc.robot.subsystems.automations.autoAlign;
+import frc.robot.subsystems.automations.AutoAlign;
 
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -40,8 +40,8 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 
-public class drive extends SubsystemBase {
-    private static drive swerve = null;
+public class Drive extends SubsystemBase {
+    private static Drive swerve = null;
     
     //YAGSL
     private File directory = new File(Filesystem.getDeployDirectory(),"swerve2");
@@ -69,9 +69,9 @@ public class drive extends SubsystemBase {
 
     //Driving modes
     private boolean driveLock = false;
-    intake ballIntake = intake.getInstance();
+    Intake ballIntake = Intake.getInstance();
 
-    private drive(){
+    private Drive(){
         try
         {
             SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -144,19 +144,14 @@ public class drive extends SubsystemBase {
               }
               return false;
             },
-            drive.this// Reference to this subsystem to set requirements
+            Drive.this// Reference to this subsystem to set requirements
         );
 
     }
 
-    //Main driving code
-    public void switchModes(boolean mode1, boolean mode2){
-        if(mode1) driveLock = false;
-        if(mode2) driveLock = true;
-    }
-
-    public void driveInputHandler(double x, double y, double theta, boolean toggle1, boolean toggle2){
-        switchModes(toggle1, toggle2);
+    //Main driving code, called in operator interface(should change to robot container if we have time)
+    public void driveInputHandler(double x, double y, double theta, boolean alignButton){
+        driveLock = alignButton;
         if(driveLock){
             rotateToYaw(x, y);
             ballIntake.stateIntaking = false;
@@ -180,7 +175,7 @@ public class drive extends SubsystemBase {
     }
 
     private void rotateToYaw(double x, double y){
-        autoAlign alignBot = autoAlign.getInstance();
+        AutoAlign alignBot = AutoAlign.getInstance();
        Rotation2d targetAngle = alignBot.getHubYaw();
         //could bug out with diff alliance
         swerveDrive.driveFieldOriented(
@@ -261,9 +256,9 @@ public class drive extends SubsystemBase {
         publisher3d.set(currentPose3d);
     }
 
-    public static drive getInstance(){
+    public static Drive getInstance(){
         if (swerve == null){
-            swerve = new drive();
+            swerve = new Drive();
         }
         return swerve;
     }

@@ -55,8 +55,10 @@ public final class Constants {
   public static final double hoodSysIdMaxVoltage = 10;
   public static final double hoodSysIdStep = 1;
   public static final double hoodSysIdDuration = 5;
-  public static final double startingHoodAngle = 5.019;
+  public static final double startingHoodAngle = 20; // Why was this 5????
   public static final Distance hoodArmLength = Meters.of(0.33176);
   public static final Mass hoodMass = Kilograms.of(1.451496);
+
+  public static final Mass robotMass = Kilograms.of(48);
 
 }

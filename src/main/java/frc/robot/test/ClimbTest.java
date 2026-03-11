@@ -1,10 +1,10 @@
 package frc.robot.test;
-import frc.robot.subsystems.climb;
+import frc.robot.subsystems.Climb;
 import frc.robot.constants.Constants;
 
 public class ClimbTest {
     private static ClimbTest climbTest = null;
-    private climb climber = climb.getInstance();
+    private Climb climber = Climb.getInstance();
 
     public void runClimbSysID(){
         climber.sysId(Constants.climbSysIdMaxVoltage, Constants.climbSysIdStep, Constants.climbSysIdDuration);
