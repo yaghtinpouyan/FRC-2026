@@ -6,7 +6,6 @@ import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
-import static edu.wpi.first.units.Units.Kilogram;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 
@@ -35,8 +34,8 @@ public final class Constants {
   //Intake Subsystems
   public static final int[] rockingAngles = {0,90};
   public static final int osilationTIme = 3;
-  public static final int shootingAngle = 15;
-  public static final int intakeAngle = 215;
+  public static final int intakeAngleUp = 15;
+  public static final int intakeAngleDown = 215;
   public static final double intakeSysIdMaxVoltage = 10;
   public static final double intakeSysIdStep = 1.0;
   public static final double intakeSysIdDuration = 5.0;

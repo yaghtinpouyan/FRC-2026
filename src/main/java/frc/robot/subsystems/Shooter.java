@@ -223,7 +223,7 @@ public class Shooter extends SubsystemBase{
       // Check if flywheel is near target (tolerance 20 RPM)
       if (mainShooter.isNear(getFlyWheelVel(), RPM.of(100)).getAsBoolean()){
         runKicker(true);
-        ballIntake.setShootingPivot();
+        ballIntake.setIntakePivotUp();
         leds.shooterReadyBlink();
       }
     }

@@ -99,18 +99,7 @@ public class Intake extends SubsystemBase{
     }
 
     //Intaking Code
-    public void changeIntakeState(boolean toggle){
-        //To toggle between intaking and not intaking !!!! :thumbs_up:
-        stateIntaking = toggle ? !stateIntaking : stateIntaking;
-        if(stateIntaking) {
-            setIntakePivot();
-            intakingSystem.setVoltage(Volts.of(calcIntakingVolts()));
-        }
-        else{
-            intakingSystem.setVoltage(Volts.of(0));
-        }
-    }
-
+    
     //For scaling intake speed with drive speed
     public double calcIntakingVolts(){
         telemetry = Telemetry.getInstance();
@@ -121,13 +110,6 @@ public class Intake extends SubsystemBase{
         
         double scaling = 0.7 - (botVelocity / maxVelocity);
         return maxVolts*scaling;
-    }
-
-    public void runIntake(boolean forward){
-        if(forward) intakingSystem.setVoltage(Volts.of(3));
-        else{
-            intakingSystem.setVoltage(Volts.of(-3));
-        }
     }
 
     //Pivot Code
@@ -151,12 +133,12 @@ public class Intake extends SubsystemBase{
         }
     }
 
-    public void setShootingPivot(){
-        setAngle(Degrees.of(Constants.shootingAngle));
+    public void setIntakePivotUp(){
+        setAngle(Degrees.of(Constants.intakeAngleUp));
     }
 
-    public void setIntakePivot(){
-        setAngle(Degrees.of(Constants.intakeAngle));
+    public void setIntakePivotDown(){
+        setAngle(Degrees.of(Constants.intakeAngleDown));
     }
 
     public double getPivotDir(){
@@ -169,12 +151,35 @@ public class Intake extends SubsystemBase{
         pivot.sysId(Volts.of(voltage), Volts.of(step).per(Second), Seconds.of(duration)).schedule();
     }
 
-    public void intakeInputHandler(boolean input1, double input2){
-        changeIntakeState(input1);
-        leds.intakeSolid();
+    public void runIntake(boolean forward){
+        if(forward) intakingSystem.setVoltage(Volts.of(3));
+        else{
+            intakingSystem.setVoltage(Volts.of(-3));
+        }
+    }
+
+    public void changeIntakeState(boolean toggle){
+        //To toggle between intaking and not intaking !!!! :thumbs_up:
+        stateIntaking = toggle;
+        if(stateIntaking) {
+            setIntakePivotDown();
+            intakingSystem.setVoltage(Volts.of(calcIntakingVolts()));
+        }
+        else{
+            intakingSystem.setVoltage(Volts.of(0));
+        }
+    }
+
+    public void intakeInputHandler(boolean raiseIntake, double input2){
+        if (raiseIntake && pivot.isNear(Degrees.of(Constants.intakeAngleUp), Degrees.of(5)).getAsBoolean()) {
+            setIntakePivotUp();
+        }
         if(input2 > 0.3){
-            setIntakePivot();
+            if (pivot.isNear(Degrees.of(Constants.intakeAngleDown), Degrees.of(5)).getAsBoolean()){
+                setIntakePivotDown();
+            }
             runIntake(false);
+            leds.intakeSolid();
         }
     }
 
