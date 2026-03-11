@@ -40,66 +40,62 @@ public class Intake extends SubsystemBase{
     private static Intake ballIntake = null;
 
     private TalonFX intakeMotor;
-    private TalonFX hopperMotor;
     private SparkMax pivotMotor;
     private Telemetry telemetry;
 
     private final SmartMotorControllerConfig falconConfig;
     private final SmartMotorControllerConfig neoConfig;
     private SmartMotorController pivotingSystem;
-    private SmartMotorController hopperSystem;
     private SmartMotorController intakingSystem;
 
     private LEDS leds = LEDS.getInstance();
 
-     public boolean stateIntaking;
+    public boolean stateIntaking;
 
     private Intake(){
-        hopperMotor = new TalonFX(idConstants.falcon500_I1);
         intakeMotor = new TalonFX(idConstants.falcon500_I2);
         pivotMotor = new SparkMax(idConstants.neo_I3, MotorType.kBrushless);
         stateIntaking = false;
 
         falconConfig = new SmartMotorControllerConfig(this)
-        .withClosedLoopController(0.00016541, 0, 0, RPM.of(5000), RotationsPerSecondPerSecond.of(2500))
-        .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
-        .withIdleMode(MotorMode.COAST)
-        .withTelemetry("KickerMotor", TelemetryVerbosity.HIGH)
-        .withStatorCurrentLimit(Amps.of(20))
-        .withMotorInverted(true)
-        .withClosedLoopRampRate(Seconds.of(0.25))
-        .withOpenLoopRampRate(Seconds.of(0.25))
-        .withFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
-        .withSimFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
-        .withControlMode(ControlMode.CLOSED_LOOP);
+                            .withClosedLoopController(0.00016541, 0, 0, RPM.of(5000), RotationsPerSecondPerSecond.of(2500))
+                            .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
+                            .withIdleMode(MotorMode.COAST)
+                            .withTelemetry("KickerMotor", TelemetryVerbosity.HIGH)
+                            .withStatorCurrentLimit(Amps.of(20))
+                            .withMotorInverted(true)
+                            .withClosedLoopRampRate(Seconds.of(0.25))
+                            .withOpenLoopRampRate(Seconds.of(0.25))
+                            .withFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
+                            .withSimFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
+                            .withControlMode(ControlMode.CLOSED_LOOP);
 
         neoConfig = new SmartMotorControllerConfig(this)
-        .withClosedLoopController(0.00016541, 0, 0, RPM.of(5000), RotationsPerSecondPerSecond.of(2500))
-        .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
-        .withIdleMode(MotorMode.COAST)
-        .withTelemetry("KickerMotor", TelemetryVerbosity.HIGH)
-        .withStatorCurrentLimit(Amps.of(20))
-        .withMotorInverted(true)
-        .withClosedLoopRampRate(Seconds.of(0.25))
-        .withOpenLoopRampRate(Seconds.of(0.25))
-        .withFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
-        .withSimFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
-        .withControlMode(ControlMode.CLOSED_LOOP);
+                        .withClosedLoopController(0.00016541, 0, 0, RPM.of(5000), RotationsPerSecondPerSecond.of(2500))
+                        .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
+                        .withIdleMode(MotorMode.COAST)
+                        .withTelemetry("KickerMotor", TelemetryVerbosity.HIGH)
+                        .withStatorCurrentLimit(Amps.of(20))
+                        .withMotorInverted(true)
+                        .withClosedLoopRampRate(Seconds.of(0.25))
+                        .withOpenLoopRampRate(Seconds.of(0.25))
+                        .withFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
+                        .withSimFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
+                        .withControlMode(ControlMode.CLOSED_LOOP);
 
-        pivotingSystem = new SparkWrapper(pivotMotor, DCMotor.getFalcon500(1), neoConfig);
+        pivotingSystem = new SparkWrapper(pivotMotor, DCMotor.getNEO(1), neoConfig);
 
         pivotConfig = new ArmConfig(pivotingSystem)
-        .withLength(Meters.of(0.3366))
-        .withSoftLimits(Degrees.of(26.5), Degrees.of(152))
-        .withHardLimit(Degrees.of(26.5), Degrees.of(152))
-        .withTelemetry("Pivot", TelemetryVerbosity.HIGH)
-        .withMass(Kilograms.of(2.714))
-        .withStartingPosition(Degrees.of(0));
-
+                           .withLength(Meters.of(0.3366))
+                           .withSoftLimits(Degrees.of(26.5), Degrees.of(152))
+                           .withHardLimit(Degrees.of(26.5), Degrees.of(152))
+                           .withTelemetry("Pivot", TelemetryVerbosity.HIGH)
+                           .withMass(Kilograms.of(2.714))
+                           .withStartingPosition(Degrees.of(0));
+                           
+        intakingSystem = new TalonFXWrapper(intakeMotor, DCMotor.getFalcon500(1), falconConfig);
+        
         pivot = new Arm(pivotConfig);
-
-        hopperSystem = new TalonFXWrapper(hopperMotor, DCMotor.getFalcon500(1), falconConfig);
-        intakingSystem = new TalonFXWrapper(intakeMotor, DCMotor.getNEO(1), falconConfig);
     }
 
     //Intaking Code
@@ -109,7 +105,6 @@ public class Intake extends SubsystemBase{
         if(stateIntaking) {
             setIntakePivot();
             intakingSystem.setVoltage(Volts.of(calcIntakingVolts()));
-            runHopper(true);
         }
         else{
             intakingSystem.setVoltage(Volts.of(0));
@@ -170,15 +165,6 @@ public class Intake extends SubsystemBase{
         return dir;
     }
 
-    //Hopper Code
-    public void runHopper(boolean indexF){
-        //Account for movement vector later to save power
-        if(indexF) hopperSystem.setVoltage(Volts.of(3));
-        else{
-            if(indexF) hopperSystem.setVoltage(Volts.of(-3));
-        }
-    } 
-
     public void sysId(double voltage,double step,double duration){
         pivot.sysId(Volts.of(voltage), Volts.of(step).per(Second), Seconds.of(duration)).schedule();
     }
@@ -188,7 +174,6 @@ public class Intake extends SubsystemBase{
         leds.intakeSolid();
         if(input2 > 0.3){
             setIntakePivot();
-            runHopper(false);
             runIntake(false);
         }
     }
