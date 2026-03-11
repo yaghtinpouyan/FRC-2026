@@ -216,17 +216,22 @@ public class Shooter extends SubsystemBase{
   }
 
   public void shooterInputManager(boolean charge, double fire){
-    //Richard make dis a toggle pls
-    if(charge){
+    if(fire > 0.3){
       setHoodAngle(getHoodAngle());
       setFlyWheelVel(getFlyWheelVel());
       leds.shooterChargingWave();
+      // Check if flywheel is near target (tolerance 20 RPM)
+      if (mainShooter.isNear(getFlyWheelVel(), RPM.of(100)).getAsBoolean()){
+        runKicker(true);
+        ballIntake.setIntakePivotUp();
+        leds.shooterReadyBlink();
+      }
     }
-    else if(fire > 0.3){
-      runKicker(true);
-      ballIntake.setShootingPivot();
-      leds.shooterReadyBlink();
-    }
+    // else if(fire > 0.3){
+    //   runKicker(true);
+    //   ballIntake.setShootingPivot();
+    //   leds.shooterReadyBlink();
+    // }
   }
 
   public void flyWheelSysId(double voltage,double step,double duration) {

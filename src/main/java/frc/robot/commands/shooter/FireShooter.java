@@ -28,7 +28,7 @@ public class FireShooter extends Command {
     @Override
     public void execute() {
         m_shooter.runKicker(true);
-        m_intake.setShootingPivot();
+        m_intake.setIntakePivotUp();
     }
 
     @Override
