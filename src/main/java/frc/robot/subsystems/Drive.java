@@ -1,262 +1,318 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
-//WPILIB Imports
+import static edu.wpi.first.units.Units.Meter;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.constants.Constants;
-import frc.robot.subsystems.automations.Vision;
-import frc.robot.subsystems.automations.AutoAlign;
-
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-
-//YAGSL Imports
-import java.io.File;
-
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.constants.Constants;
+import java.io.File;
+import java.util.Arrays;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+import swervelib.SwerveController;
+import swervelib.SwerveDrive;
+import swervelib.SwerveDriveTest;
+import swervelib.math.SwerveMath;
+import swervelib.parser.SwerveControllerConfiguration;
+import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
-import swervelib.SwerveDrive;
-import swervelib.SwerveInputStream;
-import swervelib.SwerveModule;
 
-//Pathplanner imports
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+public class Drive extends SubsystemBase
+{
 
-
-public class Drive extends SubsystemBase {
     private static Drive swerve = null;
-    
-    //YAGSL
-    private File directory = new File(Filesystem.getDeployDirectory(),"swerve2");
-    public SwerveDrive swerveDrive;
-    private SwerveInputStream angularVel;
-    private SwerveInputStream driveVel;
+  /**
+   * Swerve drive object.
+   */
+  private final SwerveDrive swerveDrive;
+  private File directory = new File(Filesystem.getDeployDirectory(),"swerve2");
 
-    //Advantage Scope
-    private StructPublisher<Pose3d> publisher3d;
-    private StructPublisher<ChassisSpeeds> publisherSpeed;
-    private Pose2d currentPose2d;
-    private Pose3d currentPose3d;
-
-    //Pathplanner
-    private RobotConfig config;
-
-    //Select module
-    public int selectModule;
-
-    //sysid
-    SysIdRoutine driveSysID;
-    SysIdRoutine angleSysID;
-    Direction currentDir = Direction.kForward;
-    private SwerveModule[] modules;
-
-    //Driving modes
-    private boolean driveLock = false;
-    Intake ballIntake = Intake.getInstance();
-
-    private Drive(){
-        try
-        {
-            SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
-            swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.maxDriveSpeed, Constants.startPose);
-        } catch (Exception e)
-        {
-        throw new RuntimeException(e);
-        }
-
-        //Advantage Scope
-        publisherSpeed = NetworkTableInstance.getDefault().getStructTopic("MyChassisSpeed", ChassisSpeeds.struct).publish();
-        publisher3d = NetworkTableInstance.getDefault().getStructTopic("/AdvantageScope/Robot/Pose", Pose3d.struct).publish();
-        modules = swerveDrive.getModules();
-
-        //sysID
-        driveSysID = new SysIdRoutine(new SysIdRoutine.Config(), 
-            new SysIdRoutine.Mechanism(
-                (voltage) -> {modules[0].getDriveMotor().setVoltage(voltage.in(Volts));}, 
-                (log) -> {
-                    log.motor("drive1").voltage(Volts.of(modules[0].getDriveMotor().getVoltage()))
-                        //Potential encoder return error, the ttb and integrated encoders could be returning non meter related units
-                       .linearVelocity(MetersPerSecond.of(modules[0].getDriveMotor().getVelocity()/(Constants.secondsPerMinute*Constants.driveCircumferenceMeters)))
-                       .linearPosition(Meters.of(modules[0].getDriveMotor().getPosition()*Constants.driveCircumferenceMeters));
-                }, 
-                this
-            )
-        );
-
-        angleSysID = new SysIdRoutine(new SysIdRoutine.Config(), 
-            new SysIdRoutine.Mechanism(
-                (voltage) -> {modules[0].getAngleMotor().setVoltage(voltage.in(Volts));}, 
-                (log) -> {
-                    log.motor("angle1").voltage(Volts.of(modules[0].getAngleMotor().getVoltage()))
-                    //Changed to use internal motor encoder, (watch out for meters instead of deg)
-                    .angularVelocity(RotationsPerSecond.of(modules[0].getAngleMotor().getVelocity()/Constants.secondsPerMinute))
-                    .angularPosition(Rotations.of(modules[0].getAngleMotor().getPosition()));
-                }, 
-                this
-            )
-        );
-
-        /*
-         * 
-         */
-
-        //Pathplanner
-        try {
-            config = RobotConfig.fromGUISettings();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Configure AutoBuilder last
-            AutoBuilder.configure(
-            this::getRobotPose, 
-            this::resetRobotPose, 
-            this::getRobotSpeed, 
-            (speeds, feedforwards) -> drive(speeds), 
-            new PPHolonomicDriveController( 
-                    new PIDConstants(5.0, 0.0, 0.0), // Movement PID constants
-                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-            ),
-            config,
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            Drive.this// Reference to this subsystem to set requirements
-        );
-
+  public Drive()
+  { 
+    boolean blueAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue;
+    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
+                                                                      Meter.of(4)),
+                                                    Rotation2d.fromDegrees(0))
+                                       : new Pose2d(new Translation2d(Meter.of(16),
+                                                                      Meter.of(4)),
+                                                    Rotation2d.fromDegrees(180));
+    // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    try
+    {
+      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.maxDriveSpeed, startingPose);
+      // Alternative method if you don't want to supply the conversion factor via JSON files.
+      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
+    } catch (Exception e)
+    {
+      throw new RuntimeException(e);
     }
+    swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
+    swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
+    swerveDrive.setAngularVelocityCompensation(true,
+                                               true,
+                                               0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
+    swerveDrive.setModuleEncoderAutoSynchronize(false,
+                                                1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
+    // swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
+  }
 
-    //Main driving code, called in operator interface(should change to robot container if we have time)
-    public void driveInputHandler(double x, double y, double theta, boolean alignButton){
-        driveLock = alignButton;
-        if(driveLock){
-            rotateToYaw(x, y);
-            ballIntake.stateIntaking = false;
-        }
-        else{
-            swerveSupplier(x,y,theta);
-        }
+  /**
+   * Construct the swerve drive.
+   *
+   * @param driveCfg      SwerveDriveConfiguration for the swerve.
+   * @param controllerCfg Swerve Controller.
+   */
+  public Drive(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
+  {
+    swerveDrive = new SwerveDrive(driveCfg,
+                                  controllerCfg,
+                                  Constants.maxDriveSpeed,
+                                  new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)),
+                                             Rotation2d.fromDegrees(0)));
+  }
+
+  @Override
+  public void periodic()
+  {
+  }
+
+  @Override
+  public void simulationPeriodic()
+  {
+  }
+
+  public Command sysIdDriveMotorCommand()
+  {
+    return SwerveDriveTest.generateSysIdCommand(
+        SwerveDriveTest.setDriveSysIdRoutine(
+            new Config(),
+            this, swerveDrive, 12, true),
+        3.0, 5.0, 3.0);
+  }
+
+  public Command sysIdAngleMotorCommand()
+  {
+    return SwerveDriveTest.generateSysIdCommand(
+        SwerveDriveTest.setAngleSysIdRoutine(
+            new Config(),
+            this, swerveDrive),
+        3.0, 5.0, 3.0);
+  }
+
+  public Command centerModulesCommand()
+  {
+    return run(() -> Arrays.asList(swerveDrive.getModules())
+                           .forEach(it -> it.setAngle(0.0)));
+  }
+
+  public Command driveForward()
+  {
+    return run(() -> {
+      swerveDrive.drive(new Translation2d(1, 0), 0, false, false);
+    }).finallyDo(() -> swerveDrive.drive(new Translation2d(0, 0), 0, false, false));
+  }
+
+
+  
+  public void replaceSwerveModuleFeedforward(double kS, double kV, double kA)
+  {
+    swerveDrive.replaceSwerveModuleFeedforward(new SimpleMotorFeedforward(kS, kV, kA));
+  }
+
+  /**
+   * Command to drive the robot using translative values and heading as angular velocity.
+   *
+   * @param translationX     Translation in the X direction. Cubed for smoother controls.
+   * @param translationY     Translation in the Y direction. Cubed for smoother controls.
+   * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
+   * @return Drive command.
+   */
+  public void driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
+  {
+      // Make the robot move
+      swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
+                            translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
+                            translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()), 0.8),
+                        Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
+                        true,
+                        false);
+  }
+
+  public void driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
+                              DoubleSupplier headingY)
+  {
+    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
+      Translation2d scaledInputs = SwerveMath.scaleTranslation(new Translation2d(translationX.getAsDouble(),
+                                                                                 translationY.getAsDouble()), 0.8);
+
+      // Make the robot move
+      driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
+                                                                      headingX.getAsDouble(),
+                                                                      headingY.getAsDouble(),
+                                                                      swerveDrive.getOdometryHeading().getRadians(),
+                                                                      swerveDrive.getMaximumChassisVelocity()));
+  }
+
+  public void drive(Translation2d translation, double rotation, boolean fieldRelative)
+  {
+    swerveDrive.drive(translation,
+                      rotation,
+                      fieldRelative,
+                      false); // Open loop is disabled since it shouldn't be used most of the time.
+  }
+
+  public void driveFieldOriented(ChassisSpeeds velocity)
+  {
+    swerveDrive.driveFieldOriented(velocity);
+  }
+
+  public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity)
+  {
+    return run(() -> {
+      swerveDrive.driveFieldOriented(velocity.get());
+    });
+  }
+
+  public void drive(ChassisSpeeds velocity)
+  {
+    swerveDrive.drive(velocity);
+  }
+
+  public SwerveDriveKinematics getKinematics()
+  {
+    return swerveDrive.kinematics;
+  }
+
+  public void resetOdometry(Pose2d initialHolonomicPose)
+  {
+    swerveDrive.resetOdometry(initialHolonomicPose);
+  }
+
+  public Pose2d getPose()
+  {
+    return swerveDrive.getPose();
+  }
+  
+  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds)
+  {
+    swerveDrive.setChassisSpeeds(chassisSpeeds);
+  }
+
+  public void postTrajectory(Trajectory trajectory)
+  {
+    swerveDrive.postTrajectory(trajectory);
+  }
+
+  public void zeroGyro()
+  {
+    swerveDrive.zeroGyro();
+  }
+
+  private boolean isRedAlliance()
+  {
+    var alliance = DriverStation.getAlliance();
+    return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+  }
+
+  public void zeroGyroWithAlliance()
+  {
+    if (isRedAlliance())
+    {
+      zeroGyro();
+      //Set the pose 180 degrees
+      resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+    } else
+    {
+      zeroGyro();
     }
-    
-    public void swerveSupplier(double x, double y, double theta){
-        angularVel = SwerveInputStream.of(
-            returnSwerveDrive(), 
-            () -> x, 
-            () -> y
-        ).withControllerRotationAxis(() -> theta).scaleRotation(0.8).deadband(Constants.deadband).allianceRelativeControl(true);   
+  }
 
-        driveVel = angularVel.copy().withControllerHeadingAxis(() -> x, () ->y);
-        driveField(driveVel.get());
+  public void setMotorBrake(boolean brake)
+  {
+    swerveDrive.setMotorIdleMode(brake);
+  }
 
-        publisherSpeed.set(swerveDrive.getFieldVelocity());
-    }
+  public Rotation2d getHeading()
+  {
+    return getPose().getRotation();
+  }
 
-    private void rotateToYaw(double x, double y){
-        AutoAlign alignBot = AutoAlign.getInstance();
-       Rotation2d targetAngle = alignBot.getHubYaw();
-        //could bug out with diff alliance
-        swerveDrive.driveFieldOriented(
-            swerveDrive.swerveController.getTargetSpeeds(
-                x, 
-                y, 
-                targetAngle.getRadians(), 
-                swerveDrive.getYaw().getRadians(), 
-                swerveDrive.getMaximumChassisVelocity()
-            )
-        );
+  public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX, double headingY)
+  {
+    Translation2d scaledInputs = SwerveMath.cubeTranslation(new Translation2d(xInput, yInput));
+    return swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(),
+                                                        scaledInputs.getY(),
+                                                        headingX,
+                                                        headingY,
+                                                        getHeading().getRadians(),
+                                                        Constants.maxDriveSpeed);
+  }
 
-        driveVel = angularVel.copy().withControllerHeadingAxis(() -> x, () ->y);
-    }
+  public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle)
+  {
+    Translation2d scaledInputs = SwerveMath.cubeTranslation(new Translation2d(xInput, yInput));
 
-    private void drive(ChassisSpeeds vel){
-        swerveDrive.drive(vel);
-    }
+    return swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(),
+                                                        scaledInputs.getY(),
+                                                        angle.getRadians(),
+                                                        getHeading().getRadians(),
+                                                        Constants.maxDriveSpeed);
+  }
 
-    private void driveField(ChassisSpeeds vel){
-        swerveDrive.driveFieldOriented(vel);
-    }
+  public ChassisSpeeds getFieldVelocity()
+  {
+    return swerveDrive.getFieldVelocity();
+  }
 
-    //Helper methods
-    private SwerveDrive returnSwerveDrive(){
-        return swerveDrive;
-    }
+  public ChassisSpeeds getRobotVelocity()
+  {
+    return swerveDrive.getRobotVelocity();
+  }
 
-    public void autoZero(boolean input1){
-        SwerveModule[] modules = swerveDrive.getModules();
-        if(input1){
-            modules[0].setAngle(0);
-            modules[1].setAngle(0);
-            modules[2].setAngle(0);
-            modules[3].setAngle(0);
-        }
-    }
+  public SwerveController getSwerveController()
+  {
+    return swerveDrive.swerveController;
+  }
 
-    public void runDriveSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
-        if(toggleF) currentDir = Direction.kForward;
-        if(toggleR) currentDir = Direction.kReverse;
-        if(quat) driveSysID.quasistatic(currentDir).schedule();
-        if(dynamic) driveSysID.dynamic(currentDir).schedule();
-    }
+  public SwerveDriveConfiguration getSwerveDriveConfiguration()
+  {
+    return swerveDrive.swerveDriveConfiguration;
+  }
 
-    public void runAngleSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
-        if(toggleF) currentDir = Direction.kForward;
-        if(toggleR) currentDir = Direction.kReverse;
-        if(quat) angleSysID.quasistatic(currentDir).schedule();
-        if(dynamic) angleSysID.dynamic(currentDir).schedule();
-    }
+  public void lock()
+  {
+    swerveDrive.lockPose();
+  }
 
-    public ChassisSpeeds getRobotSpeed(){
-        return swerveDrive.getRobotVelocity();
-    }
+  public Rotation2d getPitch()
+  {
+    return swerveDrive.getPitch();
+  }
 
-    public Pose2d getRobotPose(){
-        return swerveDrive.getPose();
-    }
+  public SwerveDrive getSwerveDrive()
+  {
+    return swerveDrive;
+  }
 
-    public void resetRobotPose(Pose2d pose){
-        swerveDrive.resetOdometry(pose);
-    }
-
-    public void updatePoseEstimator(){
-        Vision.getInstance().updateVision();
-        swerveDrive.updateOdometry();
-    }
-
-    //Update advantage scope periodically
-    @Override
-    public void periodic(){
-        //Get current pose 3d for advantage scope
-        Rotation2d heading = swerveDrive.getYaw();
-        currentPose2d = swerveDrive.getPose();
-        currentPose3d = new Pose3d(currentPose2d.getX(), currentPose2d.getY(), 0, new Rotation3d(heading));
-        //Send 3D data to advantage scope
-        publisher3d.set(currentPose3d);
-    }
-
-    public static Drive getInstance(){
+   public static Drive getInstance(){
         if (swerve == null){
             swerve = new Drive();
         }

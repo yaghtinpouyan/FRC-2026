@@ -39,7 +39,7 @@ public class AutoAlign extends SubsystemBase{
     }
 
     public Rotation2d getHubYaw(){
-        Pose2d botPos = drivetrain.getRobotPose();
+        Pose2d botPos = drivetrain.getPose();
         Pose2d hubPos = getHubPos();
 
         double targetRadians = Math.atan2(
@@ -51,7 +51,7 @@ public class AutoAlign extends SubsystemBase{
     }
 
     public Distance getHubDist(){
-        Pose2d botPos = drivetrain.getRobotPose();
+        Pose2d botPos = drivetrain.getPose();
         Pose2d hubPos = getHubPos();
 
         Distance hubDist = Meters.of(
@@ -67,7 +67,7 @@ public class AutoAlign extends SubsystemBase{
 
     //Path finding
     public void followGeneratedPath(Pose2d intermediate, Pose2d target) {
-        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(drivetrain.getRobotPose(), intermediate, target);
+        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(drivetrain.getPose(), intermediate, target);
         PathConstraints constraints = new PathConstraints(4.0, 3.0, 2 * Math.PI, 2 * Math.PI);
         PathPlannerPath path = new PathPlannerPath(
             waypoints,
@@ -98,7 +98,7 @@ public class AutoAlign extends SubsystemBase{
     }
 
     public Optional<Pose2d> getTrenchToAlign() {
-        Pose2d botPose = drivetrain.getRobotPose();
+        Pose2d botPose = drivetrain.getPose();
         if (botPose.getTranslation().getDistance(autoConstants.BlueTrenchLeft.getTranslation()) < 1) {
             return Optional.of(autoConstants.BlueTrenchLeft);
         }

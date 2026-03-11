@@ -23,12 +23,10 @@ public class Telemetry extends SubsystemBase{
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
 
         //Update robot position on the 2d field inside the dashboard
-        field2d.setRobotPose(drivetrain.getRobotPose());
-        int target = drivetrain.selectModule;
-        SmartDashboard.putNumber("selected", target);
+        field2d.setRobotPose(drivetrain.getPose());
 
         //Update robot driving velocity
-        currentVelocity = drivetrain.getRobotSpeed();
+        currentVelocity = drivetrain.getRobotVelocity();
         double botVelocity = Math.hypot(currentVelocity.vxMetersPerSecond, currentVelocity.vyMetersPerSecond);
         SmartDashboard.putNumber("Velocity", botVelocity);
     }
