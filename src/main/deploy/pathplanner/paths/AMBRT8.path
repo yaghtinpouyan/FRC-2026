@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.780767592818649,
-        "y": 0.6822392589427806
+        "x": 2.6775704266583484,
+        "y": 1.0466401559335212
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7265230790099277,
-        "y": 0.9262833793834409
+        "x": 1.9529363330748515,
+        "y": 0.9689051422120026
       },
       "isLocked": false,
-      "linkedName": "AMBE3"
+      "linkedName": "AMBE7"
     },
     {
       "anchor": {
-        "x": 2.440579545197664,
-        "y": 1.4209277400264033
+        "x": 0.49393333333333334,
+        "y": 0.673166666666666
       },
       "prevControl": {
-        "x": 2.5698876349906286,
-        "y": 1.181428005897288
+        "x": 1.457977446139854,
+        "y": 0.6819128958318098
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "AMBE4"
+      "linkedName": "AMBRTE 8"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": true
   },
   "goalEndState": {
-    "velocity": 2.0,
-    "rotation": 51.036034326971716
+    "velocity": 3.0,
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Actual Main Bottom - Tr",
+  "folder": "Actuall Main Bottom WC Revised Trench",
   "idealStartingState": {
-    "velocity": 2.0,
-    "rotation": -1.678323844730185
+    "velocity": 3.0,
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }
