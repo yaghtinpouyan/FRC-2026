@@ -29,6 +29,10 @@ public class Telemetry extends SubsystemBase{
         currentVelocity = drivetrain.getRobotVelocity();
         double botVelocity = Math.hypot(currentVelocity.vxMetersPerSecond, currentVelocity.vyMetersPerSecond);
         SmartDashboard.putNumber("Velocity", botVelocity);
+        SmartDashboard.putNumber("Encoder1", drivetrain.getEncoderOffset(0));
+        SmartDashboard.putNumber("Encoder2", drivetrain.getEncoderOffset(1));
+        SmartDashboard.putNumber("Encoder3", drivetrain.getEncoderOffset(2));
+        SmartDashboard.putNumber("Encoder4", drivetrain.getEncoderOffset(3));
     }
 
     public static Telemetry getInstance(){

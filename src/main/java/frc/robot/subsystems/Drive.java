@@ -27,6 +27,7 @@ import java.util.function.Supplier;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
+import swervelib.SwerveModule;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -41,7 +42,7 @@ public class Drive extends SubsystemBase
   /**
    * Swerve drive object.
    */
-  private final SwerveDrive swerveDrive;
+  private SwerveDrive swerveDrive;
   private File directory = new File(Filesystem.getDeployDirectory(),"swerve2");
 
   public Drive()
@@ -74,12 +75,6 @@ public class Drive extends SubsystemBase
     // swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
   }
 
-  /**
-   * Construct the swerve drive.
-   *
-   * @param driveCfg      SwerveDriveConfiguration for the swerve.
-   * @param controllerCfg Swerve Controller.
-   */
   public Drive(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
   {
     swerveDrive = new SwerveDrive(driveCfg,
@@ -137,14 +132,6 @@ public class Drive extends SubsystemBase
     swerveDrive.replaceSwerveModuleFeedforward(new SimpleMotorFeedforward(kS, kV, kA));
   }
 
-  /**
-   * Command to drive the robot using translative values and heading as angular velocity.
-   *
-   * @param translationX     Translation in the X direction. Cubed for smoother controls.
-   * @param translationY     Translation in the Y direction. Cubed for smoother controls.
-   * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
-   * @return Drive command.
-   */
   public void driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
   {
       // Make the robot move
@@ -275,6 +262,12 @@ public class Drive extends SubsystemBase
                                                         angle.getRadians(),
                                                         getHeading().getRadians(),
                                                         Constants.maxDriveSpeed);
+  }
+
+  public double getEncoderOffset(int targetModule){
+    SwerveModule[] modules = swerveDrive.getModules();
+    SwerveModule module = modules[targetModule];
+    return module.getAbsolutePosition();
   }
 
   public ChassisSpeeds getFieldVelocity()

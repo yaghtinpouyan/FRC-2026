@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.test.ShooterTest;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class OperatorInterface extends SubsystemBase{
@@ -9,10 +10,10 @@ public class OperatorInterface extends SubsystemBase{
     private Drive drivetrain = Drive.getInstance();
     // private Vision vision = Vision.getInstance();
     // private Intake ballIntake = Intake.getInstance();
-    // private Shooter ballShooter = Shooter.getInstance();
+    //private Shooter ballShooter = Shooter.getInstance();
     // private Climb climber = Climb.getInstance();
-    // private Telemetry telemetry = Telemetry.getInstance();
-    // private ShooterTest shooterTest = ShooterTest.getInstance();
+    private Telemetry telemetry = Telemetry.getInstance();
+    //private ShooterTest shooterTest = ShooterTest.getInstance();
 
     private OperatorInterface(){
         controller1 = new XboxController(0);
@@ -33,14 +34,15 @@ public class OperatorInterface extends SubsystemBase{
     // }
 
     // private void updateShooter(){
-    //     ballShooter.shooterInputManager(controller1.getRightBumperButtonPressed(), controller1.getRightTriggerAxis());
+    //     //ballShooter.shooterInputManager(controller1.getRightBumperButtonPressed(), controller1.getRightTriggerAxis());
     //     // shooterTest.SetTestVelocity(controller1.getBButtonPressed());
-    //     shooterTest.runFlyWheelSysID(controller1.getBButtonPressed());
+    //     //shooterTest.runFlyWheelSysID(controller1.getBButtonPressed());
+    //     //ballShooter.testVel(controller1.getLeftTriggerAxis());
     // }
 
-    // private void updateTelemetry(){
-    //     telemetry.update();
-    // }
+    private void updateTelemetry(){
+        telemetry.update();
+    }
 
     // private void updateVision(){
     //     vision.updateSimVision(drivetrain.getPose());
@@ -50,9 +52,9 @@ public class OperatorInterface extends SubsystemBase{
     public void periodic(){
         updateDrive();
         // updateVision();
-        // updateTelemetry();
+         updateTelemetry();
         // updateIntake();
-        // updateShooter();
+         //updateShooter();
         // updateClimb();
     }
 

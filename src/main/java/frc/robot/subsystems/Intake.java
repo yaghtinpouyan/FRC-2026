@@ -171,15 +171,18 @@ public class Intake extends SubsystemBase{
     }
 
     public void intakeInputHandler(boolean raiseIntake, double input2){
-        if (raiseIntake && pivot.isNear(Degrees.of(Constants.intakeAngleUp), Degrees.of(5)).getAsBoolean()) {
+        if (raiseIntake && !pivot.isNear(Degrees.of(Constants.intakeAngleUp), Degrees.of(5)).getAsBoolean()) {
             setIntakePivotUp();
         }
         if(input2 > 0.3){
-            if (pivot.isNear(Degrees.of(Constants.intakeAngleDown), Degrees.of(5)).getAsBoolean()){
+            if (!pivot.isNear(Degrees.of(Constants.intakeAngleDown), Degrees.of(5)).getAsBoolean()){
                 setIntakePivotDown();
             }
-            runIntake(false);
             leds.intakeSolid();
+
+            if (pivot.isNear(Degrees.of(Constants.intakeAngleDown), Degrees.of(5)).getAsBoolean()){
+                runIntake(false);
+            }
         }
     }
 
