@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 5.7635515667950665,
-        "y": 5.344497550116645
+        "y": 4.863277777777778
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.9398562938548904,
-        "y": 4.200096602828414
+        "x": 5.9800555555555555,
+        "y": 3.752411111111111
       },
       "isLocked": false,
       "linkedName": "AMBE6"
@@ -17,36 +17,36 @@
     {
       "anchor": {
         "x": 5.7635515667950665,
-        "y": 0.6226167127821178
+        "y": 0.673166666666666
       },
       "prevControl": {
-        "x": 6.499818162848755,
-        "y": 0.640458114820226
+        "x": 6.013328477511551,
+        "y": 0.662607553402302
       },
       "nextControl": {
-        "x": 4.243631812766747,
-        "y": 0.5857856253164786
+        "x": 4.207855979026384,
+        "y": 0.738932416867518
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6775704266583484,
-        "y": 1.0466401559335212
+        "x": 0.49393333333333334,
+        "y": 0.673166666666666
       },
       "prevControl": {
-        "x": 3.366641455191153,
-        "y": 0.5617321890371818
+        "x": 1.3417,
+        "y": 0.702399999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "AMBE7"
+      "linkedName": "AMBRTE 7"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.7206832082648024,
+      "waypointRelativePos": 1.0207468879668051,
       "rotationDegrees": 0.0
     },
     {
@@ -67,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": 59.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Actual Main Bottom - Tr",

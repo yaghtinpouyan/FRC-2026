@@ -8,11 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5409060160195607,
-        "y": 0.7282422141886667
+        "x": 1.5423745424351218,
+        "y": 0.7376042352320185
       },
       "isLocked": false,
-      "linkedName": "AMBRTE 8"
+      "linkedName": "AMBRTE 7"
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 1.0466401559335212
       },
       "prevControl": {
-        "x": 1.5889951499965236,
-        "y": 0.9662501392955758
+        "x": 1.566149757900157,
+        "y": 0.9592793878786947
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "AMBE7"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
