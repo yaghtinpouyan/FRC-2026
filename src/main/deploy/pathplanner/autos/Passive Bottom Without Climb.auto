@@ -1,0 +1,94 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBPWC1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MBPWC2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MBPWC3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBPWC4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ChargeShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MBPWC5"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MBPWC6"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeBalls"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Actuall 2026 WC",
+  "choreoAuto": false
+}

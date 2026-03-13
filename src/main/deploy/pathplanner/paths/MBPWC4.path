@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.5167762185555922,
+        "y": 7.002076402452257
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.289322809855144,
+        "y": 6.595473580819589
+      },
+      "isLocked": false,
+      "linkedName": "MBPWCE3"
+    },
+    {
+      "anchor": {
+        "x": 3.356744003861039,
+        "y": 5.502444142659506
+      },
+      "prevControl": {
+        "x": 2.4607091640896273,
+        "y": 5.941490347403066
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MBPWCE4"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": true
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.29851622250437
+  },
+  "reversed": false,
+  "folder": "Actual Main Bottom Passive WC",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.5
+  },
+  "useDefaultConstraints": true
+}
