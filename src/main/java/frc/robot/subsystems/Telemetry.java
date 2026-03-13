@@ -12,7 +12,7 @@ public class Telemetry extends SubsystemBase{
     private Field2d field2d;
     public ChassisSpeeds currentVelocity;
     private Drive drivetrain = Drive.getInstance();
-
+    
     private Telemetry(){
         field2d = new Field2d();
         SmartDashboard.putData("Field ", field2d);
@@ -33,6 +33,8 @@ public class Telemetry extends SubsystemBase{
         SmartDashboard.putNumber("Encoder2", drivetrain.getEncoderOffset(1));
         SmartDashboard.putNumber("Encoder3", drivetrain.getEncoderOffset(2));
         SmartDashboard.putNumber("Encoder4", drivetrain.getEncoderOffset(3));
+        SmartDashboard.putNumber("Motor Vel:", drivetrain.getMotorVel(0));
+        SmartDashboard.putNumber("Motor Volts:", drivetrain.getMotorVel(0));
     }
 
     public static Telemetry getInstance(){

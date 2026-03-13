@@ -70,9 +70,9 @@ public class Drive extends SubsystemBase
     swerveDrive.setAngularVelocityCompensation(true,
                                                true,
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
-    swerveDrive.setModuleEncoderAutoSynchronize(false,
+    swerveDrive.setModuleEncoderAutoSynchronize(true,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
-    // swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
+    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
   }
 
   public Drive(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
@@ -102,6 +102,8 @@ public class Drive extends SubsystemBase
             this, swerveDrive, 12, true),
         3.0, 5.0, 3.0);
   }
+
+
 
   public Command sysIdAngleMotorCommand()
   {
@@ -268,6 +270,18 @@ public class Drive extends SubsystemBase
     SwerveModule[] modules = swerveDrive.getModules();
     SwerveModule module = modules[targetModule];
     return module.getAbsolutePosition();
+  }
+
+  public double getMotorVel(int targetModule){
+    SwerveModule[] modules = swerveDrive.getModules();
+    SwerveModule module = modules[targetModule];
+    return module.getDriveMotor().getVelocity();
+  }
+
+  public double getDriveCurrent(int targetModule){
+    SwerveModule[] modules = swerveDrive.getModules();
+    SwerveModule module = modules[targetModule];
+    return module.getDriveMotor().getVoltage();
   }
 
   public ChassisSpeeds getFieldVelocity()

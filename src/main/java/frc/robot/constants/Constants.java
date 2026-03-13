@@ -21,7 +21,7 @@ public final class Constants {
   public static final double secondsPerMinute = 60.0;
   public static final double driveCircumferenceMeters = 0.2393893602;
   //YAGSL
-  public static final double maxDriveSpeed = Units.feetToMeters(16);
+  public static final double maxDriveSpeed = Units.feetToMeters(3);
   public static final double maxVolts = 12;
   public static final Pose2d startPose = new Pose2d(1, 1, Rotation2d.fromDegrees(0));
   public static final double deadband = 0.05;
