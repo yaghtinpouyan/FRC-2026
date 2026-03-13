@@ -9,12 +9,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.RobotContainer;
-import frc.robot.subsystems.LEDS;
 import frc.robot.subsystems.OperatorInterface;
-import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
 
 public class Robot extends TimedRobot {
   public Drive drivetrain;
@@ -25,7 +21,6 @@ public class Robot extends TimedRobot {
   // public autoAlign align;
   // public RobotContainer rc;
   // public Command getAutonomousCommand;
-  private LEDS leds = LEDS.getInstance();
 
 
   public Robot() {
@@ -66,7 +61,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    leds.autonWave();
+ 
   }
 
   @Override
@@ -78,7 +73,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    leds.teleopBlink();
+    
   }
 
   @Override

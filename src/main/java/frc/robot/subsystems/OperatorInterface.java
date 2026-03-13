@@ -1,15 +1,15 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.test.ShooterTest;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.Intake;
 
 public class OperatorInterface extends SubsystemBase{
     private static OperatorInterface oi = null;
     private XboxController controller1;
     private Drive drivetrain = Drive.getInstance();
     // private Vision vision = Vision.getInstance();
-    // private Intake ballIntake = Intake.getInstance();
+    private Intake ballIntake = Intake.getInstance();
     //private Shooter ballShooter = Shooter.getInstance();
     // private Climb climber = Climb.getInstance();
     private Telemetry telemetry = Telemetry.getInstance();
@@ -21,23 +21,21 @@ public class OperatorInterface extends SubsystemBase{
 
     private void updateDrive(){
         //drivetrain.driveCommand(-controller1.getRawAxis(1), -controller1.getRawAxis(0), -controller1.getRawAx
-        drivetrain.driveCommand(() -> -controller1.getRawAxis(1), 
-            () -> -controller1.getRawAxis(0), () -> controller1.getRawAxis(4));
+        drivetrain.driveCommand(() -> -controller1.getRawAxis(0), 
+            () -> -controller1.getRawAxis(1), () -> -controller1.getRawAxis(4));
     }
 
     // private void updateClimb(){
     //     climber.climbInputHandler(controller1.getPOV());
     // }
 
-    // private void updateIntake(){
-    //     ballIntake.intakeInputHandler(controller1.getLeftBumperButtonPressed(), controller1.getLeftTriggerAxis());
-    // }
+    private void updateIntake(){
+        ballIntake.runRollers(controller1.getRightTriggerAxis());
+        ballIntake.setPivot(controller1.getLeftBumperButton(), controller1.getRightBumperButton());
+    }
 
     // private void updateShooter(){
-    //     //ballShooter.shooterInputManager(controller1.getRightBumperButtonPressed(), controller1.getRightTriggerAxis());
-    //     // shooterTest.SetTestVelocity(controller1.getBButtonPressed());
-    //     //shooterTest.runFlyWheelSysID(controller1.getBButtonPressed());
-    //     //ballShooter.testVel(controller1.getLeftTriggerAxis());
+    //     ballShooter.shooterInputManager(controller1.getRawAxis(3));
     // }
 
     private void updateTelemetry(){
@@ -51,11 +49,9 @@ public class OperatorInterface extends SubsystemBase{
     @Override
     public void periodic(){
         updateDrive();
-        // updateVision();
-         updateTelemetry();
-        // updateIntake();
-         //updateShooter();
-        // updateClimb();
+        updateTelemetry();
+        //updateIntake();
+        //updateShooter();
     }
 
     public static OperatorInterface getInstance(){
