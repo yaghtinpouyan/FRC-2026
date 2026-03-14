@@ -16,27 +16,39 @@ public class Intake extends SubsystemBase{
     SparkMax pivot;
     
     private Intake(){
-        intakeRollers = new TalonFX(idConstants.falcon500_I2);
+        intakeRollers = new TalonFX(idConstants.falcon500_I1);
         indexer = new TalonFX(idConstants.falcon500_I2);
         pivot = new SparkMax(idConstants.neo_I3, MotorType.kBrushless);
     }
 
     public void runIndexer(){
-        indexer.set(.5);
+        indexer.setVoltage(12);
+    }
+
+    public void unJam(boolean input1){
+        if(input1){
+            indexer.setVoltage(-12);
+        }
+        else{
+            indexer.setVoltage(0);
+        }
     }
 
     public void stopIndexer(){
-        indexer.set(0);
+        indexer.setVoltage(0);
     }
 
     public void runRollers(double input1){
-        if(input1 > 0.1) pivot.set(.3);
+        if(input1 > 0.1) intakeRollers.setVoltage(10.5);
+        else{
+            intakeRollers.setVoltage(0);
+        }
     }
 
     public void setPivot(boolean input1, boolean input2){
-        if(input1) pivot.set(.3);
+        if(input1) pivot.setVoltage(2.4);
         else if(input2){
-            pivot.set(-0.3);
+            pivot.setVoltage(-2.4);
         }
         else{
             pivot.set(0);
