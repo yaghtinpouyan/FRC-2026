@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public final class Constants {
   //Global
+  public static final double driveDeadzone = 0.05;
   public static final Optional<Alliance> currentAlliance = DriverStation.getAlliance();
   
   //Math/Calculations 
