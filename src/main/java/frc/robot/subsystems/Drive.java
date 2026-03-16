@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.automations.AutoAlign;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
@@ -73,6 +75,8 @@ public class Drive extends SubsystemBase
     swerveDrive.setModuleEncoderAutoSynchronize(true,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
     swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
+  
+  
   }
 
   public Drive(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
@@ -147,8 +151,22 @@ public class Drive extends SubsystemBase
                         true,
                         false);
   }
-
   
+  // public void driveAlignedHub(DoubleSupplier translationX, DoubleSupplier translationY)
+  // {
+  //   AutoAlign align = AutoAlign.getInstance();
+  //   double xVelocity = MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband);
+  //   double yVelocity = MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband);
+  //   Rotation2d hubDelta = align.getHubHeading();
+
+  //     // Make the robot move
+  //       swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
+  //                           xVelocity * swerveDrive.getMaximumChassisVelocity(),
+  //                           yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.8),
+  //                       Math.pow(, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
+  //                       true,
+  //                       false);
+  // }
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative)
   {

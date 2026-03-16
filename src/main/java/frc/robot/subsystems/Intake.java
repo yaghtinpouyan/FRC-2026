@@ -22,33 +22,30 @@ public class Intake extends SubsystemBase{
     }
 
     public void runIndexer(){
-        indexer.setVoltage(12);
-    }
-
-    public void unJam(boolean input1){
-        if(input1){
-            indexer.setVoltage(-12);
-        }
-        else{
-            indexer.setVoltage(0);
-        }
+        indexer.setVoltage(8);
     }
 
     public void stopIndexer(){
         indexer.setVoltage(0);
     }
 
-    public void runRollers(double input1){
-        if(input1 > 0.1) intakeRollers.setVoltage(10.5);
+    public void runRollers(double input1, boolean input2){
+        if(input1 > 0.1) intakeRollers.setVoltage(-6);
+        else if(input2){
+            intakeRollers.setVoltage(6);
+        }
         else{
             intakeRollers.setVoltage(0);
         }
     }
 
-    public void setPivot(boolean input1, boolean input2){
-        if(input1) pivot.setVoltage(2.4);
-        else if(input2){
+    public void setPivot(int pov){
+        if(pov == 0) pivot.setVoltage(2.4);
+        else if(pov == 180){
             pivot.setVoltage(-2.4);
+        }
+        else if(pov == 90){
+            indexer.setVoltage(-8);
         }
         else{
             pivot.set(0);

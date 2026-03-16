@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -47,6 +48,11 @@ public class Shooter extends SubsystemBase{
   private velocityMap shootingVMap;
   public double shootingVolts = 3.5;
 
+  TalonFXConfiguration config1;
+  TalonFXConfiguration config2;
+  TalonFXConfiguration config3;
+  TalonFXConfiguration config4;
+
   private Shooter() {
     //Motor inits
     Lshooter1 = new TalonFX(idConstants.krakenx60_S2);
@@ -56,8 +62,6 @@ public class Shooter extends SubsystemBase{
     kickerMotor = new TalonFX(idConstants.faclon500_S1);
     hoodMotor = new SparkMax(idConstants.neo550_S6, MotorType.kBrushless);
 
-
-    
     //Motor configs
     hoodMotorConfig = new SparkMaxConfig();
     hoodMotor.configure(hoodMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -67,6 +71,21 @@ public class Shooter extends SubsystemBase{
     Lshooter2.setControl(followLFShooter);
     Rshooter1.setControl(followLShooter);
     Rshooter2.setControl(followRFShooter);
+
+    config1 = new TalonFXConfiguration();
+    config2 = new TalonFXConfiguration();
+    config3 = new TalonFXConfiguration();
+    config4 = new TalonFXConfiguration();
+
+    config1.CurrentLimits.StatorCurrentLimit = 20;
+    config2.CurrentLimits.StatorCurrentLimit = 20;
+    config3.CurrentLimits.StatorCurrentLimit = 20;
+    config4.CurrentLimits.StatorCurrentLimit = 20;
+
+    Lshooter1.getConfigurator().apply(config1);
+    Lshooter2.getConfigurator().apply(config2);
+    Rshooter1.getConfigurator().apply(config3);
+    Rshooter2.getConfigurator().apply(config4);
   }
 
   private double getVirtualTarget(Distance hubDistance){
@@ -103,6 +122,7 @@ public class Shooter extends SubsystemBase{
 
     if(fire > 0.1){
         Lshooter1.setVoltage(-shootingVolts);
+        kickerMotor.setVoltage(6);
     }  
     else{
         Lshooter1.set(0);

@@ -28,13 +28,14 @@ public class OperatorInterface extends SubsystemBase{
     }
 
     private void updateIntake(){
-        ballIntake.runRollers(controller2.getRawAxis(3));
-        ballIntake.setPivot(controller2.getLeftBumperButton(), controller2.getRightBumperButton());
+        ballIntake.runRollers(controller2.getRawAxis(3), controller2.getRawButton(6));
+        ballIntake.setPivot(controller2.getPOV());
         //ballIntake.unJam(controller2.getYButton());
     }
 
     private void updateShooter(){
-        ballShooter.shooterInputManager(controller2.getRawAxis(2), controller2.getBButton());
+        ballShooter.shooterInputManager(controller2.getRawAxis(2), controller2.getRawButton(5));
+
     }
 
     private void updateTelemetry(){
