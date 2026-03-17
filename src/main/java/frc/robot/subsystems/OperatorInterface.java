@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.automations.Vision;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class OperatorInterface extends SubsystemBase{
@@ -8,7 +9,7 @@ public class OperatorInterface extends SubsystemBase{
     private XboxController controller1;
     private XboxController controller2;
     private Drive drivetrain = Drive.getInstance();
-    // private Vision vision = Vision.getInstance();
+    private Vision vision = Vision.getInstance();
     private Intake ballIntake = Intake.getInstance();
     private Shooter ballShooter = Shooter.getInstance();
     // private Climb climber = Climb.getInstance();
@@ -29,12 +30,14 @@ public class OperatorInterface extends SubsystemBase{
     private void updateIntake(){
         ballIntake.runRollers(controller2.getRawAxis(3), controller2.getRawButton(6));
         ballIntake.setPivot(controller2.getPOV());
-        //ballIntake.unJam(controller2.getYButton());
     }
 
     private void updateShooter(){
         ballShooter.shooterInputManager(controller2.getRawAxis(2), controller2.getRawButton(5));
+    }
 
+    private void updateVision(){
+        vision.updateVision();
     }
 
     private void updateTelemetry(){
