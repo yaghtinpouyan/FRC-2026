@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.automations.AutoAlign;
 
+//Yagsl
 import java.io.File;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
@@ -37,18 +38,23 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
+//Pathplanner
+//Pathplanner imports
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 public class Drive extends SubsystemBase
 {
-
-    private static Drive swerve = null;
-  /**
-   * Swerve drive object.
-   */
+  private static Drive swerve = null;
   private SwerveDrive swerveDrive;
   private File directory = new File(Filesystem.getDeployDirectory(),"swerve2");
+  private RobotConfig config;
 
   public Drive()
   { 
+    //YAGSL config
     boolean blueAlliance = false;
     Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(4),
                                                                       Meter.of(4)),
@@ -76,7 +82,35 @@ public class Drive extends SubsystemBase
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
     swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
   
-  
+    //Pathplanner config
+    try {
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Configure AutoBuilder last
+            AutoBuilder.configure(
+            this::getPose, 
+            this::resetOdometry, 
+            this::getRobotVelocity, 
+            (speeds, feedforwards) -> drive(speeds), 
+            new PPHolonomicDriveController( 
+                    new PIDConstants(5.0, 0.0, 0.0), // Movement PID constants
+                    new PIDConstants(0.4, 0.0, 0.01) // Rotation PID constants
+            ),
+            config,
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            Drive.this// Reference to this subsystem to set requirements
+        );
   }
 
   public Drive(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
@@ -85,7 +119,8 @@ public class Drive extends SubsystemBase
                                   controllerCfg,
                                   Constants.maxDriveSpeed,
                                   new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)),
-                                             Rotation2d.fromDegrees(0)));
+                                             Rotation2d.fromDegrees(0))
+    );
   }
 
   @Override

@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -19,8 +18,8 @@ public class Robot extends TimedRobot {
   // public intake ballIntake;
   // public climb climber;
   // public autoAlign align;
-  // public RobotContainer rc;
-  // public Command getAutonomousCommand;
+  public RobotContainer rc;
+  public Command getAutonomousCommand;
 
 
   public Robot() {
@@ -30,7 +29,7 @@ public class Robot extends TimedRobot {
     // align = autoAlign.getInstance();
     // ballShooter = shooter.getInstance();
     // climber = climb.getInstance();
-    // rc = new RobotContainer();
+    rc = new RobotContainer();
   }
 
   @Override
@@ -52,11 +51,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // getAutonomousCommand = rc.getAutonomousCommand();
+    getAutonomousCommand = rc.getAutonomousCommand();
     
-  //   if (getAutonomousCommand != null){
-  //     getAutonomousCommand.schedule();
-  //  }
+    if (getAutonomousCommand != null){
+      getAutonomousCommand.schedule();
+   }
   }
 
   @Override
@@ -66,9 +65,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // if (getAutonomousCommand != null){
-    //   getAutonomousCommand.cancel();
-    // }
+    if (getAutonomousCommand != null){
+      getAutonomousCommand.cancel();
+    }
   }
 
   @Override
