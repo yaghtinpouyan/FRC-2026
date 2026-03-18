@@ -17,12 +17,13 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
 import frc.robot.subsystems.automations.AutoAlign;
 import frc.robot.constants.angleMap;
-
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 
@@ -52,6 +53,8 @@ public class Shooter extends SubsystemBase{
   TalonFXConfiguration config2;
   TalonFXConfiguration config3;
   TalonFXConfiguration config4;
+
+  private final double shootingInc = 0.025;
 
   private Shooter() {
     //Motor inits
@@ -114,11 +117,21 @@ public class Shooter extends SubsystemBase{
     return targetAngle;
   }
 
-  public void shooterInputManager(double fire, boolean charge){ 
+  public void shooterInputManager(double fire, boolean charge, boolean up, boolean down){
+    SmartDashboard.putNumber("Shooter RPM", Lshooter1.getVelocity().getValueAsDouble());
+
     if(charge){
         kickerMotor.setVoltage(6);
         ballIntake.runIndexer();
     }
+
+    if (up) {
+      shootingVolts += shootingInc;
+    } else if (down) {
+      shootingVolts -= shootingInc;
+    }
+
+    SmartDashboard.putNumber("Shooter Voltage", Math.round(shootingVolts * 1000.0) / 1000.0);
 
     if(fire > 0.1){
         Lshooter1.setVoltage(-shootingVolts);

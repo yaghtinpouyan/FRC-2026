@@ -22,18 +22,25 @@ public class OperatorInterface extends SubsystemBase{
     }
 
     private void updateDrive(){
-        //drivetrain.driveCommand(-controller1.getRawAxis(1), -controller1.getRawAxis(0), -controller1.getRawAx
-        drivetrain.driveCommand(() -> -controller1.getRawAxis(1), 
-            () -> -controller1.getRawAxis(0), () -> -controller1.getRawAxis(4));
+        // drivetrain.driveCommand(() -> -controller1.getRawAxis(1), 
+        //     () -> -controller1.getRawAxis(0), () -> -controller1.getRawAxis(4));
+        drivetrain.driveInputHandler(() -> -controller1.getRawAxis(1), 
+            () -> -controller1.getRawAxis(0), () -> -controller1.getRawAxis(4), controller1.getYButton());
     }
 
     private void updateIntake(){
         ballIntake.runRollers(controller2.getRawAxis(3), controller2.getRawButton(6));
         ballIntake.setPivot(controller2.getPOV());
+
     }
 
     private void updateShooter(){
-        ballShooter.shooterInputManager(controller2.getRawAxis(2), controller2.getRawButton(5));
+        ballShooter.shooterInputManager(
+            controller2.getRawAxis(2), 
+            controller2.getRawButton(5),
+            controller2.getYButtonPressed(),
+            controller2.getAButtonPressed()
+        );
     }
 
     private void updateVision(){
@@ -50,6 +57,7 @@ public class OperatorInterface extends SubsystemBase{
         updateTelemetry();
         updateIntake();
         updateShooter();
+        updateVision();
     }
 
     public static OperatorInterface getInstance(){

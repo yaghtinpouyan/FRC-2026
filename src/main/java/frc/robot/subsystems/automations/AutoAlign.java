@@ -38,7 +38,7 @@ public class AutoAlign extends SubsystemBase{
         intermediatePoseMap.put(autoConstants.BlueTrenchRight, autoConstants.BlueTrenchRightI);
     }
 
-    public Rotation2d getHubyaw(){
+    public Rotation2d getHubHeading(){
         Pose2d botPos = drivetrain.getPose();
         Pose2d hubPos = getHubPos();
 

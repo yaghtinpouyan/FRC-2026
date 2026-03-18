@@ -187,21 +187,29 @@ public class Drive extends SubsystemBase
                         false);
   }
   
-  // public void driveAlignedHub(DoubleSupplier translationX, DoubleSupplier translationY)
-  // {
-  //   AutoAlign align = AutoAlign.getInstance();
-  //   double xVelocity = MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband);
-  //   double yVelocity = MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband);
-  //   Rotation2d hubDelta = align.getHubHeading();
+  public void driveAlignedHub(DoubleSupplier translationX, DoubleSupplier translationY)
+  {
+    AutoAlign align = AutoAlign.getInstance();
+    double xVelocity = MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband);
+    double yVelocity = MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband);
+    Rotation2d hubHeading = align.getHubHeading();
+    double angularVel = swerveDrive.getSwerveController().headingCalculate(swerveDrive.getOdometryHeading().getRadians(), hubHeading.getRadians());
 
-  //     // Make the robot move
-  //       swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-  //                           xVelocity * swerveDrive.getMaximumChassisVelocity(),
-  //                           yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.8),
-  //                       Math.pow(, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
-  //                       true,
-  //                       false);
-  // }
+      // Make the robot move
+        swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
+                            xVelocity * swerveDrive.getMaximumChassisVelocity(),
+                            yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.8),
+                        Math.pow(angularVel, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
+                        true,
+                        false);
+  }
+
+  public void driveInputHandler(DoubleSupplier x, DoubleSupplier y, DoubleSupplier theta, boolean lock){
+    if(lock) driveAlignedHub(x,y);
+    else{
+      driveCommand(x,y,theta);
+    }
+  }
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative)
   {
