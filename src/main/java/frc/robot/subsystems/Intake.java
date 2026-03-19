@@ -13,6 +13,9 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.idConstants;
 import yams.gearing.GearBox;
@@ -82,6 +85,22 @@ public class Intake extends SubsystemBase{
         else{
             pivotMotor.set(0);
         }
+    }
+
+    public Command runIntakeCommand(){
+        return run(() -> intakeRollers.setVoltage(-6));
+    }
+
+    public Command stopIntakeCommand(){
+        return runOnce(() -> intakeRollers.setVoltage(0));
+    }
+
+    public Command raisePivot(){
+        return run(() -> pivotMotor.setVoltage(2.4));
+    }
+
+    public Command lowerPivot(){
+        return run(() -> pivotMotor.setVoltage(-2.4));
     }
 
     public static Intake getInstance(){
