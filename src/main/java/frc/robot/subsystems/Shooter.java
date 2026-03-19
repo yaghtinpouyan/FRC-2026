@@ -1,8 +1,14 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
@@ -22,8 +28,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
 import frc.robot.subsystems.automations.AutoAlign;
+import yams.gearing.GearBox;
+import yams.gearing.MechanismGearing;
+import yams.mechanisms.config.FlyWheelConfig;
+import yams.mechanisms.velocity.FlyWheel;
+import yams.motorcontrollers.SmartMotorController;
+import yams.motorcontrollers.SmartMotorControllerConfig;
+import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
+import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
+import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import frc.robot.constants.angleMap;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 
@@ -54,7 +69,13 @@ public class Shooter extends SubsystemBase{
   TalonFXConfiguration config3;
   TalonFXConfiguration config4;
 
-  private final double shootingInc = 0.025;
+  private double shootingInc = 100;
+  private SmartMotorControllerConfig krakenConfig;
+  private SmartMotorController shooterMotor;
+  private FlyWheelConfig shooterConfig;
+  private FlyWheel mainShooter;
+  public double startingVal = 3000;
+  private AngularVelocity startingVel = RotationsPerSecond.of(startingVal);
 
   private Shooter() {
     //Motor inits
@@ -75,15 +96,37 @@ public class Shooter extends SubsystemBase{
     Rshooter1.setControl(followLShooter);
     Rshooter2.setControl(followRFShooter);
 
+    //YAMS
+    krakenConfig = new SmartMotorControllerConfig(this)
+    .withClosedLoopController(0.0001, 0, 0, RPM.of(6000), RotationsPerSecondPerSecond.of(5513))
+    .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,1)))
+    .withIdleMode(MotorMode.COAST)
+    .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
+    .withStatorCurrentLimit(Amps.of(40))
+    .withMotorInverted(true)  //Inverted due to shooter orientation
+    .withClosedLoopRampRate(Seconds.of(0.25))
+    .withOpenLoopRampRate(Seconds.of(0.25))
+    .withFeedforward(new SimpleMotorFeedforward(0.27937, 0.52, 0.14))
+    .withSimFeedforward(new SimpleMotorFeedforward(0.27937, 0.52, 0.14))
+    .withControlMode(ControlMode.CLOSED_LOOP);
+
+    shooterConfig = new FlyWheelConfig(shooterMotor)
+    .withDiameter(Inches.of(4))
+    .withMass(Pounds.of(4.5))
+    .withTelemetry("ShooterWheel", TelemetryVerbosity.LOW)
+    .withSoftLimit(RPM.of(-6065), RPM.of(6065));
+
+    mainShooter = new FlyWheel(shooterConfig);
+
     config1 = new TalonFXConfiguration();
     config2 = new TalonFXConfiguration();
     config3 = new TalonFXConfiguration();
     config4 = new TalonFXConfiguration();
 
-    config1.CurrentLimits.StatorCurrentLimit = 20;
-    config2.CurrentLimits.StatorCurrentLimit = 20;
-    config3.CurrentLimits.StatorCurrentLimit = 20;
-    config4.CurrentLimits.StatorCurrentLimit = 20;
+    config1.CurrentLimits.StatorCurrentLimit = 40;
+    config2.CurrentLimits.StatorCurrentLimit = 40;
+    config3.CurrentLimits.StatorCurrentLimit = 40;
+    config4.CurrentLimits.StatorCurrentLimit = 40;
 
     Lshooter1.getConfigurator().apply(config1);
     Lshooter2.getConfigurator().apply(config2);
@@ -117,31 +160,31 @@ public class Shooter extends SubsystemBase{
     return targetAngle;
   }
 
-  public void shooterInputManager(double fire, boolean charge, boolean up, boolean down){
-    SmartDashboard.putNumber("Shooter RPM", Lshooter1.getVelocity().getValueAsDouble());
+  public void setFlywheelVel(AngularVelocity vel){
+    mainShooter.setSpeed(vel);
+  }
 
-    if(charge){
+  public void mapIncrementation(boolean up, boolean down){
+    if(up) startingVal += shootingInc;
+    if(down) startingVal -= shootingInc;
+  }
+
+  public void shooterInputManager(double charge, boolean fire, boolean up, boolean down){
+    if(fire){
         kickerMotor.setVoltage(6);
         ballIntake.runIndexer();
     }
-
-    if (up) {
-      shootingVolts += shootingInc;
-    } else if (down) {
-      shootingVolts -= shootingInc;
-    }
-
-    SmartDashboard.putNumber("Shooter Voltage", Math.round(shootingVolts * 1000.0) / 1000.0);
-
-    if(fire > 0.1){
-        Lshooter1.setVoltage(-shootingVolts);
+    if(charge > 0.1){
+        setFlywheelVel(startingVel);
         kickerMotor.setVoltage(6);
     }  
     else{
-        Lshooter1.set(0);
+        mainShooter.setSpeed(RotationsPerSecond.of(0));
         ballIntake.stopIndexer();
         kickerMotor.set(0);
     }
+    mapIncrementation(up, down);
+    SmartDashboard.putNumber("Shooter RPM", startingVal);
   }
 
   public static Shooter getInstance(){
