@@ -76,9 +76,9 @@ public class Intake extends SubsystemBase{
     }
 
     public void setPivot(int pov){
-        if(pov == 0) pivotMotor.setVoltage(2.4);
+        if(pov == 0) pivotMotor.setVoltage(12);
         else if(pov == 180){
-            pivotMotor.setVoltage(-2.4);
+            pivotMotor.setVoltage(-12);
         }
         else if(pov == 90){
             indexerSystem.setVoltage(Volts.of(-10));
