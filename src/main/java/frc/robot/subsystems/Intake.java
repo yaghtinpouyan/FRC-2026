@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkMax;
@@ -56,8 +57,8 @@ public class Intake extends SubsystemBase{
     }
 
     public void runIndexer(){
-        AngularVelocity vel = RotationsPerSecond.of(6000);
-        indexerSystem.setVelocity(vel);
+        //AngularVelocity vel = RotationsPerSecond.of(6000);
+        indexerSystem.setVoltage(Volts.of(10));
     }
 
     public void stopIndexer(){
@@ -80,7 +81,7 @@ public class Intake extends SubsystemBase{
             pivotMotor.setVoltage(-2.4);
         }
         else if(pov == 90){
-            indexer.setVoltage(-8);
+            indexerSystem.setVoltage(Volts.of(-10));
         }
         else{
             pivotMotor.set(0);

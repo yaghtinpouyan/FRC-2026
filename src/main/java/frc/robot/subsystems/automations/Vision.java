@@ -68,9 +68,9 @@ public class Vision extends SubsystemBase{
     private int c_Height = 480;
     private double c_Error = 0.2;
     private double fov = 70;
-    private double fps = 20;
-    private double latencyAve = 50; //Average latency
-    private double latencySTD = 15; //Standard deviation of latency
+    private double fps = 100;
+    private double latencyAve = 15; //Average latency
+    private double latencySTD = 5; //Standard deviation of latency
     private Rotation2d c_FOV = Rotation2d.fromDegrees(fov);
 
     //Camera objects

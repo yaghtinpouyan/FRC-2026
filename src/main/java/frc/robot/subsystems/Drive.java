@@ -55,7 +55,7 @@ public class Drive extends SubsystemBase
   public Drive()
   { 
     //YAGSL config
-    boolean blueAlliance = false;
+    boolean blueAlliance = true;
     Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(4),
                                                                       Meter.of(4)),
                                                     Rotation2d.fromDegrees(0))
@@ -198,7 +198,7 @@ public class Drive extends SubsystemBase
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
                             xVelocity * swerveDrive.getMaximumChassisVelocity(),
-                            yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.8),
+                            yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.6),
                         Math.pow(angularVel, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
