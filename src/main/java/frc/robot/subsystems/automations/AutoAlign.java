@@ -79,50 +79,6 @@ public class AutoAlign extends SubsystemBase{
         AutoBuilder.followPath(path).schedule();  //Follow path
     }
 
-    public void travelToTower(boolean confirmAlign){
-        if(confirmAlign){
-            Pose2d towerPos = (Constants.currentAlliance.get() == Alliance.Blue) ? autoConstants.TowerB : autoConstants.TowerR;
-            Pose2d towerIPos = (Constants.currentAlliance.get() == Alliance.Blue) ? autoConstants.TowerBI : autoConstants.TowerRI;
-            followGeneratedPath(towerIPos, towerPos);
-        }
-    }
-
-    public void alignToTrench(boolean confirmAlign){
-        Optional<Pose2d> trenchPose = getTrenchToAlign();
-
-        if(trenchPose.isPresent() && confirmAlign){
-            Pose2d targetTrench = trenchPose.get();
-            Pose2d targetTrenchI = intermediatePoseMap.get(targetTrench);
-            followGeneratedPath(targetTrench, targetTrenchI);
-        }
-    }
-
-    public Optional<Pose2d> getTrenchToAlign() {
-        Pose2d botPose = drivetrain.getPose();
-        if (botPose.getTranslation().getDistance(autoConstants.BlueTrenchLeft.getTranslation()) < 1) {
-            return Optional.of(autoConstants.BlueTrenchLeft);
-        }
-        if (botPose.getTranslation().getDistance(autoConstants.BlueTrenchRight.getTranslation()) < 1) {
-            return Optional.of(autoConstants.BlueTrenchRight);
-        }
-
-        if (botPose.getTranslation().getDistance(autoConstants.RedTrenchLeft.getTranslation()) < 1) {
-            return Optional.of(autoConstants.RedTrenchLeft);
-        }
-
-        if (botPose.getTranslation().getDistance(autoConstants.RedTrenchRight.getTranslation()) < 1) {
-            return Optional.of(autoConstants.RedTrenchRight);
-        }
-
-        return Optional.empty();
-
-        // Pose2d botPose = drivetrain.getRobotPose();
-        // return botPose.getTranslation().getDistance(autoConstants.BlueTrenchLeft.getTranslation()) < 1 ||
-        //        botPose.getTranslation().getDistance(autoConstants.BlueTrenchRight.getTranslation()) < 1 ||
-        //        botPose.getTranslation().getDistance(autoConstants.RedTrenchRight.getTranslation()) < 1 ||
-        //        botPose.getTranslation().getDistance(autoConstants.RedTrenchLeft.getTranslation()) < 1;
-    }
-
     public static AutoAlign getInstance(){
         if (align == null){
             align = new AutoAlign();

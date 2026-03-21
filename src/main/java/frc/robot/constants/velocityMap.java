@@ -7,14 +7,10 @@ public class velocityMap {
     public InterpolatingDoubleTreeMap mainMap = new InterpolatingDoubleTreeMap();
 
     public velocityMap(){
-        mainMap.put(0.64135,1600.0);
-        mainMap.put(1.49225,1675.0);
-        mainMap.put(1.6,1750.0);   //Inaccurate entry
-        mainMap.put(2.8702,2050.0);
-        mainMap.put(2.57175,2050.0);
-        mainMap.put(3.00355,2125.0);
-        mainMap.put(0.0254, 1500.0);
-        mainMap.put(2.52095, 1700.0);
+        mainMap.put(0.641,2250.0);
+        mainMap.put(1.518, 2500.0);
+        mainMap.put(2.089,2750.0);
+        mainMap.put(2.57,3000.0);
     }
 
     public static velocityMap getInstance(){

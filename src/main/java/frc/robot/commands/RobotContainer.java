@@ -10,19 +10,15 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
-    private final SendableChooser<Command> autoChooser;
-    private Intake intake = Intake.getInstance();
-    private Shooter shooter = Shooter.getInstance();
-
+    private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
 
     public RobotContainer(){
-        NamedCommands.registerCommand("runIntake", intake.runIntakeCommand());
-        NamedCommands.registerCommand("stopIntake", intake.stopIntakeCommand());
-        NamedCommands.registerCommand("lowerPivot", intake.lowerPivot());
-        NamedCommands.registerCommand("shoot", shooter.shootInAuto(0.5, true));
-        NamedCommands.registerCommand("charge", shooter.shootInAuto(0.5, false));
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        NamedCommands.registerCommand("runIntake", Intake.getInstance().runIntakeCommand());
+        NamedCommands.registerCommand("stopIntake", Intake.getInstance().stopIntakeCommand());
+        NamedCommands.registerCommand("lowerPivot", Intake.getInstance().lowerPivot());
+        NamedCommands.registerCommand("shoot", Shooter.getInstance().shootInAuto(0.5, true));
+        NamedCommands.registerCommand("charge", Shooter.getInstance().shootInAuto(0.5, false));
+        SmartDashboard.putData("Auto Chooser", AutoBuilder.buildAutoChooser());
     }
 
     public Command getAutonomousCommand() {

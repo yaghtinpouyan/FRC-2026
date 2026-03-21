@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -56,7 +57,7 @@ public class Drive extends SubsystemBase
   public Drive()
   { 
     //YAGSL config
-    boolean blueAlliance = true;
+    boolean blueAlliance = !isRedAlliance();
     Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(4),
                                                                       Meter.of(4)),
                                                     Rotation2d.fromDegrees(0))
@@ -143,8 +144,6 @@ public class Drive extends SubsystemBase
         3.0, 5.0, 3.0);
   }
 
-
-
   public Command sysIdAngleMotorCommand()
   {
     return SwerveDriveTest.generateSysIdCommand(
@@ -181,7 +180,7 @@ public class Drive extends SubsystemBase
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
                             xVelocity * swerveDrive.getMaximumChassisVelocity(),
-                            yVelocity * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
+                            yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.6),
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);

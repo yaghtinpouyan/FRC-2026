@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //DataLogManager.start();
+    //getAutonomousCommand.schedule();
   }
 
   @Override
@@ -51,23 +52,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    getAutonomousCommand = rc.getAutonomousCommand();
-    
-    if (getAutonomousCommand != null){
-      getAutonomousCommand.schedule();
-   }
   }
 
   @Override
   public void autonomousPeriodic() {
- 
+    //getAutonomousCommand.schedule();
   }
 
   @Override
   public void teleopInit() {
-    if (getAutonomousCommand != null){
-      getAutonomousCommand.cancel();
-    }
+    // if (getAutonomousCommand != null){
+    //   getAutonomousCommand.cancel();
+    // }
   }
 
   @Override

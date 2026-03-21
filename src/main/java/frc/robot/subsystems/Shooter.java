@@ -158,28 +158,52 @@ public class Shooter extends SubsystemBase{
     return velocityMap.getInstance().mainMap.get(distance.baseUnitMagnitude());
   }
 
-  public void shooterInputManager(double charge, boolean fire){
+  public void shooterInputManager(double charge, boolean fire, boolean up, boolean down, boolean manual){
+    if(!manual) manualShooter(charge, fire, up, down);
+    else{
+      shooterMap(charge, fire);
+    }
+  }
+
+  public void manualShooter(double charge, boolean fire, boolean up, boolean down){
     if(fire){
         kickerMotor.setVoltage(10);
         ballIntake.runIndexer();
     }
+
     if(charge > 0.1){
-        shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
+        //shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
         Drive.getInstance().scaledSpeed = 0.4;
-        //AngularVelocity vel = RPM.of(startingVal);
-        //shooterMotor1.setVelocity(vel);
+        AngularVelocity vel = RPM.of(startingVal);
+        shooterMotor1.setVelocity(vel);
     }  
     else{
         shooterMotor1.setVelocity(RPM.of(0));
         ballIntake.stopIndexer();
         kickerMotor.set(0);
     }
-    //mapIncrementation(up, down);
+    Drive.getInstance().scaledSpeed = 0.8;
+    mapIncrementation(up, down);
     SmartDashboard.putNumber("Shooter RPM :", startingVal);
   }
 
+  public void shooterMap(double charge, boolean fire){
+     if(fire){
+        kickerMotor.setVoltage(10);
+        ballIntake.runIndexer();
+    }
+    if(charge > 0.1){
+        shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
+    }  
+    else{
+        shooterMotor1.setVelocity(RPM.of(0));
+        ballIntake.stopIndexer();
+        kickerMotor.set(0);
+    }
+  }
+
   public Command shootInAuto(double charge, boolean fire){
-    return this.run(() -> this.shooterInputManager(charge, fire));
+    return this.run(() -> this.shooterMap(charge, fire));
   }
 
   public static Shooter getInstance(){

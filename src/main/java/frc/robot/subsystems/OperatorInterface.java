@@ -31,8 +31,11 @@ public class OperatorInterface extends SubsystemBase{
 
     private void updateShooter(){
         ballShooter.shooterInputManager(
-            controller2.getRawAxis(2), 
-            controller2.getRawButton(5)
+            controller2.getLeftTriggerAxis(), 
+            controller2.getLeftBumperButton(), 
+            controller2.getYButtonPressed(), 
+            controller2.getAButtonPressed(), 
+            controller2.getBButton()
         );
     }
 
