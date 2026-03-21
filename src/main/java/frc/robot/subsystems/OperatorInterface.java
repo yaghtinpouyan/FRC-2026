@@ -21,7 +21,7 @@ public class OperatorInterface extends SubsystemBase{
 
     private void updateDrive(){
         drivetrain.driveInputHandler(() -> -controller1.getRawAxis(1), 
-            () -> -controller1.getRawAxis(0), () -> -controller1.getRawAxis(4), controller1.getYButton());
+            () -> -controller1.getRawAxis(0), () -> -controller1.getRawAxis(4), controller1.getRightBumperButton());
     }
 
     private void updateIntake(){
@@ -32,11 +32,8 @@ public class OperatorInterface extends SubsystemBase{
     private void updateShooter(){
         ballShooter.shooterInputManager(
             controller2.getRawAxis(2), 
-            controller2.getRawButton(5),
-            controller2.getYButtonPressed(),
-            controller2.getAButtonPressed()
+            controller2.getRawButton(5)
         );
-        //ballShooter.tempSysID(controller1.getYButtonPressed(), controller1.getAButtonPressed(), controller1.getRightBumperButtonPressed(), controller1.getLeftBumperButtonPressed());
     }
 
     private void updateVision(){

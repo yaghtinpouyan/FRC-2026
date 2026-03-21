@@ -13,6 +13,8 @@ public class velocityMap {
         mainMap.put(2.8702,2050.0);
         mainMap.put(2.57175,2050.0);
         mainMap.put(3.00355,2125.0);
+        mainMap.put(0.0254, 1500.0);
+        mainMap.put(2.52095, 1700.0);
     }
 
     public static velocityMap getInstance(){

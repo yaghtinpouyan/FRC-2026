@@ -11,6 +11,12 @@ public class VisionConstants {
     public static final double camPosZ = 0.38372;
     public static final double camRotPitch = 45;
 
+     //Camera 2 position and rotation relative to the robot center (in meters and degrees)
+    public static final double cam2PosX = -0.209550;
+    public static final double cam2PosY = -0.10808;
+    public static final double cam2PosZ = -0.505474;
+    public static final double cam2RotPitch = 15;
+
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);

@@ -51,6 +51,7 @@ public class Drive extends SubsystemBase
   private SwerveDrive swerveDrive;
   private File directory = new File(Filesystem.getDeployDirectory(),"swerve2");
   private RobotConfig config;
+  public double scaledSpeed = 0.8;
 
   public Drive()
   { 
@@ -166,7 +167,6 @@ public class Drive extends SubsystemBase
     }).finallyDo(() -> swerveDrive.drive(new Translation2d(0, 0), 0, false, false));
   }
 
-
   
   public void replaceSwerveModuleFeedforward(double kS, double kV, double kA)
   {
@@ -181,7 +181,7 @@ public class Drive extends SubsystemBase
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
                             xVelocity * swerveDrive.getMaximumChassisVelocity(),
-                            yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.8),
+                            yVelocity * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
