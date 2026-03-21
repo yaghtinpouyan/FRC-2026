@@ -32,6 +32,7 @@ import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -96,6 +97,35 @@ public class Shooter extends SubsystemBase{
   // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
   private final MutAngularVelocity m_velocity = RadiansPerSecond.mutable(0);
   Direction currentDir = Direction.kForward;
+
+  // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+  private final MutVoltage m_appliedVoltage = Volts.mutable(0);
+  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+  private final MutAngle m_angle = Radians.mutable(0);
+  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+  private final MutAngularVelocity m_velocity = RadiansPerSecond.mutable(0);
+
+  Direction currentDir = Direction.kForward;
+
+
+  private final SysIdRoutine shooterSysIdRoutine =
+    new SysIdRoutine(
+        new SysIdRoutine.Config(),
+        new SysIdRoutine.Mechanism(
+            voltage -> Lshooter1.setControl(new VoltageOut(voltage.in(Volts))),
+            log -> {
+                log.motor("shooter-wheel")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            Lshooter1.getMotorVoltage().getValueAsDouble(), Volts))
+                    .angularPosition(
+                        m_angle.mut_replace(
+                            Lshooter1.getPosition().getValueAsDouble(), Rotations))
+                    .angularVelocity(
+                        m_velocity.mut_replace(
+                            Lshooter1.getVelocity().getValueAsDouble(), RotationsPerSecond));
+            },
+            this));
 
   private Shooter() {
     //Motor inits
@@ -224,6 +254,13 @@ public class Shooter extends SubsystemBase{
   }
 
   public void tempSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
+        if(toggleF) currentDir = Direction.kForward;
+        if(toggleR) currentDir = Direction.kReverse;
+        if(quat) shooterSysIdRoutine.quasistatic(currentDir).schedule();
+        if(dynamic) shooterSysIdRoutine.dynamic(currentDir).schedule();
+  }
+
+  public void runShooterSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
         if(toggleF) currentDir = Direction.kForward;
         if(toggleR) currentDir = Direction.kReverse;
         if(quat) shooterSysIdRoutine.quasistatic(currentDir).schedule();
