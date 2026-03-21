@@ -36,6 +36,7 @@ public class OperatorInterface extends SubsystemBase{
             controller2.getYButtonPressed(),
             controller2.getAButtonPressed()
         );
+        //ballShooter.tempSysID(controller1.getYButtonPressed(), controller1.getAButtonPressed(), controller1.getRightBumperButtonPressed(), controller1.getLeftBumperButtonPressed());
     }
 
     private void updateVision(){

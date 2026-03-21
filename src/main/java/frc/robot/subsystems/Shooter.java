@@ -6,6 +6,9 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
@@ -16,6 +19,7 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.revrobotics.spark.SparkMax;
@@ -24,8 +28,13 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.units.measure.MutAngularVelocity;
+import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
 import frc.robot.subsystems.automations.AutoAlign;
@@ -65,8 +74,7 @@ public class Shooter extends SubsystemBase{
   TalonFXConfiguration config3;
   TalonFXConfiguration config4;
 
-  private double shootingInc = 100;
-  private double voltInc = 0.15;
+  private double shootingInc = 250;
   private SmartMotorControllerConfig LmotorConfig;
   private SmartMotorControllerConfig RmotorConfig;
 
@@ -77,9 +85,17 @@ public class Shooter extends SubsystemBase{
 
   private FlyWheelConfig shooterConfig;
   private FlyWheel mainShooter;
-  //public double startingVal = 1000;
-  public double adjustVolts = 3.5;
+  private final SysIdRoutine shooterSysIdRoutine;
+  public double startingVal = 1000;
+  //public double adjustVolts = 3.5;
   //private AngularVelocity startingVel = RotationsPerSecond.of(startingVal);
+  // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+  private final MutVoltage m_appliedVoltage = Volts.mutable(0);
+  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+  private final MutAngle m_angle = Radians.mutable(0);
+  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+  private final MutAngularVelocity m_velocity = RadiansPerSecond.mutable(0);
+  Direction currentDir = Direction.kForward;
 
   private Shooter() {
     //Motor inits
@@ -91,7 +107,7 @@ public class Shooter extends SubsystemBase{
 
     //YAMS
     LmotorConfig = new SmartMotorControllerConfig(this)
-    .withClosedLoopController(0.000001, 0, 0, RPM.of(3000), RotationsPerSecondPerSecond.of(2500))
+    .withClosedLoopController(0.17053, 0, 0, RPM.of(3000), RotationsPerSecondPerSecond.of(2500))
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,1)))
     .withIdleMode(MotorMode.COAST)
     .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
@@ -99,11 +115,11 @@ public class Shooter extends SubsystemBase{
     .withMotorInverted(true)  //Inverted due to shooter orientation
     .withClosedLoopRampRate(Seconds.of(0.25))
     .withOpenLoopRampRate(Seconds.of(0.25))
-    .withFeedforward(new SimpleMotorFeedforward(0, 0, 0))
+    .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
     .withControlMode(ControlMode.CLOSED_LOOP);
 
     RmotorConfig = new SmartMotorControllerConfig(this)
-    .withClosedLoopController(0.000001, 0, 0, RPM.of(3000), RotationsPerSecondPerSecond.of(3000))
+    .withClosedLoopController(0.17053, 0, 0, RPM.of(3000), RotationsPerSecondPerSecond.of(3000))
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,1)))
     .withIdleMode(MotorMode.COAST)
     .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
@@ -111,7 +127,7 @@ public class Shooter extends SubsystemBase{
     .withMotorInverted(false) 
     .withClosedLoopRampRate(Seconds.of(0.25))
     .withOpenLoopRampRate(Seconds.of(0.25))
-    .withFeedforward(new SimpleMotorFeedforward(0.001, 0.01, 0.001))
+    .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
     .withControlMode(ControlMode.CLOSED_LOOP);
 
     shooterMotor4 = new TalonFXWrapper(Rshooter2, DCMotor.getKrakenX60(1), RmotorConfig);
@@ -136,6 +152,25 @@ public class Shooter extends SubsystemBase{
     config2.CurrentLimits.StatorCurrentLimit = 40;
     config3.CurrentLimits.StatorCurrentLimit = 40;
     config4.CurrentLimits.StatorCurrentLimit = 40;
+
+    shooterSysIdRoutine =
+    new SysIdRoutine(
+        new SysIdRoutine.Config(),
+        new SysIdRoutine.Mechanism(
+            voltage -> Lshooter1.setControl(new VoltageOut(voltage.in(Volts))),
+            log -> {
+                log.motor("shooter-wheel")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            Lshooter1.getMotorVoltage().getValueAsDouble(), Volts))
+                    .angularPosition(
+                        m_angle.mut_replace(
+                            Lshooter1.getPosition().getValueAsDouble(), Rotations))
+                    .angularVelocity(
+                        m_velocity.mut_replace(
+                            Lshooter1.getVelocity().getValueAsDouble(), RotationsPerSecond));
+            },
+            this));
   }
 
   private double getVirtualTarget(Distance hubDistance){
@@ -162,8 +197,8 @@ public class Shooter extends SubsystemBase{
   }
 
   public void mapIncrementation(boolean up, boolean down){
-    if(up) adjustVolts += voltInc;
-    if(down) adjustVolts -= voltInc;
+    if(up) startingVal += shootingInc;
+    if(down) startingVal -= shootingInc;
   }
 
   public double getCalcVoltage(Distance distance){
@@ -176,16 +211,23 @@ public class Shooter extends SubsystemBase{
         ballIntake.runIndexer();
     }
     if(charge > 0.1){
-        shooterMotor1.setVoltage(Volts.of(getCalcVoltage(align.getHubDist())));
+        shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
         //kickerMotor.setVoltage(6);
     }  
     else{
-        shooterMotor1.setVoltage(Volts.of(0));
+        shooterMotor1.setVelocity(RPM.of(0));
         ballIntake.stopIndexer();
         kickerMotor.set(0);
     }
     mapIncrementation(up, down);
-    SmartDashboard.putNumber("Shooter Volts :", adjustVolts);
+    SmartDashboard.putNumber("Shooter RPM :", startingVal);
+  }
+
+  public void tempSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
+        if(toggleF) currentDir = Direction.kForward;
+        if(toggleR) currentDir = Direction.kReverse;
+        if(quat) shooterSysIdRoutine.quasistatic(currentDir).schedule();
+        if(dynamic) shooterSysIdRoutine.dynamic(currentDir).schedule();
   }
 
   public static Shooter getInstance(){
