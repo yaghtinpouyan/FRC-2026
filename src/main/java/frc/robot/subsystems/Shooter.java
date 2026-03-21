@@ -88,44 +88,8 @@ public class Shooter extends SubsystemBase{
   private FlyWheel mainShooter;
   private final SysIdRoutine shooterSysIdRoutine;
   public double startingVal = 1000;
-  //public double adjustVolts = 3.5;
-  //private AngularVelocity startingVel = RotationsPerSecond.of(startingVal);
-  // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
-  private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
-  private final MutAngle m_angle = Radians.mutable(0);
-  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
-  private final MutAngularVelocity m_velocity = RadiansPerSecond.mutable(0);
-  Direction currentDir = Direction.kForward;
-
-  // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
-  private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
-  private final MutAngle m_angle = Radians.mutable(0);
-  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
-  private final MutAngularVelocity m_velocity = RadiansPerSecond.mutable(0);
-
-  Direction currentDir = Direction.kForward;
 
 
-  private final SysIdRoutine shooterSysIdRoutine =
-    new SysIdRoutine(
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(
-            voltage -> Lshooter1.setControl(new VoltageOut(voltage.in(Volts))),
-            log -> {
-                log.motor("shooter-wheel")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            Lshooter1.getMotorVoltage().getValueAsDouble(), Volts))
-                    .angularPosition(
-                        m_angle.mut_replace(
-                            Lshooter1.getPosition().getValueAsDouble(), Rotations))
-                    .angularVelocity(
-                        m_velocity.mut_replace(
-                            Lshooter1.getVelocity().getValueAsDouble(), RotationsPerSecond));
-            },
-            this));
 
   private Shooter() {
     //Motor inits
@@ -251,20 +215,6 @@ public class Shooter extends SubsystemBase{
     }
     mapIncrementation(up, down);
     SmartDashboard.putNumber("Shooter RPM :", startingVal);
-  }
-
-  public void tempSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
-        if(toggleF) currentDir = Direction.kForward;
-        if(toggleR) currentDir = Direction.kReverse;
-        if(quat) shooterSysIdRoutine.quasistatic(currentDir).schedule();
-        if(dynamic) shooterSysIdRoutine.dynamic(currentDir).schedule();
-  }
-
-  public void runShooterSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
-        if(toggleF) currentDir = Direction.kForward;
-        if(toggleR) currentDir = Direction.kReverse;
-        if(quat) shooterSysIdRoutine.quasistatic(currentDir).schedule();
-        if(dynamic) shooterSysIdRoutine.dynamic(currentDir).schedule();
   }
 
   public static Shooter getInstance(){
