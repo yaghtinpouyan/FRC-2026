@@ -12,12 +12,6 @@ public class VisionConstants {
     public static final double camPosZ = -0.506743;
     public static final double camRotPitch = 15;
 
-    //Camera 2 position and rotation relative to the robot center (in meters and degrees)
-    public static final double cam2PosX = -0.209550;
-    public static final double cam2PosY = -0.10808;
-    public static final double cam2PosZ = -0.505474;
-    public static final double cam2RotPitch = 15;
-
 
      //Camera 2 position and rotation relative to the robot center (in meters and degrees)
     public static final double cam2PosX = -0.209550;
