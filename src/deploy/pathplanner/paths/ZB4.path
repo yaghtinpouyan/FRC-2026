@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 3.9180666666666664
+        "x": 7.7438,
+        "y": 0.7706111111111102
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6421327114968873,
-        "y": 3.675680368688778
+        "x": 7.741856140003635,
+        "y": 1.1269715521453258
       },
       "isLocked": false,
-      "linkedName": "ZBE1"
+      "linkedName": "ZBE3"
     },
     {
       "anchor": {
-        "x": 2.988511111111111,
-        "y": 0.6341888888888878
+        "x": 7.7438,
+        "y": 2.9046444444444446
       },
       "prevControl": {
-        "x": 2.9088305311666565,
-        "y": 0.900504128766293
+        "x": 7.747893955052235,
+        "y": 2.6471103336427864
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ZBE2"
+      "linkedName": "ZBE4"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 3.0,
-    "rotation": 0.0
+    "velocity": 1.0,
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Zain Blue",
   "idealStartingState": {
-    "velocity": 3.0,
-    "rotation": 0.0
+    "velocity": 1.0,
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }
