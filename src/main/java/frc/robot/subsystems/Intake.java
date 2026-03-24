@@ -30,6 +30,7 @@ public class Intake extends SubsystemBase{
     SparkMax pivotMotor;
     private final SmartMotorControllerConfig falconConfig;
     private SmartMotorController indexerSystem;
+    public boolean isIntaking = false;
     
     private Intake(){
         intakeRollers = new TalonFX(idConstants.falcon500_I1);
@@ -61,12 +62,17 @@ public class Intake extends SubsystemBase{
     }
 
     public void runRollers(double input1, boolean input2){
-        if(input1 > 0.1) intakeRollers.setVoltage(-6);
+        if(input1 > 0.1) {
+            intakeRollers.setVoltage(-6);
+            isIntaking = true;
+        }
         else if(input2){
             intakeRollers.setVoltage(6);
+            isIntaking = true;
         }
         else{
             intakeRollers.setVoltage(0);
+            isIntaking = false;
         }
     }
 

@@ -15,7 +15,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -111,7 +110,7 @@ public class Drive extends SubsystemBase
             (speeds, feedforwards) -> drive(speeds), 
             new PPHolonomicDriveController( 
                     new PIDConstants(5.0, 0.0, 0.0), // Movement PID constants
-                    new PIDConstants(0.4, 0.0, 0.01) // Rotation PID constants
+                    new PIDConstants(0.4, 0.0, 0) // Rotation PID constants
             ),
             config,
             () -> {
@@ -135,14 +134,16 @@ public class Drive extends SubsystemBase
     );
   }
 
-  @Override
-  public void periodic()
-  {
-  }
-
-  @Override
-  public void simulationPeriodic()
-  {
+  public void scaleSpeed(){
+    if(Intake.getInstance().isIntaking){
+      scaledSpeed = 0.4;
+    }
+    else if(Shooter.getInstance().isShooting){
+      scaledSpeed = 0.4;
+    }
+    else{
+      scaledSpeed = 0.8;
+    }
   }
 
   public Command sysIdDriveMotorCommand()
@@ -190,7 +191,7 @@ public class Drive extends SubsystemBase
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
                             xVelocity * swerveDrive.getMaximumChassisVelocity(),
-                            yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.6),
+                            yVelocity * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
@@ -207,7 +208,7 @@ public class Drive extends SubsystemBase
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
                             xVelocity * swerveDrive.getMaximumChassisVelocity(),
-                            yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.6),
+                            yVelocity * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
                         Math.pow(angularVel, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);

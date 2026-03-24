@@ -66,7 +66,7 @@ public class Shooter extends SubsystemBase{
   private FlyWheelConfig shooterConfig;
   private FlyWheel mainShooter;
   public double startingVal = 1500;
-
+  public boolean isShooting = false;
 
 
   private Shooter() {
@@ -169,6 +169,7 @@ public class Shooter extends SubsystemBase{
     if(fire){
         kickerMotor.setVoltage(10);
         ballIntake.runIndexer();
+        isShooting = true;
     }
 
     if(charge > 0.1){
@@ -176,11 +177,13 @@ public class Shooter extends SubsystemBase{
         Drive.getInstance().scaledSpeed = 0.4;
         AngularVelocity vel = RPM.of(startingVal);
         shooterMotor1.setVelocity(vel);
+        isShooting = true;
     }  
     else{
         shooterMotor1.setVelocity(RPM.of(0));
         ballIntake.stopIndexer();
         kickerMotor.set(0);
+        isShooting = false;
     }
     Drive.getInstance().scaledSpeed = 0.8;
     mapIncrementation(up, down);
@@ -198,7 +201,7 @@ public class Shooter extends SubsystemBase{
     else{
         shooterMotor1.setVelocity(RPM.of(0));
         ballIntake.stopIndexer();
-        kickerMotor.set(0);  []
+        kickerMotor.set(0);  
     }
   }
 
