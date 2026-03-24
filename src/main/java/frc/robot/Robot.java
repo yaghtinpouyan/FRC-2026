@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
   // public climb climber;
   // public autoAlign align;
   public RobotContainer rc;
-  public Command getAutonomousCommand;
+  Command getAutonomousCommand;
 
 ////teetettlaksdlask
   public Robot() {
@@ -30,12 +30,12 @@ public class Robot extends TimedRobot {
     // ballShooter = shooter.getInstance();
     // climber = climb.getInstance();
     rc = new RobotContainer();
+    getAutonomousCommand = rc.getAutonomousCommand();
   }
 
   @Override
   public void robotInit() {
     //DataLogManager.start();
-    //getAutonomousCommand.schedule();
   }
 
   @Override
@@ -52,18 +52,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    getAutonomousCommand = rc.getAutonomousCommand();
+    getAutonomousCommand.schedule();
   }
 
   @Override
   public void autonomousPeriodic() {
-    //getAutonomousCommand.schedule();
   }
 
   @Override
   public void teleopInit() {
-    // if (getAutonomousCommand != null){
-    //   getAutonomousCommand.cancel();
-    // }
+    if (getAutonomousCommand != null){
+      getAutonomousCommand.cancel();
+    }
   }
 
   @Override

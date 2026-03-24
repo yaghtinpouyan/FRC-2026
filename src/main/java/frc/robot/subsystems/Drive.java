@@ -53,17 +53,29 @@ public class Drive extends SubsystemBase
   private File directory = new File(Filesystem.getDeployDirectory(),"swerve2");
   private RobotConfig config;
   public double scaledSpeed = 0.8;
+  public boolean isRed;
+  private Pose2d startingPose;
 
   public Drive()
   { 
     //YAGSL config
-    boolean blueAlliance = !isRedAlliance();
-    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(4),
-                                                                      Meter.of(4)),
-                                                    Rotation2d.fromDegrees(0))
-                                       : new Pose2d(new Translation2d(Meter.of(12.5),
-                                                                      Meter.of(4)),
-                                                    Rotation2d.fromDegrees(180));
+    var alliance = DriverStation.getAlliance();
+    if(alliance.get() == DriverStation.Alliance.Red){
+      startingPose = new Pose2d(new Translation2d(Meter.of(13),
+                                                  Meter.of(4)),
+                                                  Rotation2d.fromDegrees(180));
+    }
+    else if(alliance.isEmpty()){
+      startingPose = new Pose2d(new Translation2d(Meter.of(4),
+                                                  Meter.of(4)),
+                                                  Rotation2d.fromDegrees(0));
+    }
+    else{
+      startingPose = new Pose2d(new Translation2d(Meter.of(4),
+                                                  Meter.of(4)),
+                                                  Rotation2d.fromDegrees(0));
+    }
+  
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
     try
@@ -104,8 +116,6 @@ public class Drive extends SubsystemBase
             config,
             () -> {
               // Boolean supplier that controls when the path will be mirrored for the red alliance
-
-              var alliance = DriverStation.getAlliance();
               if (alliance.isPresent()) {
                 return alliance.get() == DriverStation.Alliance.Red;
               }
@@ -265,24 +275,18 @@ public class Drive extends SubsystemBase
     swerveDrive.zeroGyro();
   }
 
-  private boolean isRedAlliance()
-  {
-    var alliance = DriverStation.getAlliance();
-    return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
-  }
-
-  public void zeroGyroWithAlliance()
-  {
-    if (isRedAlliance())
-    {
-      zeroGyro();
-      //Set the pose 180 degrees
-      resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
-    } else
-    {
-      zeroGyro();
-    }
-  }
+  // public void zeroGyroWithAlliance()
+  // {
+  //   if (isRedAlliance())
+  //   {
+  //     zeroGyro();
+  //     //Set the pose 180 degrees
+  //     resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+  //   } else
+  //   {
+  //     zeroGyro();
+  //   }
+  // }
 
   public void setMotorBrake(boolean brake)
   {

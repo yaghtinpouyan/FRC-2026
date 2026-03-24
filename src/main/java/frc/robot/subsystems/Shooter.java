@@ -65,7 +65,7 @@ public class Shooter extends SubsystemBase{
 
   private FlyWheelConfig shooterConfig;
   private FlyWheel mainShooter;
-  public double startingVal = 1000;
+  public double startingVal = 1500;
 
 
 
@@ -198,12 +198,12 @@ public class Shooter extends SubsystemBase{
     else{
         shooterMotor1.setVelocity(RPM.of(0));
         ballIntake.stopIndexer();
-        kickerMotor.set(0);
+        kickerMotor.set(0);  []
     }
   }
 
   public Command shootInAuto(double charge, boolean fire){
-    return this.run(() -> this.shooterMap(charge, fire));
+    return run(() -> shooterMap(charge, fire));
   }
 
   public static Shooter getInstance(){

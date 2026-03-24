@@ -10,7 +10,8 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
-    private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+    private final SendableChooser<Command> autoChooser; // I fixed the error by running AutoBuilder.buildAutoChooser() 
+                                                        // after registering commands - Gaocan
 
     public RobotContainer(){
         NamedCommands.registerCommand("runIntake", Intake.getInstance().runIntakeCommand());
@@ -18,7 +19,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("lowerPivot", Intake.getInstance().lowerPivot());
         NamedCommands.registerCommand("shoot", Shooter.getInstance().shootInAuto(0.5, true));
         NamedCommands.registerCommand("charge", Shooter.getInstance().shootInAuto(0.5, false));
-        SmartDashboard.putData("Auto Chooser", AutoBuilder.buildAutoChooser());
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     public Command getAutonomousCommand() {
