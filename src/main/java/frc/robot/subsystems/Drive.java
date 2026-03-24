@@ -98,7 +98,7 @@ public class Drive extends SubsystemBase
             (speeds, feedforwards) -> drive(speeds), 
             new PPHolonomicDriveController( 
                     new PIDConstants(5.0, 0.0, 0.0), // Movement PID constants
-                    new PIDConstants(0.4, 0.0, 0.01) // Rotation PID constants
+                    new PIDConstants(1, 0.0, 0.01) // Rotation PID constants
             ),
             config,
             () -> {
