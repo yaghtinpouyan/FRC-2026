@@ -161,7 +161,7 @@ public class Shooter extends SubsystemBase{
   }
 
   public void shooterInputManager(double charge, boolean fire, boolean up, boolean down, boolean manual){
-    if(manual) manualShooter(charge, fire, up, down);
+    if(!manual) manualShooter(charge, fire, up, down);
     else{
       shooterMap(charge, fire);
     }
@@ -195,7 +195,7 @@ public class Shooter extends SubsystemBase{
   public boolean isAtTargetSpeed(){
     AngularVelocity current = shooterMotor1.getRotorVelocity();
     AngularVelocity targetSpeed = RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude()));
-    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < 200;
+    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < 50;
   
   }
   
