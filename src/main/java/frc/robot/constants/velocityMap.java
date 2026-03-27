@@ -7,10 +7,19 @@ public class velocityMap {
     public InterpolatingDoubleTreeMap mainMap = new InterpolatingDoubleTreeMap();
 
     public velocityMap(){
-        mainMap.put(0.641,2250.0);
-        mainMap.put(1.518, 2500.0);
-        mainMap.put(2.089,2750.0);
-        mainMap.put(2.57,3000.0);
+        // added 59.69cm offset to center of hub
+        mainMap.put(1.6, 1300.0);
+        mainMap.put(1.8, 1400.0);
+        mainMap.put(2.1,1480.0);
+        //2.3
+        mainMap.put(2.5,1500.0);
+        //2.7
+        mainMap.put(2.95,1600.0);
+        mainMap.put(3.2,1650.0);
+        //3.4
+        mainMap.put(3.6,1750.0);
+        mainMap.put(3.8,1900.0);
+        //4
     }
 
     public static velocityMap getInstance(){

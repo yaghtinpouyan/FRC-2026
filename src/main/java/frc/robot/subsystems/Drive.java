@@ -136,10 +136,10 @@ public class Drive extends SubsystemBase
 
   public void scaleSpeed(){
     if(Intake.getInstance().isIntaking){
-      scaledSpeed = 0.4;
+      scaledSpeed = 0.2;
     }
     else if(Shooter.getInstance().isShooting){
-      scaledSpeed = 0.4;
+      scaledSpeed = 0.2;
     }
     else{
       scaledSpeed = 0.8;

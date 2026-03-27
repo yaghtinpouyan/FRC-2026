@@ -54,7 +54,7 @@ public class Shooter extends SubsystemBase{
   TalonFXConfiguration config3;
   TalonFXConfiguration config4;
 
-  private double shootingInc = 250;
+  private double shootingInc = 50;
   private SmartMotorControllerConfig LmotorConfig;
   private SmartMotorControllerConfig RmotorConfig;
 
@@ -83,7 +83,8 @@ public class Shooter extends SubsystemBase{
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,1)))
     .withIdleMode(MotorMode.COAST)
     .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
-    .withStatorCurrentLimit(Amps.of(40))
+    .withStatorCurrentLimit(Amps.of(80))
+    .withSupplyCurrentLimit(Amps.of(40))
     .withMotorInverted(true)  //Inverted due to shooter orientation
     .withClosedLoopRampRate(Seconds.of(0.25))
     .withOpenLoopRampRate(Seconds.of(0.25))
@@ -95,7 +96,8 @@ public class Shooter extends SubsystemBase{
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,1)))
     .withIdleMode(MotorMode.COAST)
     .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
-    .withStatorCurrentLimit(Amps.of(40))
+    .withStatorCurrentLimit(Amps.of(80))
+    .withSupplyCurrentLimit(Amps.of(40))
     .withMotorInverted(false) 
     .withClosedLoopRampRate(Seconds.of(0.25))
     .withOpenLoopRampRate(Seconds.of(0.25))
@@ -190,8 +192,15 @@ public class Shooter extends SubsystemBase{
     SmartDashboard.putNumber("Shooter RPM :", startingVal);
   }
 
+  // public boolean isAtTargetSpeed(){
+  //   AngularVelocity current = shooterMotor1.getRotorVelocity();
+  //   AngularVelocity targetSpeed = RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude()));
+  
+  // }
+  
   public void shooterMap(double charge, boolean fire){
      if(fire){
+
         kickerMotor.setVoltage(10);
         ballIntake.runIndexer();
     }
