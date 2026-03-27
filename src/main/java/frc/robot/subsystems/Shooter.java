@@ -161,7 +161,7 @@ public class Shooter extends SubsystemBase{
   }
 
   public void shooterInputManager(double charge, boolean fire, boolean up, boolean down, boolean manual){
-    if(!manual) manualShooter(charge, fire, up, down);
+    if(manual) manualShooter(charge, fire, up, down);
     else{
       shooterMap(charge, fire);
     }
@@ -192,25 +192,25 @@ public class Shooter extends SubsystemBase{
     SmartDashboard.putNumber("Shooter RPM :", startingVal);
   }
 
-  // public boolean isAtTargetSpeed(){
-  //   AngularVelocity current = shooterMotor1.getRotorVelocity();
-  //   AngularVelocity targetSpeed = RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude()));
+  public boolean isAtTargetSpeed(){
+    AngularVelocity current = shooterMotor1.getRotorVelocity();
+    AngularVelocity targetSpeed = RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude()));
+    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < 200;
   
-  // }
+  }
   
   public void shooterMap(double charge, boolean fire){
-     if(fire){
-
-        kickerMotor.setVoltage(10);
-        ballIntake.runIndexer();
+    if(isAtTargetSpeed()){
+      kickerMotor.setVoltage(10);
+      ballIntake.runIndexer();
     }
     if(charge > 0.1){
-        shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
+      shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
     }  
     else{
-        shooterMotor1.setVelocity(RPM.of(0));
-        ballIntake.stopIndexer();
-        kickerMotor.set(0);  
+      shooterMotor1.setVelocity(RPM.of(0));
+      ballIntake.stopIndexer();
+      kickerMotor.set(0);  
     }
   }
 
