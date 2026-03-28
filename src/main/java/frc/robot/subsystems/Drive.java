@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -27,6 +28,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
+
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -44,6 +48,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 
 public class Drive extends SubsystemBase
 {
@@ -333,12 +339,6 @@ public class Drive extends SubsystemBase
     return module.getDriveMotor().getVelocity();
   }
 
-  public double getDriveCurrent(int targetModule){
-    SwerveModule[] modules = swerveDrive.getModules();
-    SwerveModule module = modules[targetModule];
-    return module.getDriveMotor().getVoltage();
-  }
-
   public ChassisSpeeds getFieldVelocity()
   {
     return swerveDrive.getFieldVelocity();
@@ -374,10 +374,27 @@ public class Drive extends SubsystemBase
     return swerveDrive;
   }
 
-   public static Drive getInstance(){
-        if (swerve == null){
-            swerve = new Drive();
-        }
-        return swerve;
+  @Override
+  public void periodic(){
+    Logger.recordOutput("Swerve/Heading", getHeading().getDegrees());
+    Logger.recordOutput("Swerve/Pose", getPose());
+    Logger.recordOutput("Swerve/Velocity", getRobotVelocity());
+
+    for (SwerveModule module : swerveDrive.getModules()) {
+        String name = module.configuration.name; // e.g. "frontleft"
+
+        SparkFlex driveMotor = (SparkFlex) module.getDriveMotor().getMotor();
+        SparkMax angleMotor = (SparkMax) module.getAngleMotor().getMotor();
+
+        Logger.recordOutput("Swerve/" + name + "/DriveCurrentAmps", driveMotor.getOutputCurrent());
+        Logger.recordOutput("Swerve/" + name + "/AngleCurrentAmps", angleMotor.getOutputCurrent());
     }
+  }
+
+  public static Drive getInstance(){
+    if (swerve == null){
+      swerve = new Drive();
+    }
+    return swerve;
+  }
 }
