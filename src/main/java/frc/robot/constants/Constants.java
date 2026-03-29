@@ -21,12 +21,14 @@ public final class Constants {
   //Math/Calculations 
   public static final double secondsPerMinute = 60.0;
   public static final double driveCircumferenceMeters = 0.2393893602;
+
   //YAGSL
   public static final double maxDriveSpeed = Units.feetToMeters(12);
+  public static final double maxAcceleration = 2.5;
   public static final double maxVolts = 12;
   public static final Pose2d blueStartPose = new Pose2d(4, 7.4, Rotation2d.fromDegrees(0));
   public static final Pose2d redStartPose = new Pose2d(12.5, 7.4, Rotation2d.fromDegrees(180));
-
+  public static final double driveScaling = 0.8;
   public static final double deadband = 0.05;
 
   //Vision 
@@ -52,6 +54,7 @@ public final class Constants {
   public static final double flyWheelSysIdMaxVoltage = 10;
   public static final double flyWheelSysIdStep = 1;
   public static final double flyWheelSysIdDuration = 5;
+  public static final double shootingTolerence = 50;
 
   //Hood Subsystem
   public static final double hoodSysIdMaxVoltage = 10;

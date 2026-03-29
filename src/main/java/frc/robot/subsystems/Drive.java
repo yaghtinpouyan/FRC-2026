@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Meter;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -60,6 +61,9 @@ public class Drive extends SubsystemBase
   public double scaledSpeed = 0.8;
   public boolean isRed;
   private Pose2d startingPose;
+  private SlewRateLimiter xLim;
+  private SlewRateLimiter yLim;
+  private SlewRateLimiter rotLim;
 
   public Drive()
   { 
@@ -100,7 +104,11 @@ public class Drive extends SubsystemBase
     swerveDrive.setModuleEncoderAutoSynchronize(true,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
     swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
-  
+    
+    xLim = new SlewRateLimiter(Constants.maxAcceleration);
+    yLim = new SlewRateLimiter(Constants.maxAcceleration);
+    rotLim = new SlewRateLimiter(Constants.maxAcceleration);
+
     //Pathplanner config
     try {
             config = RobotConfig.fromGUISettings();
@@ -191,13 +199,13 @@ public class Drive extends SubsystemBase
 
   public void driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
   {
-    double xVelocity = MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband);
-    double yVelocity = MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband);
-    double angularVelocity = MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband);
+    double xVelocity = xLim.calculate(MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband));
+    double yVelocity = yLim.calculate(MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband));
+    double angularVelocity = rotLim.calculate(MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband));
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                            xVelocity * swerveDrive.getMaximumChassisVelocity(),
-                            yVelocity * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
+                        Math.pow(xVelocity,3) * swerveDrive.getMaximumChassisVelocity(),
+                        Math.pow(yVelocity, 3) * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
@@ -206,8 +214,8 @@ public class Drive extends SubsystemBase
   public void driveAlignedHub(DoubleSupplier translationX, DoubleSupplier translationY)
   {
     AutoAlign align = AutoAlign.getInstance();
-    double xVelocity = MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband);
-    double yVelocity = MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband);
+    double xVelocity = xLim.calculate(MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband));
+    double yVelocity = yLim.calculate(MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband));
     Rotation2d hubHeading = align.getHubHeading();
     double angularVel = swerveDrive.getSwerveController().headingCalculate(swerveDrive.getOdometryHeading().getRadians(), hubHeading.getRadians());
 

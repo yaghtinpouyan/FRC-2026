@@ -16,6 +16,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
 import frc.robot.subsystems.automations.AutoAlign;
@@ -176,7 +177,6 @@ public class Shooter extends SubsystemBase{
 
     if(charge > 0.1){
         //shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
-        Drive.getInstance().scaledSpeed = 0.4;
         AngularVelocity vel = RPM.of(startingVal);
         shooterMotor1.setVelocity(vel);
         isShooting = true;
@@ -187,7 +187,6 @@ public class Shooter extends SubsystemBase{
         kickerMotor.set(0);
         isShooting = false;
     }
-    Drive.getInstance().scaledSpeed = 0.8;
     mapIncrementation(up, down);
     SmartDashboard.putNumber("Shooter RPM :", startingVal);
   }
@@ -195,8 +194,7 @@ public class Shooter extends SubsystemBase{
   public boolean isAtTargetSpeed(){
     AngularVelocity current = shooterMotor1.getRotorVelocity();
     AngularVelocity targetSpeed = RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude()));
-    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < 50;
-  
+    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence;
   }
   
   public void shooterMap(double charge, boolean fire){
@@ -205,9 +203,11 @@ public class Shooter extends SubsystemBase{
       ballIntake.runIndexer();
     }
     if(charge > 0.1){
+      isShooting = true;
       shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
     }  
     else{
+      isShooting = false;
       shooterMotor1.setVelocity(RPM.of(0));
       ballIntake.stopIndexer();
       kickerMotor.set(0);  

@@ -53,7 +53,7 @@ public class OperatorInterface extends SubsystemBase{
         updateTelemetry();
         updateIntake();
         updateShooter();
-        //updateVision();
+        updateVision();
     }
 
     public static OperatorInterface getInstance(){
