@@ -39,7 +39,7 @@ public final class Constants {
   //Intake Subsystems
   public static final int[] rockingAngles = {0,90};
   public static final int osilationTIme = 3;
-  public static final int intakeAngleUp = 15;
+  public static final int intakeAngleUp = 15; //TODO: Find actual angles
   public static final int intakeAngleDown = 215;
   public static final double intakeSysIdMaxVoltage = 10;
   public static final double intakeSysIdStep = 1.0;

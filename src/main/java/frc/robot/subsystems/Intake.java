@@ -4,22 +4,34 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.Angle;
+
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Feet;
+import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.constants.idConstants;
+import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
+import yams.mechanisms.config.ArmConfig;
+import yams.mechanisms.positional.Arm;
 import yams.motorcontrollers.SmartMotorController;
 import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
+import yams.motorcontrollers.local.SparkWrapper;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
 public class Intake extends SubsystemBase{
@@ -28,8 +40,12 @@ public class Intake extends SubsystemBase{
     TalonFX intakeRollers;
     TalonFX indexer;
     SparkMax pivotMotor;
+    private Arm pivot;
     private final SmartMotorControllerConfig falconConfig;
+    private SmartMotorControllerConfig smcConfig;
     private SmartMotorController indexerSystem;
+    private SmartMotorController pivotSmartMotorController;
+    private ArmConfig pivotCfg;
     public boolean isIntaking = false;
     
     private Intake(){
@@ -49,6 +65,33 @@ public class Intake extends SubsystemBase{
                             .withFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
                             .withSimFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
                             .withControlMode(ControlMode.CLOSED_LOOP);
+
+        smcConfig = new SmartMotorControllerConfig(this)
+                            .withControlMode(ControlMode.CLOSED_LOOP)
+                            .withClosedLoopController(10.92, 0, 0, RPM.of(6000), DegreesPerSecondPerSecond.of(45))//TODO
+                            .withSimClosedLoopController(10.92, 0, 0, RPM.of(6000), DegreesPerSecondPerSecond.of(45))
+                            .withFeedforward(new ArmFeedforward(0, 0, 0))
+                            .withSimFeedforward(new ArmFeedforward(0, 0, 0))
+                            .withTelemetry("PivotMotor", TelemetryVerbosity.HIGH)
+                            .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))//TODO
+                            .withMotorInverted(false)
+                            .withIdleMode(MotorMode.BRAKE)
+                            .withStatorCurrentLimit(Amps.of(40))
+                            .withClosedLoopRampRate(Seconds.of(0.25))
+                            .withOpenLoopRampRate(Seconds.of(0.25));
+
+
+        pivotSmartMotorController = new SparkWrapper(pivotMotor, DCMotor.getNEO(1), smcConfig);
+
+        pivotCfg = new ArmConfig(pivotSmartMotorController)
+        .withSoftLimits(Degrees.of(-20), Degrees.of(10))
+        .withStartingPosition(Degrees.of(-5))
+        .withLength(Feet.of(3))
+        .withMass(Pounds.of(1))
+        .withTelemetry("Pivot", TelemetryVerbosity.HIGH);
+
+        // Arm Mechanism
+        pivot = new Arm(pivotCfg);
 
         indexerSystem = new TalonFXWrapper(indexer, DCMotor.getFalcon500(1), falconConfig);
     }
@@ -75,6 +118,26 @@ public class Intake extends SubsystemBase{
             intakeRollers.setVoltage(0);
             isIntaking = false;
         }
+    }
+
+    public Angle getAngle(){
+        return pivot.getAngle();
+        //return pivotSmartMotorController.getMechanismPosition();
+    }
+
+    public void setAngle(Angle angle) {
+        pivot.run(angle).execute();
+        //pivotSmartMotorController.setPosition(angle);
+    }
+
+    public void stowIntake(){
+        pivot.run(Degrees.of(Constants.intakeAngleDown)).execute();
+        //pivotSmartMotorController.setPosition(Degrees.of(Constants.intakeAngleDown));
+    }
+
+    public void deployIntake(){
+        pivot.run(Degrees.of(Constants.intakeAngleUp)).execute();
+        //pivotSmartMotorController.setPosition(Degrees.of(Constants.intakeAngleUp));
     }
 
     public void setPivot(int pov){
