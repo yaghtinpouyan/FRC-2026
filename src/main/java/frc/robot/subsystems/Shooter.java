@@ -15,34 +15,23 @@ import static edu.wpi.first.units.Units.Volts;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
 import com.revrobotics.spark.SparkMax;
-
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.constants.Constants;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
 import frc.robot.subsystems.automations.AutoAlign;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
-import yams.mechanisms.config.ArmConfig;
-import yams.mechanisms.config.FlyWheelConfig;
-import yams.mechanisms.positional.Arm;
-import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorController;
 import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
-import yams.motorcontrollers.local.SparkWrapper;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -57,7 +46,6 @@ public class Shooter extends SubsystemBase{
   private TalonFX Rshooter1;
   private TalonFX Rshooter2;
   private TalonFX kickerMotor;
-  private SparkMax hoodMotor;
   
   private AutoAlign align = AutoAlign.getInstance();
   private Intake ballIntake = Intake.getInstance();
@@ -73,25 +61,18 @@ public class Shooter extends SubsystemBase{
   private double shootingInc = 50;
   private SmartMotorControllerConfig LmotorConfig;
   private SmartMotorControllerConfig RmotorConfig;
-  private SmartMotorControllerConfig hoodSmcConfig;
 
   private SmartMotorController shooterMotor1;
   private SmartMotorController shooterMotor2;
   private SmartMotorController shooterMotor3;
   private SmartMotorController shooterMotor4;
-  private SmartMotorController hoodSmartMotorController;
-
-  private FlyWheelConfig shooterConfig;
-  private FlyWheel mainShooter;
-  private ArmConfig hoodConfig;
-  private Arm hood;
   public double startingVal = 1500;
   public boolean isShooting = false;
 
-  Direction currentDir = Direction.kForward;
+  //Direction currentDir = Direction.kForward;
 
 
-  private final SysIdRoutine hoodSysIdRoutine = hoodSmartMotorController.sysId(Volts.of(1), Volts.of(0.5).per(Second), Second.of(2.5)); 
+  //private final SysIdRoutine hoodSysIdRoutine = hoodSmartMotorController.sysId(Volts.of(1), Volts.of(0.5).per(Second), Second.of(2.5)); 
 
 
   private Shooter() {
@@ -101,7 +82,6 @@ public class Shooter extends SubsystemBase{
     Rshooter1 = new TalonFX(idConstants.krakenx60_S4);
     Rshooter2 = new TalonFX(idConstants.krakenx60_S5);
     kickerMotor = new TalonFX(idConstants.faclon500_S1);;
-    hoodMotor = new SparkMax(idConstants.neo550_S6, MotorType.kBrushless);
 
     //YAMS
     LmotorConfig = new SmartMotorControllerConfig(this)
@@ -130,43 +110,10 @@ public class Shooter extends SubsystemBase{
     .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
     .withControlMode(ControlMode.CLOSED_LOOP);
 
-    hoodSmcConfig = new SmartMotorControllerConfig(this)
-    .withClosedLoopController(0.00016541, 0, 0, RPM.of(11000), RotationsPerSecondPerSecond.of(2500))
-    .withGearing(new MechanismGearing(GearBox.fromReductionStages(100, 1)))
-    .withIdleMode(MotorMode.BRAKE)
-    .withTelemetry("KickerMotor", TelemetryVerbosity.HIGH)
-    .withStatorCurrentLimit(Amps.of(40))
-    .withMotorInverted(true)
-    .withClosedLoopRampRate(Seconds.of(0.25))
-    .withOpenLoopRampRate(Seconds.of(0.25))
-    .withFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
-    .withSimFeedforward(new SimpleMotorFeedforward(0.27937, 0.089836, 0.014557))
-    .withControlMode(ControlMode.CLOSED_LOOP);
-
-    hoodSmartMotorController = new SparkWrapper(hoodMotor, DCMotor.getNEO(1), hoodSmcConfig);
-
     shooterMotor4 = new TalonFXWrapper(Rshooter2, DCMotor.getKrakenX60(1), RmotorConfig);
     shooterMotor2 = new TalonFXWrapper(Lshooter2, DCMotor.getKrakenX60(1), LmotorConfig);
     shooterMotor3 = new TalonFXWrapper(Rshooter1, DCMotor.getKrakenX60(1), RmotorConfig.withLooselyCoupledFollowers(shooterMotor4));
     shooterMotor1 = new TalonFXWrapper(Lshooter1, DCMotor.getKrakenX60(1), LmotorConfig.withLooselyCoupledFollowers(shooterMotor2, shooterMotor3));    
-
-    shooterConfig = new FlyWheelConfig(shooterMotor1)
-    .withDiameter(Inches.of(4))
-    .withMass(Pounds.of(4.5))
-    .withTelemetry("ShooterWheel", TelemetryVerbosity.LOW)
-    .withSoftLimit(RPM.of(-6065), RPM.of(6065));
-
-    hoodConfig = new ArmConfig(hoodSmartMotorController)
-    .withTelemetry("Hood", TelemetryVerbosity.HIGH)
-    .withSoftLimits(Degrees.of(20), Degrees.of(30))
-    .withHardLimit(Degrees.of(20), Degrees.of(30))
-    .withLength(Constants.hoodArmLength)
-    .withStartingPosition(Degrees.of(Constants.startingHoodAngle)) 
-    .withMass(Constants.hoodMass); 
-
-
-    mainShooter = new FlyWheel(shooterConfig);
-    hood = new Arm(hoodConfig);
 
     config1 = new TalonFXConfiguration();
     config2 = new TalonFXConfiguration();
@@ -196,35 +143,6 @@ public class Shooter extends SubsystemBase{
     shootingVMap = velocityMap.getInstance();
     AngularVelocity targetVelocity = RotationsPerSecond.of(shootingVMap.mainMap.get(targetDist));
     return targetVelocity;
-  }
-
-  public void setFlywheelVel(AngularVelocity vel){
-    mainShooter.setSpeed(vel);
-  }
-
-  public Angle getAngle() {
-    return hood.getAngle();
-    //return hoodSmartMotorController.getMechanismPostion();
-  }
-
-  public void setAngle(Angle angle) {
-    hood.setAngle(angle).execute();
-    // hoodSmartMotorController.setPosition(angle);
-  }
-
-  public Command hoodSysId() {
-    return hood.sysId(
-            Volts.of(1), Volts.of(0.5).per(Second), Second.of(2.5))
-            .beforeStarting(
-                    () -> SignalLogger.start())
-            .finallyDo(() -> SignalLogger.stop());
-  }
-
-  public void runHoodSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
-        if(toggleF) currentDir = Direction.kForward;
-        if(toggleR) currentDir = Direction.kReverse;
-        if(quat) hoodSysIdRoutine.quasistatic(currentDir).schedule();
-        if(dynamic) hoodSysIdRoutine.dynamic(currentDir).schedule();
   }
 
   public void mapIncrementation(boolean up, boolean down){

@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import org.littletonrobotics.junction.Logger;
+//import org.littletonrobotics.junction.Logger;
 
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -204,8 +204,8 @@ public class Drive extends SubsystemBase
     double angularVelocity = rotLim.calculate(MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband));
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                        Math.pow(xVelocity,3) * swerveDrive.getMaximumChassisVelocity(),
-                        Math.pow(yVelocity, 3) * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
+                        Math.pow(xVelocity,1) * swerveDrive.getMaximumChassisVelocity(),
+                        Math.pow(yVelocity, 1) * swerveDrive.getMaximumChassisVelocity()), 0.8),
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
@@ -222,7 +222,7 @@ public class Drive extends SubsystemBase
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
                             xVelocity * swerveDrive.getMaximumChassisVelocity(),
-                            yVelocity * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
+                            yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.8),
                         Math.pow(angularVel, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
@@ -380,23 +380,6 @@ public class Drive extends SubsystemBase
   public SwerveDrive getSwerveDrive()
   {
     return swerveDrive;
-  }
-
-  @Override
-  public void periodic(){
-    Logger.recordOutput("Swerve/Heading", getHeading().getDegrees());
-    Logger.recordOutput("Swerve/Pose", getPose());
-    Logger.recordOutput("Swerve/Velocity", getRobotVelocity());
-
-    for (SwerveModule module : swerveDrive.getModules()) {
-        String name = module.configuration.name; // e.g. "frontleft"
-
-        SparkFlex driveMotor = (SparkFlex) module.getDriveMotor().getMotor();
-        SparkMax angleMotor = (SparkMax) module.getAngleMotor().getMotor();
-
-        Logger.recordOutput("Swerve/" + name + "/DriveCurrentAmps", driveMotor.getOutputCurrent());
-        Logger.recordOutput("Swerve/" + name + "/AngleCurrentAmps", angleMotor.getOutputCurrent());
-    }
   }
 
   public static Drive getInstance(){
