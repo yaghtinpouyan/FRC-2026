@@ -21,6 +21,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.constants.Constants;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
@@ -69,12 +70,6 @@ public class Shooter extends SubsystemBase{
   public double startingVal = 1500;
   public boolean isShooting = false;
 
-  //Direction currentDir = Direction.kForward;
-
-
-  //private final SysIdRoutine hoodSysIdRoutine = hoodSmartMotorController.sysId(Volts.of(1), Volts.of(0.5).per(Second), Second.of(2.5)); 
-
-
   private Shooter() {
     //Motor inits
     Lshooter1 = new TalonFX(idConstants.krakenx60_S2);
@@ -119,11 +114,6 @@ public class Shooter extends SubsystemBase{
     config2 = new TalonFXConfiguration();
     config3 = new TalonFXConfiguration();
     config4 = new TalonFXConfiguration();
-
-    config1.CurrentLimits.StatorCurrentLimit = 40;
-    config2.CurrentLimits.StatorCurrentLimit = 40;
-    config3.CurrentLimits.StatorCurrentLimit = 40;
-    config4.CurrentLimits.StatorCurrentLimit = 40;
   }
 
   private double getVirtualTarget(Distance hubDistance){
@@ -131,6 +121,7 @@ public class Shooter extends SubsystemBase{
     ChassisSpeeds chassisVel = telemetry.currentVelocity;
     double xVel = chassisVel.vxMetersPerSecond;
     double yVel = chassisVel.vyMetersPerSecond;
+    //Placeholder use actual flight time from the shooter map
     double flightTime = hubDistance.in(Meters)*0.4;
 
     double virtualTargetX = hubDistance.in(Meters) - (xVel*flightTime);

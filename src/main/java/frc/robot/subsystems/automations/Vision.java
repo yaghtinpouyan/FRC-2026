@@ -96,8 +96,8 @@ public class Vision extends SubsystemBase{
         camera = new PhotonCamera("cam2");
         cameraSim = new PhotonCameraSim(camera, cameraProp);
         cameraPos = new Transform3d(
-            new Translation3d(VisionConstants.camPosX, VisionConstants.camPosY, VisionConstants.camPosZ), //Position of camera on the robot
-            new Rotation3d(0, VisionConstants.camRotPitch, 0) //Rotate the camera POV
+            new Translation3d(VisionConstants.backCamPosX, VisionConstants.backCamPosY, VisionConstants.backCamPosZ), //Position of camera on the robot
+            new Rotation3d(0, VisionConstants.backCamRotPitch, VisionConstants.backCamRotYaw) //Rotate the camera POV
         );
         cameraSim.enableRawStream(true);
         cameraSim.enableProcessedStream(true);

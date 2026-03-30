@@ -204,8 +204,8 @@ public class Drive extends SubsystemBase
     double angularVelocity = rotLim.calculate(MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband));
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                        Math.pow(xVelocity,1) * swerveDrive.getMaximumChassisVelocity(),
-                        Math.pow(yVelocity, 1) * swerveDrive.getMaximumChassisVelocity()), 0.8),
+                        Math.pow(xVelocity,3) * swerveDrive.getMaximumChassisVelocity(),
+                        Math.pow(yVelocity, 3) * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
