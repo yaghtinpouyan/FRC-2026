@@ -7,18 +7,18 @@ import edu.wpi.first.math.numbers.N3;
 
 public class VisionConstants {
     //Camera 1 position and rotation relative to the robot center (in meters and degrees)
-    public static final double backCamPosX = 0.2096;
-    public static final double backCamPosY = 0.028653;
-    public static final double backCamPosZ = 0.506743;
-    public static final double backCamRotPitch = -15;
-    public static final double backCamRotYaw = 0;
+    public static final double frontCamPosX = -0.213;
+    public static final double frontCamPosY = 0.027;
+    public static final double frontCamPosZ = 0.509;
+    public static final double frontCamRotPitch = 15;
+    public static final double frontCamRotYaw = Math.PI;
 
     //Camera 2 position and rotation relative to the robot center (in meters and degrees)
-    public static final double frontCamPosX = -0.209550;
-    public static final double frontCamPosY = 0.031925;
-    public static final double frontCamPosZ = 0.505474;
-    public static final double frontCamRotPitch = -15;
-    public static final double frontCamRotYaw = 180;
+    public static final double backCamPosX = 0.213;
+    public static final double backCamPosY = 0.110;
+    public static final double backCamPosZ = 0.508;
+    public static final double backCamRotPitch = 15;
+    public static final double backCamRotYaw = 0;
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
