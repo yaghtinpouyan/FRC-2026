@@ -14,7 +14,7 @@ public class VisionConstants {
     public static final double backCamRotYaw = 0;
 
     //Camera 2 position and rotation relative to the robot center (in meters and degrees)
-    public static final double frontCam2PosX = -0.209550;
+    public static final double frontCamPosX = -0.209550;
     public static final double frontCamPosY = 0.031925;
     public static final double frontCamPosZ = 0.505474;
     public static final double frontCamRotPitch = -15;

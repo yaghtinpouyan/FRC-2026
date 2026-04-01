@@ -153,7 +153,7 @@ public class Shooter extends SubsystemBase{
   }
 
   public void manualShooter(double charge, boolean fire, boolean up, boolean down){
-    if(fire){
+    if(isAtTargetSpeed()){
         kickerMotor.setVoltage(10);
         ballIntake.runIndexer();
         isShooting = true;
@@ -177,12 +177,18 @@ public class Shooter extends SubsystemBase{
 
   public boolean isAtTargetSpeed(){
     AngularVelocity current = shooterMotor1.getRotorVelocity();
+    AngularVelocity targetSpeed = RPM.of(startingVal);
+    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence;
+  }
+
+  public boolean isAtTargetMapSpeed(){
+    AngularVelocity current = shooterMotor1.getRotorVelocity();
     AngularVelocity targetSpeed = RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude()));
     return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence;
   }
   
   public void shooterMap(double charge, boolean fire){
-    if(isAtTargetSpeed()){
+    if(isAtTargetMapSpeed()){
       kickerMotor.setVoltage(10);
       ballIntake.runIndexer();
     }

@@ -54,7 +54,7 @@ public final class Constants {
   public static final double flyWheelSysIdMaxVoltage = 10;
   public static final double flyWheelSysIdStep = 1;
   public static final double flyWheelSysIdDuration = 5;
-  public static final double shootingTolerence = 50;
+  public static final double shootingTolerence = 30;
 
   //Hood Subsystem
   public static final double hoodSysIdMaxVoltage = 10;
