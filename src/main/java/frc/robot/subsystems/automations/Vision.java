@@ -43,7 +43,8 @@ public class Vision extends SubsystemBase{
 
     //Vision objects
     private VisionSystemSim visionSim;
-    private final Transform3d cameraPos;
+    private final Transform3d cameraPos1;
+    private final Transform3d cameraPos2;
     private AprilTagFieldLayout field;   
     private TargetModel targetModel;
 
@@ -58,7 +59,8 @@ public class Vision extends SubsystemBase{
 
     //Pose estimation
     private PoseStrategy strat;
-    private final PhotonPoseEstimator poseEstimator;
+    private final PhotonPoseEstimator poseEstimator1;
+    private final PhotonPoseEstimator poseEstimator2;
     private Matrix<N3, N1> currentStdDevs;
 
 
@@ -75,7 +77,8 @@ public class Vision extends SubsystemBase{
 
     //Camera objects
     private PhotonCameraSim cameraSim;
-    private PhotonCamera camera;
+    private PhotonCamera camera1;
+    private PhotonCamera camera2;
     
     //Target info
     int tagId;
@@ -93,11 +96,16 @@ public class Vision extends SubsystemBase{
         cameraProp.setAvgLatencyMs(latencyAve);
         cameraProp.setLatencyStdDevMs(latencySTD);
 
-        camera = new PhotonCamera("cam1");
-        cameraSim = new PhotonCameraSim(camera, cameraProp);
-        cameraPos = new Transform3d(
+        camera1 = new PhotonCamera("cam1");
+        camera2 = new PhotonCamera("cam2");
+        cameraSim = new PhotonCameraSim(camera1, cameraProp);
+        cameraPos1 = new Transform3d(
             new Translation3d(VisionConstants.frontCamPosX, VisionConstants.frontCamPosY, VisionConstants.frontCamPosZ), //Position of camera on the robot
-            new Rotation3d(0, VisionConstants.frontCamRotPitch, VisionConstants.frontCamRotYaw) //Rotate the camera POV
+            new Rotation3d(0, VisionConstants.frontCamRotPitch, 0) //Rotate the camera POV
+        );
+        cameraPos2 = new Transform3d(
+            new Translation3d(VisionConstants.backCamPosX, VisionConstants.backCamPosY, VisionConstants.backCamPosZ), //Position of camera on the robot
+            new Rotation3d(0, VisionConstants.backCamRotPitch, VisionConstants.backCamRotYaw) //Rotate the camera POV
         );
         cameraSim.enableRawStream(true);
         cameraSim.enableProcessedStream(true);
@@ -105,13 +113,15 @@ public class Vision extends SubsystemBase{
 
         //Simulation
         visionSim = new VisionSystemSim("main");
-        visionSim.addCamera(cameraSim, cameraPos);
+        visionSim.addCamera(cameraSim, cameraPos1);
+        visionSim.addCamera(cameraSim, cameraPos2);
         visionSim.addAprilTags(field);
         targetModel = new TargetModel(t_Width, t_Height);
         
         //Pose estimation tools
         strat = PoseStrategy.AVERAGE_BEST_TARGETS;
-        poseEstimator = new PhotonPoseEstimator(field, strat, cameraPos);
+        poseEstimator1 = new PhotonPoseEstimator(field, strat, cameraPos1);
+        poseEstimator2 = new PhotonPoseEstimator(field, strat, cameraPos2);
 
         //Advantage Scope
         as_aprilTags = NetworkTableInstance.getDefault().getStructArrayTopic("aprilTags", Pose3d.struct).publish();
@@ -120,14 +130,19 @@ public class Vision extends SubsystemBase{
     }
 
     //Main vision code
-    public void updateVision() {
-        Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for(var result : camera.getAllUnreadResults()){
-            visionEst = poseEstimator.estimateCoprocMultiTagPose(result);
-            if(visionEst.isEmpty()){
-                visionEst = poseEstimator.estimateLowestAmbiguityPose(result);
+    public void updateVision(){
+        updateVisionData(poseEstimator1, camera1);
+        updateVisionData(poseEstimator2, camera2);
+    }
+
+    public void updateVisionData(PhotonPoseEstimator estimator, PhotonCamera cam){
+            Optional<EstimatedRobotPose> visionEst = Optional.empty();
+            for(var result : cam.getAllUnreadResults()){
+                visionEst = estimator.estimateCoprocMultiTagPose(result);
+                if(visionEst.isEmpty()){
+                    visionEst = estimator.estimateLowestAmbiguityPose(result);
             }
-            updateEstimationStdDevs(visionEst, result.getTargets());
+            updateEstimationStdDevs(visionEst, result.getTargets(), estimator);
 
             if (Robot.isSimulation()) {
                 visionEst.ifPresentOrElse(
@@ -149,7 +164,7 @@ public class Vision extends SubsystemBase{
         }
     }
 
-    private void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+    private void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets, PhotonPoseEstimator estimator) {
         if(estimatedPose.isEmpty()){
             //Set to default std (standard deviation) value
             currentStdDevs = VisionConstants.kSingleTagStdDevs;
@@ -161,7 +176,7 @@ public class Vision extends SubsystemBase{
 
             //Go through all tags and count them and their distances relative to the robot
             for(var target : targets){
-                var tagPose = poseEstimator.getFieldTags().getTagPose(target.getFiducialId());
+                var tagPose = estimator.getFieldTags().getTagPose(target.getFiducialId());
                 if (tagPose.isEmpty()) continue;
                 numTags++;
                 avgDistance += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
@@ -211,20 +226,20 @@ public class Vision extends SubsystemBase{
 
     //Helper methods
 
-    public Optional<EstimatedRobotPose> getVisionPose() {
-        var result = camera.getLatestResult();
-        Optional<EstimatedRobotPose> estPose = poseEstimator.estimateCoprocMultiTagPose(result);
+    public Optional<EstimatedRobotPose> getVisionPose1() {
+        var result = camera1.getLatestResult();
+        Optional<EstimatedRobotPose> estPose = poseEstimator1.estimateCoprocMultiTagPose(result);
 
         if (estPose.isEmpty()) {
-            estPose = poseEstimator.estimateLowestAmbiguityPose(result);
-            camera.getAllUnreadResults();
+            estPose = poseEstimator1.estimateLowestAmbiguityPose(result);
+            camera1.getAllUnreadResults();
         }
 
         return estPose;
     }
 
     public int getTargetAprilTag(){
-        var result = camera.getLatestResult();
+        var result = camera1.getLatestResult();
         double areaMax = 0;
         for(PhotonTrackedTarget target : result.getTargets()){
             if(target.getArea() > areaMax){
