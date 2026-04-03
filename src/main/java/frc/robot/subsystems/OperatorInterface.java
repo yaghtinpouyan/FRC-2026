@@ -37,7 +37,7 @@ public class OperatorInterface extends SubsystemBase{
         //     controller2.getAButtonPressed(), 
         //     controller2.getBButton()
         // );
-        ballShooter.zainsMethod(controller2.getLeftTriggerAxis());
+        ballShooter.zainsMethod(controller2.getLeftTriggerAxis(), controller2.getLeftBumperButtonPressed());
     }
 
     private void updateVision(){
