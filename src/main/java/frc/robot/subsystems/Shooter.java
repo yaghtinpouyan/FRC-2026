@@ -166,16 +166,14 @@ public class Shooter extends SubsystemBase{
             },
     this));
   }
-
-  public void runHoodSysId(boolean run){
-    if(run){
-      hoodSysIdRoutine.quasistatic(Direction.kForward);
-      hoodSysIdRoutine.quasistatic(Direction.kReverse);
-      hoodSysIdRoutine.dynamic(Direction.kForward);
-      hoodSysIdRoutine.dynamic(Direction.kReverse);
-    }
-  }
   
+  public void runHoodSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
+        if(toggleF) currentDir = Direction.kForward;
+        if(toggleR) currentDir = Direction.kReverse;
+        if(quat) hoodSysIdRoutine.quasistatic(currentDir).schedule();
+        if(dynamic) hoodSysIdRoutine.dynamic(currentDir).schedule();
+  }
+
   public AngularVelocity getFlyWheelVel(){
     double targetDist = getVirtualTarget(align.getHubDist()); 
     shootingVMap = velocityMap.getInstance();
