@@ -30,13 +30,14 @@ public class OperatorInterface extends SubsystemBase{
     }
 
     private void updateShooter(){
-        ballShooter.shooterInputManager(
-            controller2.getLeftTriggerAxis(), 
-            controller2.getLeftBumperButton(), 
-            controller2.getYButtonPressed(), 
-            controller2.getAButtonPressed(), 
-            controller2.getBButton()
-        );
+        // ballShooter.shooterInputManager(
+        //     controller2.getLeftTriggerAxis(), 
+        //     controller2.getLeftBumperButton(), 
+        //     controller2.getYButtonPressed(), 
+        //     controller2.getAButtonPressed(), 
+        //     controller2.getBButton()
+        // );
+        ballShooter.runHoodSysId(controller2.getBButtonPressed());
     }
 
     private void updateVision(){
@@ -49,11 +50,11 @@ public class OperatorInterface extends SubsystemBase{
     
     @Override
     public void periodic(){
-        updateDrive();
-        updateTelemetry();
-        updateIntake();
+        //updateDrive();
+        //updateTelemetry();
+        //updateIntake();
         updateShooter();
-        updateVision();
+        //updateVision();
     }
 
     public static OperatorInterface getInstance(){

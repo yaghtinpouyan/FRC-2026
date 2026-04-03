@@ -6,6 +6,9 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Second;
@@ -14,13 +17,18 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.units.measure.MutAngularVelocity;
+import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.constants.Constants;
 import frc.robot.constants.idConstants;
@@ -47,6 +55,7 @@ public class Shooter extends SubsystemBase{
   private TalonFX Rshooter1;
   private TalonFX Rshooter2;
   private TalonFX kickerMotor;
+  private SparkMax hoodMotor;
   
   private AutoAlign align = AutoAlign.getInstance();
   private Intake ballIntake = Intake.getInstance();
@@ -59,16 +68,27 @@ public class Shooter extends SubsystemBase{
   TalonFXConfiguration config3;
   TalonFXConfiguration config4;
 
-  private double shootingInc = 50;
   private SmartMotorControllerConfig LmotorConfig;
   private SmartMotorControllerConfig RmotorConfig;
-
+  private SmartMotorControllerConfig HmotorConfig;
   private SmartMotorController shooterMotor1;
   private SmartMotorController shooterMotor2;
   private SmartMotorController shooterMotor3;
   private SmartMotorController shooterMotor4;
-  public double startingVal = 1500;
+  private SmartMotorController mainHood;
   public boolean isShooting = false;
+
+  public double startingVal = 1500;
+  private double shootingInc = 50;
+  public double startingPos = 15;
+  private double posInc = 0.5;
+
+  //Temp sysID stuff
+  private final MutVoltage m_appliedVoltage = Volts.mutable(0);
+  private final MutAngle m_angle = Radians.mutable(0);
+  private final MutAngularVelocity m_velocity = RadiansPerSecond.mutable(0);
+  Direction currentDir = Direction.kForward;
+  private final SysIdRoutine hoodSysIdRoutine;
 
   private Shooter() {
     //Motor inits
@@ -105,28 +125,55 @@ public class Shooter extends SubsystemBase{
     .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
     .withControlMode(ControlMode.CLOSED_LOOP);
 
+    HmotorConfig = new SmartMotorControllerConfig(this)
+    .withClosedLoopController(0.17053, 0, 0, RPM.of(11000), RotationsPerSecondPerSecond.of(1500))
+    .withGearing(new MechanismGearing(GearBox.fromReductionStages(5,5,4)))
+    .withIdleMode(MotorMode.BRAKE)
+    .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
+    .withStatorCurrentLimit(Amps.of(80))
+    .withSupplyCurrentLimit(Amps.of(20))
+    .withMotorInverted(false) 
+    .withClosedLoopRampRate(Seconds.of(0.25))
+    .withOpenLoopRampRate(Seconds.of(0.25))
+    .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
+    .withControlMode(ControlMode.CLOSED_LOOP);
+
     shooterMotor4 = new TalonFXWrapper(Rshooter2, DCMotor.getKrakenX60(1), RmotorConfig);
     shooterMotor2 = new TalonFXWrapper(Lshooter2, DCMotor.getKrakenX60(1), LmotorConfig);
     shooterMotor3 = new TalonFXWrapper(Rshooter1, DCMotor.getKrakenX60(1), RmotorConfig.withLooselyCoupledFollowers(shooterMotor4));
     shooterMotor1 = new TalonFXWrapper(Lshooter1, DCMotor.getKrakenX60(1), LmotorConfig.withLooselyCoupledFollowers(shooterMotor2, shooterMotor3));    
 
-    config1 = new TalonFXConfiguration();
-    config2 = new TalonFXConfiguration();
-    config3 = new TalonFXConfiguration();
-    config4 = new TalonFXConfiguration();
+    //SysID
+    hoodSysIdRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(
+          Volts.per(Second).of(1.5),
+          Volts.of(1),
+          Seconds.of(0.5)
+        ),
+        new SysIdRoutine.Mechanism(
+            voltage -> hoodMotor.setVoltage(voltage),
+            log -> {
+                log.motor("hood")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            Lshooter1.getMotorVoltage().getValueAsDouble(), Volts))
+                    .angularPosition(
+                        m_angle.mut_replace(
+                            Lshooter1.getPosition().getValueAsDouble(), Rotations))
+                    .angularVelocity(
+                        m_velocity.mut_replace(
+                            Lshooter1.getVelocity().getValueAsDouble(), RotationsPerSecond));
+            },
+    this));
   }
 
-  private double getVirtualTarget(Distance hubDistance){
-    telemetry = Telemetry.getInstance();
-    ChassisSpeeds chassisVel = telemetry.currentVelocity;
-    double xVel = chassisVel.vxMetersPerSecond;
-    double yVel = chassisVel.vyMetersPerSecond;
-    //Placeholder use actual flight time from the shooter map
-    double flightTime = hubDistance.in(Meters)*0.4;
-
-    double virtualTargetX = hubDistance.in(Meters) - (xVel*flightTime);
-    double virtualTargetY = 0 - (yVel * flightTime);
-    return Math.hypot(virtualTargetX, virtualTargetY);
+  public void runHoodSysId(boolean run){
+    if(run){
+      hoodSysIdRoutine.quasistatic(Direction.kForward);
+      hoodSysIdRoutine.quasistatic(Direction.kReverse);
+      hoodSysIdRoutine.dynamic(Direction.kForward);
+      hoodSysIdRoutine.dynamic(Direction.kReverse);
+    }
   }
   
   public AngularVelocity getFlyWheelVel(){
@@ -141,6 +188,11 @@ public class Shooter extends SubsystemBase{
     if(down) startingVal -= shootingInc;
   }
 
+  public void hoodIncrementation(boolean up, boolean down){
+    if(up) startingPos += posInc;
+    if(down) startingPos -= posInc;
+  }
+
   public double getCalcVoltage(Distance distance){
     return velocityMap.getInstance().mainMap.get(distance.baseUnitMagnitude());
   }
@@ -152,6 +204,7 @@ public class Shooter extends SubsystemBase{
     }
   }
 
+  //Flywheel
   public void manualShooter(double charge, boolean fire, boolean up, boolean down){
     if(isAtTargetSpeed()){
         kickerMotor.setVoltage(10);
@@ -175,18 +228,6 @@ public class Shooter extends SubsystemBase{
     SmartDashboard.putNumber("Shooter RPM :", startingVal);
   }
 
-  public boolean isAtTargetSpeed(){
-    AngularVelocity current = shooterMotor1.getRotorVelocity();
-    AngularVelocity targetSpeed = RPM.of(startingVal);
-    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence;
-  }
-
-  public boolean isAtTargetMapSpeed(){
-    AngularVelocity current = shooterMotor1.getRotorVelocity();
-    AngularVelocity targetSpeed = RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude()));
-    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence;
-  }
-  
   public void shooterMap(double charge, boolean fire){
     if(isAtTargetMapSpeed()){
       kickerMotor.setVoltage(10);
@@ -202,6 +243,39 @@ public class Shooter extends SubsystemBase{
       ballIntake.stopIndexer();
       kickerMotor.set(0);  
     }
+  }
+
+  public boolean isAtTargetSpeed(){
+    AngularVelocity current = shooterMotor1.getRotorVelocity();
+    AngularVelocity targetSpeed = RPM.of(startingVal);
+    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence;
+  }
+
+  public boolean isAtTargetMapSpeed(){
+    AngularVelocity current = shooterMotor1.getRotorVelocity();
+    AngularVelocity targetSpeed = RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude()));
+    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence;
+  }
+
+  //Hood
+  public void manualHoodAdjust(boolean up, boolean down){
+    mainHood.setPosition(Degrees.ofBaseUnits(startingPos));
+
+    hoodIncrementation(up, down);
+    SmartDashboard.putNumber("Hood Angle :", startingVal);
+  }
+
+  private double getVirtualTarget(Distance hubDistance){
+    telemetry = Telemetry.getInstance();
+    ChassisSpeeds chassisVel = telemetry.currentVelocity;
+    double xVel = chassisVel.vxMetersPerSecond;
+    double yVel = chassisVel.vyMetersPerSecond;
+    //Placeholder use actual flight time from the shooter map
+    double flightTime = hubDistance.in(Meters)*0.4;
+
+    double virtualTargetX = hubDistance.in(Meters) - (xVel*flightTime);
+    double virtualTargetY = 0 - (yVel * flightTime);
+    return Math.hypot(virtualTargetX, virtualTargetY);
   }
 
   public Command shootInAuto(double charge, boolean fire){
