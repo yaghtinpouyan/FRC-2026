@@ -102,7 +102,7 @@ public class Shooter extends SubsystemBase{
 
     //YAMS
     LmotorConfig = new SmartMotorControllerConfig(this)
-    .withClosedLoopController(0.17053, 0, 0, RPM.of(3000), RotationsPerSecondPerSecond.of(2500))
+    .withClosedLoopController(0.17053, 0, 0, RPM.of(3000), RotationsPerSecondPerSecond.of(3000))
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,1)))
     .withIdleMode(MotorMode.COAST)
     .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
@@ -169,13 +169,11 @@ public class Shooter extends SubsystemBase{
     this));
   }
   
-  public void runHoodSysID(boolean run){
-        if(run){
-          hoodSysIdRoutine.quasistatic(Direction.kForward);
-          hoodSysIdRoutine.quasistatic(Direction.kReverse);
-          hoodSysIdRoutine.dynamic(Direction.kForward);
-          hoodSysIdRoutine.dynamic(Direction.kReverse);
-        } 
+   public void runHoodSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
+        if(toggleF) currentDir = Direction.kForward;
+        if(toggleR) currentDir = Direction.kReverse;
+        if(quat) hoodSysIdRoutine.quasistatic(currentDir).schedule();
+        if(dynamic) hoodSysIdRoutine.dynamic(currentDir).schedule();
   }
 
   public AngularVelocity getFlyWheelVel(){

@@ -37,7 +37,7 @@ public class OperatorInterface extends SubsystemBase{
         //     controller2.getAButtonPressed(), 
         //     controller2.getBButton()
         // );
-        ballShooter.runHoodSysID(controller2.getBButtonPressed());
+        ballShooter.runHoodSysID(controller2.getRightBumperButtonPressed(), controller2.getLeftBumperButtonPressed(), controller2.getAButtonPressed(), controller2.getBButtonPressed());
     }
 
     private void updateVision(){
