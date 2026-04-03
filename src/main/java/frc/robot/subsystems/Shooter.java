@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Radians;
@@ -39,6 +40,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
+import yams.motorcontrollers.local.SparkWrapper;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -69,12 +71,12 @@ public class Shooter extends SubsystemBase{
 
   private SmartMotorControllerConfig LmotorConfig;
   private SmartMotorControllerConfig RmotorConfig;
-  //private SmartMotorControllerConfig HmotorConfig;
+  private SmartMotorControllerConfig HmotorConfig;
   private SmartMotorController shooterMotor1;
   private SmartMotorController shooterMotor2;
   private SmartMotorController shooterMotor3;
   private SmartMotorController shooterMotor4;
-  //private SmartMotorController mainHood;
+  private SmartMotorController mainHood;
   public boolean isShooting = false;
 
   public double startingVal = 1500;
@@ -127,23 +129,24 @@ public class Shooter extends SubsystemBase{
     .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
     .withControlMode(ControlMode.CLOSED_LOOP);
 
-    // HmotorConfig = new SmartMotorControllerConfig(this)
-    // .withClosedLoopController(0.17053, 0, 0, RPM.of(11000), RotationsPerSecondPerSecond.of(1500))
-    // .withGearing(new MechanismGearing(GearBox.fromReductionStages(5,5,4)))
-    // .withIdleMode(MotorMode.BRAKE)
-    // .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
-    // .withStatorCurrentLimit(Amps.of(80))
-    // .withSupplyCurrentLimit(Amps.of(20))
-    // .withMotorInverted(false) 
-    // .withClosedLoopRampRate(Seconds.of(0.25))
-    // .withOpenLoopRampRate(Seconds.of(0.25))
-    // .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
-    // .withControlMode(ControlMode.CLOSED_LOOP);
+    HmotorConfig = new SmartMotorControllerConfig(this)
+    .withClosedLoopController(3.596, 0, 0, RPM.of(11000), RotationsPerSecondPerSecond.of(1500))
+    .withGearing(new MechanismGearing(GearBox.fromReductionStages(5,5,4)))
+    .withIdleMode(MotorMode.BRAKE)
+    .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
+    .withStatorCurrentLimit(Amps.of(80))
+    .withSupplyCurrentLimit(Amps.of(20))
+    .withMotorInverted(false) 
+    .withClosedLoopRampRate(Seconds.of(0.25))
+    .withOpenLoopRampRate(Seconds.of(0.25))
+    .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.58565, 0.029957))
+    .withControlMode(ControlMode.CLOSED_LOOP);
 
     shooterMotor4 = new TalonFXWrapper(Rshooter2, DCMotor.getKrakenX60(1), RmotorConfig);
     shooterMotor2 = new TalonFXWrapper(Lshooter2, DCMotor.getKrakenX60(1), LmotorConfig);
     shooterMotor3 = new TalonFXWrapper(Rshooter1, DCMotor.getKrakenX60(1), RmotorConfig.withLooselyCoupledFollowers(shooterMotor4));
-    shooterMotor1 = new TalonFXWrapper(Lshooter1, DCMotor.getKrakenX60(1), LmotorConfig.withLooselyCoupledFollowers(shooterMotor2, shooterMotor3));    
+    shooterMotor1 = new TalonFXWrapper(Lshooter1, DCMotor.getKrakenX60(1), LmotorConfig.withLooselyCoupledFollowers(shooterMotor2, shooterMotor3)); 
+    mainHood = new SparkWrapper(hoodMotor, DCMotor.getNeo550(1), HmotorConfig);   
 
     //SysID
     hoodSysIdRoutine = new SysIdRoutine(
@@ -169,7 +172,7 @@ public class Shooter extends SubsystemBase{
     this));
   }
   
-   public void runHoodSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
+  public void runHoodSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
         if(toggleF) currentDir = Direction.kForward;
         if(toggleR) currentDir = Direction.kReverse;
         if(quat) hoodSysIdRoutine.quasistatic(currentDir).schedule();
@@ -228,21 +231,6 @@ public class Shooter extends SubsystemBase{
     SmartDashboard.putNumber("Shooter RPM :", startingVal);
   }
 
-  public void zainsMethod(double charge, boolean fire){
-    if(fire){
-      kickerMotor.setVoltage(10);
-      ballIntake.runIndexer();
-    }
-    if(charge > 0.1){
-      shooterMotor1.setVelocity(RPM.of(6000));
-    }  
-    else{
-      shooterMotor1.setVelocity(RPM.of(0));
-      ballIntake.stopIndexer();
-      kickerMotor.set(0);  
-    }
-  }
-
   public void shooterMap(double charge, boolean fire){
     if(isAtTargetMapSpeed()){
       kickerMotor.setVoltage(10);
@@ -273,12 +261,12 @@ public class Shooter extends SubsystemBase{
   }
 
   //Hood
-  // public void manualHoodAdjust(boolean up, boolean down){
-  //   mainHood.setPosition(Degrees.ofBaseUnits(startingPos));
+  public void manualHoodAdjust(boolean up, boolean down){
+    mainHood.setPosition(Degrees.ofBaseUnits(startingPos));
+    hoodIncrementation(up, down);
+    SmartDashboard.putNumber("Hood Angle :", startingVal);
+  }
 
-  //   hoodIncrementation(up, down);
-  //   SmartDashboard.putNumber("Hood Angle :", startingVal);
-  // }
 
   private double getVirtualTarget(Distance hubDistance){
     telemetry = Telemetry.getInstance();
