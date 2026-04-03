@@ -19,7 +19,10 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkRelativeEncoder;
+
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.MutAngle;
@@ -56,6 +59,7 @@ public class Shooter extends SubsystemBase{
   private TalonFX Rshooter2;
   private TalonFX kickerMotor;
   private SparkMax hoodMotor;
+  private RelativeEncoder hoodEncoder = hoodMotor.getEncoder();
   
   private AutoAlign align = AutoAlign.getInstance();
   private Intake ballIntake = Intake.getInstance();
@@ -148,7 +152,7 @@ public class Shooter extends SubsystemBase{
         new SysIdRoutine.Config(
           Volts.per(Second).of(1.5),
           Volts.of(1),
-          Seconds.of(0.5)
+          Seconds.of(0.8)
         ),
         new SysIdRoutine.Mechanism(
             voltage -> hoodMotor.setVoltage(voltage),
@@ -156,13 +160,13 @@ public class Shooter extends SubsystemBase{
                 log.motor("hood")
                     .voltage(
                         m_appliedVoltage.mut_replace(
-                            Lshooter1.getMotorVoltage().getValueAsDouble(), Volts))
+                            hoodMotor.getBusVoltage(), Volts))
                     .angularPosition(
                         m_angle.mut_replace(
-                            Lshooter1.getPosition().getValueAsDouble(), Rotations))
+                            hoodEncoder.getPosition(), Rotations))
                     .angularVelocity(
                         m_velocity.mut_replace(
-                            Lshooter1.getVelocity().getValueAsDouble(), RotationsPerSecond));
+                            hoodEncoder.getVelocity(), RotationsPerSecond));
             },
     this));
   }
