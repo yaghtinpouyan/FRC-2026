@@ -149,8 +149,8 @@ public class Shooter extends SubsystemBase{
     hoodSysIdRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
           Volts.per(Second).of(1.5),
-          Volts.of(1),
-          Seconds.of(0.8)
+          Volts.of(2),
+          Seconds.of(1)
         ),
         new SysIdRoutine.Mechanism(
             voltage -> hoodMotor.setVoltage(voltage),
@@ -169,11 +169,13 @@ public class Shooter extends SubsystemBase{
     this));
   }
   
-  public void runHoodSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
-        if(toggleF) currentDir = Direction.kForward;
-        if(toggleR) currentDir = Direction.kReverse;
-        if(quat) hoodSysIdRoutine.quasistatic(currentDir).schedule();
-        if(dynamic) hoodSysIdRoutine.dynamic(currentDir).schedule();
+  public void runHoodSysID(boolean run){
+        if(run){
+          hoodSysIdRoutine.quasistatic(Direction.kForward);
+          hoodSysIdRoutine.quasistatic(Direction.kReverse);
+          hoodSysIdRoutine.dynamic(Direction.kForward);
+          hoodSysIdRoutine.dynamic(Direction.kReverse);
+        } 
   }
 
   public AngularVelocity getFlyWheelVel(){
