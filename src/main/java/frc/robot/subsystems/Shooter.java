@@ -1,10 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
@@ -15,13 +12,11 @@ import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkRelativeEncoder;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
@@ -59,7 +54,7 @@ public class Shooter extends SubsystemBase{
   private TalonFX Rshooter2;
   private TalonFX kickerMotor;
   private SparkMax hoodMotor;
-  private RelativeEncoder hoodEncoder = hoodMotor.getEncoder();
+  private RelativeEncoder hoodEncoder;
   
   private AutoAlign align = AutoAlign.getInstance();
   private Intake ballIntake = Intake.getInstance();
@@ -74,12 +69,12 @@ public class Shooter extends SubsystemBase{
 
   private SmartMotorControllerConfig LmotorConfig;
   private SmartMotorControllerConfig RmotorConfig;
-  private SmartMotorControllerConfig HmotorConfig;
+  //private SmartMotorControllerConfig HmotorConfig;
   private SmartMotorController shooterMotor1;
   private SmartMotorController shooterMotor2;
   private SmartMotorController shooterMotor3;
   private SmartMotorController shooterMotor4;
-  private SmartMotorController mainHood;
+  //private SmartMotorController mainHood;
   public boolean isShooting = false;
 
   public double startingVal = 1500;
@@ -100,7 +95,10 @@ public class Shooter extends SubsystemBase{
     Lshooter2 = new TalonFX(idConstants.krakenx60_S3);
     Rshooter1 = new TalonFX(idConstants.krakenx60_S4);
     Rshooter2 = new TalonFX(idConstants.krakenx60_S5);
-    kickerMotor = new TalonFX(idConstants.faclon500_S1);;
+    kickerMotor = new TalonFX(idConstants.faclon500_S1);
+    hoodMotor = new SparkMax(idConstants.neo550_S6, MotorType.kBrushless);
+    hoodEncoder = hoodMotor.getEncoder();
+
 
     //YAMS
     LmotorConfig = new SmartMotorControllerConfig(this)
@@ -129,18 +127,18 @@ public class Shooter extends SubsystemBase{
     .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
     .withControlMode(ControlMode.CLOSED_LOOP);
 
-    HmotorConfig = new SmartMotorControllerConfig(this)
-    .withClosedLoopController(0.17053, 0, 0, RPM.of(11000), RotationsPerSecondPerSecond.of(1500))
-    .withGearing(new MechanismGearing(GearBox.fromReductionStages(5,5,4)))
-    .withIdleMode(MotorMode.BRAKE)
-    .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
-    .withStatorCurrentLimit(Amps.of(80))
-    .withSupplyCurrentLimit(Amps.of(20))
-    .withMotorInverted(false) 
-    .withClosedLoopRampRate(Seconds.of(0.25))
-    .withOpenLoopRampRate(Seconds.of(0.25))
-    .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
-    .withControlMode(ControlMode.CLOSED_LOOP);
+    // HmotorConfig = new SmartMotorControllerConfig(this)
+    // .withClosedLoopController(0.17053, 0, 0, RPM.of(11000), RotationsPerSecondPerSecond.of(1500))
+    // .withGearing(new MechanismGearing(GearBox.fromReductionStages(5,5,4)))
+    // .withIdleMode(MotorMode.BRAKE)
+    // .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
+    // .withStatorCurrentLimit(Amps.of(80))
+    // .withSupplyCurrentLimit(Amps.of(20))
+    // .withMotorInverted(false) 
+    // .withClosedLoopRampRate(Seconds.of(0.25))
+    // .withOpenLoopRampRate(Seconds.of(0.25))
+    // .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
+    // .withControlMode(ControlMode.CLOSED_LOOP);
 
     shooterMotor4 = new TalonFXWrapper(Rshooter2, DCMotor.getKrakenX60(1), RmotorConfig);
     shooterMotor2 = new TalonFXWrapper(Lshooter2, DCMotor.getKrakenX60(1), LmotorConfig);
@@ -260,12 +258,12 @@ public class Shooter extends SubsystemBase{
   }
 
   //Hood
-  public void manualHoodAdjust(boolean up, boolean down){
-    mainHood.setPosition(Degrees.ofBaseUnits(startingPos));
+  // public void manualHoodAdjust(boolean up, boolean down){
+  //   mainHood.setPosition(Degrees.ofBaseUnits(startingPos));
 
-    hoodIncrementation(up, down);
-    SmartDashboard.putNumber("Hood Angle :", startingVal);
-  }
+  //   hoodIncrementation(up, down);
+  //   SmartDashboard.putNumber("Hood Angle :", startingVal);
+  // }
 
   private double getVirtualTarget(Distance hubDistance){
     telemetry = Telemetry.getInstance();

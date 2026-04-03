@@ -44,7 +44,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
-    //DataLogManager.start();
+    DataLogManager.start();
   }
 
   @Override
