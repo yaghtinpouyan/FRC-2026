@@ -228,6 +228,23 @@ public class Shooter extends SubsystemBase{
     SmartDashboard.putNumber("Shooter RPM :", startingVal);
   }
 
+  public void zainsMethod(double charge){
+    AngularVelocity current = shooterMotor1.getRotorVelocity();
+    AngularVelocity targetSpeed = RPM.of(6000);
+    if(Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence){
+      kickerMotor.setVoltage(10);
+      ballIntake.runIndexer();
+    }
+    if(charge > 0.1){
+      shooterMotor1.setVelocity(RPM.of(6000));
+    }  
+    else{
+      shooterMotor1.setVelocity(RPM.of(0));
+      ballIntake.stopIndexer();
+      kickerMotor.set(0);  
+    }
+  }
+
   public void shooterMap(double charge, boolean fire){
     if(isAtTargetMapSpeed()){
       kickerMotor.setVoltage(10);
