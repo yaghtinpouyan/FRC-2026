@@ -37,6 +37,8 @@ public class OperatorInterface extends SubsystemBase{
             controller2.getAButtonPressed(), 
             controller2.getBButton()
         );
+
+        ballShooter.manualHoodAdjust(controller1.getYButtonPressed(), controller1.getAButtonPressed());
     }
 
     private void updateVision(){
@@ -49,11 +51,11 @@ public class OperatorInterface extends SubsystemBase{
     
     @Override
     public void periodic(){
-        updateDrive();
-        updateTelemetry();
-        updateIntake();
+        //updateDrive();
+        //updateTelemetry();
+        //updateIntake();
         updateShooter();
-        updateVision();
+        //updateVision();
     }
 
     public static OperatorInterface getInstance(){
