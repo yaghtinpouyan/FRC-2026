@@ -29,7 +29,7 @@ public final class Constants {
   public static final Pose2d blueStartPose = new Pose2d(4, 7.4, Rotation2d.fromDegrees(0));
   public static final Pose2d redStartPose = new Pose2d(12.5, 7.4, Rotation2d.fromDegrees(180));
   public static final double driveScaling = 0.8;
-  public static final double deadband = 0.05;
+  public static final double deadband = 0.075;
 
   //Vision 
   public static final double visionX = 0.2;

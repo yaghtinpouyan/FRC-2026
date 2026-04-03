@@ -199,13 +199,13 @@ public class Drive extends SubsystemBase
 
   public void driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
   {
-    double xVelocity = xLim.calculate(MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband));
-    double yVelocity = yLim.calculate(MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband));
-    double angularVelocity = rotLim.calculate(MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband));
+    double xVelocity = MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband);
+    double yVelocity = MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband);
+    double angularVelocity = MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband);
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
                         Math.pow(xVelocity,3) * swerveDrive.getMaximumChassisVelocity(),
-                        Math.pow(yVelocity, 3) * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
+                        Math.pow(yVelocity,3) * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
