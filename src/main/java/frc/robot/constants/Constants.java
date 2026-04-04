@@ -15,7 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public final class Constants {
   //Global
-  public static final double driveDeadzone = 0.05;
+  public static final double driveDeadzone = 0.2;
   public static final Optional<Alliance> currentAlliance = DriverStation.getAlliance();
   
   //Math/Calculations 
@@ -29,7 +29,7 @@ public final class Constants {
   public static final Pose2d blueStartPose = new Pose2d(4, 7.4, Rotation2d.fromDegrees(0));
   public static final Pose2d redStartPose = new Pose2d(12.5, 7.4, Rotation2d.fromDegrees(180));
   public static final double driveScaling = 0.8;
-  public static final double deadband = 0.075;
+  public static final double deadband = 0.2;
 
   //Vision 
   public static final double visionX = 0.2;
@@ -39,7 +39,7 @@ public final class Constants {
   //Intake Subsystems
   public static final int[] rockingAngles = {0,90};
   public static final int osilationTIme = 3;
-  public static final int intakeAngleUp = 15; //TODO: Find actual angles
+  public static final int intakeAngleUp = 0; 
   public static final int intakeAngleDown = 215;
   public static final double intakeSysIdMaxVoltage = 10;
   public static final double intakeSysIdStep = 1.0;

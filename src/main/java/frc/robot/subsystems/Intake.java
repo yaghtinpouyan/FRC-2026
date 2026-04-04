@@ -53,8 +53,8 @@ public class Intake extends SubsystemBase{
                             .withClosedLoopController(0.0001, 0, 0, RPM.of(6000), RotationsPerSecondPerSecond.of(100))
                             .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 1)))
                             .withIdleMode(MotorMode.COAST)
-                            .withStatorCurrentLimit(Amps.of(80))
-                            .withSupplyCurrentLimit(Amps.of(40))
+                            .withStatorCurrentLimit(Amps.of(120))
+                            .withSupplyCurrentLimit(Amps.of(60))
                             .withMotorInverted(true)
                             .withClosedLoopRampRate(Seconds.of(0.25))
                             .withOpenLoopRampRate(Seconds.of(0.25))
@@ -75,17 +75,17 @@ public class Intake extends SubsystemBase{
         .velocityConversionFactor(360.0/47.53/60.0);
 
         pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .p(0.1)
+        .p(0.01)
         .i(0)
         .d(0)
         .outputRange(-1, 1);
 
-        pivotConfig.closedLoop.maxMotion.cruiseVelocity(6000)
-        .maxAcceleration(6000)
+        pivotConfig.closedLoop.maxMotion.cruiseVelocity(6400)
+        .maxAcceleration(6400)
         .allowedProfileError(0.5)
         .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         
-        pivotConfig.inverted(false);
+        pivotConfig.inverted(true);
         pivotEncoder.setPosition(0);
         pivotMotor.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
@@ -114,10 +114,19 @@ public class Intake extends SubsystemBase{
     }
 
     public void setPivot(int pov){
-        if(pov == 0) pivotController.setSetpoint(0,ControlType.kMAXMotionPositionControl);
-        if(pov == 180){
-            pivotController.setSetpoint(115.5,ControlType.kMAXMotionPositionControl);
+        if(pov == 0){ 
+            pivotMotor.setVoltage(3);
+        //pivotController.setSetpoint(0,ControlType.kMAXMotionPositionControl);
         }
+        if(pov == 180){
+            pivotMotor.setVoltage(-3);
+            //pivotController.setSetpoint(115.5,ControlType.kMAXMotionPositionControl);
+        }
+
+        if(pov == -1 && (pivotEncoder.getPosition() >= 0 || pivotEncoder.getPosition() <= -120)){
+            pivotMotor.setVoltage(0);
+        }
+        
         SmartDashboard.putNumber("Pivot Angle:", pivotEncoder.getPosition());
     }
 

@@ -70,17 +70,17 @@ public class Drive extends SubsystemBase
     //YAGSL config
     var alliance = DriverStation.getAlliance();
     if(alliance.get() == DriverStation.Alliance.Red){
-      startingPose = new Pose2d(new Translation2d(Meter.of(13),
+      startingPose = new Pose2d(new Translation2d(Meter.of(13.45),
                                                   Meter.of(4)),
                                                   Rotation2d.fromDegrees(180));
     }
     else if(alliance.isEmpty()){
-      startingPose = new Pose2d(new Translation2d(Meter.of(4),
+      startingPose = new Pose2d(new Translation2d(Meter.of(3.55),
                                                   Meter.of(4)),
                                                   Rotation2d.fromDegrees(0));
     }
     else{
-      startingPose = new Pose2d(new Translation2d(Meter.of(4),
+      startingPose = new Pose2d(new Translation2d(Meter.of(3.55),
                                                   Meter.of(4)),
                                                   Rotation2d.fromDegrees(0));
     }
@@ -204,8 +204,8 @@ public class Drive extends SubsystemBase
     double angularVelocity = MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband);
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                        Math.pow(xVelocity,3) * swerveDrive.getMaximumChassisVelocity(),
-                        Math.pow(yVelocity,3) * swerveDrive.getMaximumChassisVelocity()), scaledSpeed),
+                        Math.pow(xVelocity,1) * swerveDrive.getMaximumChassisVelocity(),
+                        Math.pow(yVelocity,1) * swerveDrive.getMaximumChassisVelocity()), 0.8),
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);

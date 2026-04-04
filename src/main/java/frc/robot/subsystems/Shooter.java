@@ -16,6 +16,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.constants.hoodMap;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
 import frc.robot.subsystems.automations.AutoAlign;
@@ -87,7 +89,7 @@ public class Shooter extends SubsystemBase{
     .velocityConversionFactor(360.0/1250.0/60.0);
 
     hoodConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .p(0.1)
+    .p(0.01)
     .i(0)
     .d(0)
     .outputRange(-1, 1);
@@ -98,6 +100,7 @@ public class Shooter extends SubsystemBase{
     .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
     
     hoodConfig.inverted(true);
+    hoodConfig.idleMode(IdleMode.kBrake);
     hoodEncoder.setPosition(20);
     hoodMotor.configure(hoodConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -122,7 +125,7 @@ public class Shooter extends SubsystemBase{
     .withTelemetry("ShooterMotor2", TelemetryVerbosity.LOW)
     .withStatorCurrentLimit(Amps.of(80))
     .withSupplyCurrentLimit(Amps.of(40))
-    .withMotorInverted(true) 
+    .withMotorInverted(false) 
     .withClosedLoopRampRate(Seconds.of(0.25))
     .withOpenLoopRampRate(Seconds.of(0.25))
     .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.01))
@@ -216,10 +219,10 @@ public class Shooter extends SubsystemBase{
   }
 
   //Hood
-  public void manualHoodAdjust(boolean up, boolean down){
-    hoodIncrementation(up, down);
-    hoodController.setSetpoint(startingPos, ControlType.kMAXMotionPositionControl);
-    SmartDashboard.putNumber("Hood Angle :", startingPos);
+  public void hoodAdjust(){
+    double targetAngle = hoodMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude());
+    hoodController.setSetpoint(targetAngle, ControlType.kMAXMotionPositionControl);
+    SmartDashboard.putNumber("Hood Angle :", targetAngle);
   }
 
 

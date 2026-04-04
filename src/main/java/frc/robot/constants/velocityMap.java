@@ -8,11 +8,19 @@ public class velocityMap {
 
     public velocityMap(){
         // added 59.69cm offset to center of hub
-        mainMap.put(1.0,1200.0);
-        mainMap.put(1.5, 1350.0);
-        mainMap.put(2.0, 1550.0);
-        mainMap.put(2.5,1700.0);
-        mainMap.put(3.0,1850.0);
+        mainMap.put(1.45,1415.0);
+        mainMap.put(1.76,1435.0);
+        mainMap.put(2.07, 1445.0);
+        mainMap.put(2.38, 1465.0);
+        mainMap.put(2.69,1485.0);
+        mainMap.put(3.0,1500.0);
+        mainMap.put(3.31, 1530.0);
+        mainMap.put(4.0, 1650.0);
+        // mainMap.put(1.0,1200.0);
+        // mainMap.put(1.5, 1350.0);
+        // mainMap.put(2.0, 1550.0);
+        // mainMap.put(2.5,1700.0);
+        // mainMap.put(3.0,1850.0);
     }
 
     public static velocityMap getInstance(){

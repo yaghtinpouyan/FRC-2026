@@ -101,7 +101,7 @@ public class Vision extends SubsystemBase{
         cameraSim = new PhotonCameraSim(camera1, cameraProp);
         cameraPos1 = new Transform3d(
             new Translation3d(VisionConstants.frontCamPosX, VisionConstants.frontCamPosY, VisionConstants.frontCamPosZ), //Position of camera on the robot
-            new Rotation3d(0, VisionConstants.frontCamRotPitch, 0) //Rotate the camera POV
+            new Rotation3d(0, VisionConstants.frontCamRotPitch, VisionConstants.frontCamRotYaw) //Rotate the camera POV
         );
         cameraPos2 = new Transform3d(
             new Translation3d(VisionConstants.backCamPosX, VisionConstants.backCamPosY, VisionConstants.backCamPosZ), //Position of camera on the robot
@@ -124,9 +124,9 @@ public class Vision extends SubsystemBase{
         poseEstimator2 = new PhotonPoseEstimator(field, strat, cameraPos2);
 
         //Advantage Scope
-        as_aprilTags = NetworkTableInstance.getDefault().getStructArrayTopic("aprilTags", Pose3d.struct).publish();
-        as_cameraPose = NetworkTableInstance.getDefault().getStructTopic("cameraPose", Pose3d.struct).publish();
-        as_estimatedCameraPose = NetworkTableInstance.getDefault().getStructTopic("estimatedPose", Pose2d.struct).publish();
+       // as_aprilTags = NetworkTableInstance.getDefault().getStructArrayTopic("aprilTags", Pose3d.struct).publish();
+       // as_cameraPose = NetworkTableInstance.getDefault().getStructTopic("cameraPose", Pose3d.struct).publish();
+      //  as_estimatedCameraPose = NetworkTableInstance.getDefault().getStructTopic("estimatedPose", Pose2d.struct).publish();
     }
 
     //Main vision code

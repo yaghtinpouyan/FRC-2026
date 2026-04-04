@@ -5,11 +5,6 @@
 package frc.robot;
 
 import org.littletonrobotics.junction.LoggedRobot;
-
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.RobotContainer;
@@ -31,7 +26,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
-    //DataLogManager.start();
+
   }
 
   @Override
