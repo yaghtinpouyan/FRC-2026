@@ -15,8 +15,16 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.FeedbackSensor;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -42,6 +50,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 import yams.motorcontrollers.remote.TalonFXWrapper;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -55,8 +64,10 @@ public class Shooter extends SubsystemBase{
   private TalonFX Rshooter1;
   private TalonFX Rshooter2;
   private TalonFX kickerMotor;
+
   private SparkMax hoodMotor;
   private RelativeEncoder hoodEncoder;
+  private SparkClosedLoopController hoodController;
   
   private AutoAlign align = AutoAlign.getInstance();
   private Intake ballIntake = Intake.getInstance();
@@ -64,32 +75,26 @@ public class Shooter extends SubsystemBase{
   private velocityMap shootingVMap;
   public double shootingVolts = 3.5;
 
-  TalonFXConfiguration config1;
-  TalonFXConfiguration config2;
-  TalonFXConfiguration config3;
-  TalonFXConfiguration config4;
-
   private SmartMotorControllerConfig LmotorConfig;
   private SmartMotorControllerConfig RmotorConfig;
-  private SmartMotorControllerConfig HmotorConfig;
   private SmartMotorController shooterMotor1;
   private SmartMotorController shooterMotor2;
   private SmartMotorController shooterMotor3;
   private SmartMotorController shooterMotor4;
-  private SmartMotorController mainHood;
   public boolean isShooting = false;
 
   public double startingVal = 1500;
   private double shootingInc = 50;
-  public double startingPos = 15;
-  private double posInc = 0.5;
+  public double startingPos = 20;
+  private double posInc = 2.5;
+  private ClosedLoopConfig motionConfig;
 
   //Temp sysID stuff
-  private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-  private final MutAngle m_angle = Radians.mutable(0);
-  private final MutAngularVelocity m_velocity = RadiansPerSecond.mutable(0);
-  Direction currentDir = Direction.kForward;
-  private final SysIdRoutine hoodSysIdRoutine;
+  // private final MutVoltage m_appliedVoltage = Volts.mutable(0);
+  // private final MutAngle m_angle = Radians.mutable(0);
+  // private final MutAngularVelocity m_velocity = RadiansPerSecond.mutable(0);
+  // Direction currentDir = Direction.kForward;
+  // private final SysIdRoutine hoodSysIdRoutine;
 
   private Shooter() {
     //Motor inits
@@ -98,16 +103,36 @@ public class Shooter extends SubsystemBase{
     Rshooter1 = new TalonFX(idConstants.krakenx60_S4);
     Rshooter2 = new TalonFX(idConstants.krakenx60_S5);
     kickerMotor = new TalonFX(idConstants.faclon500_S1);
+    
     hoodMotor = new SparkMax(idConstants.neo550_S6, MotorType.kBrushless);
     hoodEncoder = hoodMotor.getEncoder();
+    SparkMaxConfig hoodConfig = new SparkMaxConfig();
+    hoodController = hoodMotor.getClosedLoopController();
 
+    hoodConfig.encoder.positionConversionFactor(360.0/1250.0)
+    .velocityConversionFactor(360.0/1250.0/60.0);
+
+    hoodConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+    .p(0.1)
+    .i(0)
+    .d(0)
+    .outputRange(-1, 1);
+
+    hoodConfig.closedLoop.maxMotion.cruiseVelocity(6000)
+    .maxAcceleration(5400)
+    .allowedProfileError(0.5)
+    .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
+    
+    hoodConfig.inverted(true);
+    hoodEncoder.setPosition(20);
+    hoodMotor.configure(hoodConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     //YAMS
     LmotorConfig = new SmartMotorControllerConfig(this)
     .withClosedLoopController(0.17053, 0, 0, RPM.of(3000), RotationsPerSecondPerSecond.of(3000))
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,1)))
     .withIdleMode(MotorMode.COAST)
-    .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
+    .withTelemetry("ShooterMotor1", TelemetryVerbosity.LOW)
     .withStatorCurrentLimit(Amps.of(80))
     .withSupplyCurrentLimit(Amps.of(40))
     .withMotorInverted(true)  //Inverted due to shooter orientation
@@ -120,64 +145,46 @@ public class Shooter extends SubsystemBase{
     .withClosedLoopController(0.17053, 0, 0, RPM.of(3000), RotationsPerSecondPerSecond.of(3000))
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,1)))
     .withIdleMode(MotorMode.COAST)
-    .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
+    .withTelemetry("ShooterMotor2", TelemetryVerbosity.LOW)
     .withStatorCurrentLimit(Amps.of(80))
     .withSupplyCurrentLimit(Amps.of(40))
-    .withMotorInverted(false) 
+    .withMotorInverted(true) 
     .withClosedLoopRampRate(Seconds.of(0.25))
     .withOpenLoopRampRate(Seconds.of(0.25))
-    .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.06718))
-    .withControlMode(ControlMode.CLOSED_LOOP);
-
-    HmotorConfig = new SmartMotorControllerConfig(this)
-    .withClosedLoopController(3.596, 0, 0, RPM.of(11000), RotationsPerSecondPerSecond.of(1500))
-    .withGearing(new MechanismGearing(GearBox.fromReductionStages(5,5,4)))
-    .withIdleMode(MotorMode.BRAKE)
-    .withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
-    .withStatorCurrentLimit(Amps.of(80))
-    .withSupplyCurrentLimit(Amps.of(20))
-    .withMotorInverted(false) 
-    .withClosedLoopRampRate(Seconds.of(0.25))
-    .withOpenLoopRampRate(Seconds.of(0.25))
-    .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.58565, 0.029957))
+    .withFeedforward(new SimpleMotorFeedforward(0.11706, 0.12336, 0.01))
     .withControlMode(ControlMode.CLOSED_LOOP);
 
     shooterMotor4 = new TalonFXWrapper(Rshooter2, DCMotor.getKrakenX60(1), RmotorConfig);
     shooterMotor2 = new TalonFXWrapper(Lshooter2, DCMotor.getKrakenX60(1), LmotorConfig);
     shooterMotor3 = new TalonFXWrapper(Rshooter1, DCMotor.getKrakenX60(1), RmotorConfig.withLooselyCoupledFollowers(shooterMotor4));
     shooterMotor1 = new TalonFXWrapper(Lshooter1, DCMotor.getKrakenX60(1), LmotorConfig.withLooselyCoupledFollowers(shooterMotor2, shooterMotor3)); 
-    mainHood = new SparkWrapper(hoodMotor, DCMotor.getNeo550(1), HmotorConfig);   
 
     //SysID
-    hoodSysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(
-          Volts.per(Second).of(1.5),
-          Volts.of(2),
-          Seconds.of(1)
-        ),
-        new SysIdRoutine.Mechanism(
-            voltage -> hoodMotor.setVoltage(voltage),
-            log -> {
-                log.motor("hood")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            hoodMotor.getBusVoltage(), Volts))
-                    .angularPosition(
-                        m_angle.mut_replace(
-                            hoodEncoder.getPosition(), Rotations))
-                    .angularVelocity(
-                        m_velocity.mut_replace(
-                            hoodEncoder.getVelocity(), RotationsPerSecond));
-            },
-    this));
+    // hoodSysIdRoutine = new SysIdRoutine(
+    //     new SysIdRoutine.Config(),
+    //     new SysIdRoutine.Mechanism(
+    //         voltage -> hoodMotor.setVoltage(voltage),
+    //         log -> {
+    //             log.motor("hood")
+    //                 .voltage(
+    //                     m_appliedVoltage.mut_replace(
+    //                         hoodMotor.getBusVoltage(), Volts))
+    //                 .angularPosition(
+    //                     m_angle.mut_replace(
+    //                         hoodEncoder.getPosition(), Rotations))
+    //                 .angularVelocity(
+    //                     m_velocity.mut_replace(
+    //                         hoodEncoder.getVelocity(), RotationsPerSecond));
+    //         },
+    // this));
   }
   
-  public void runHoodSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
-        if(toggleF) currentDir = Direction.kForward;
-        if(toggleR) currentDir = Direction.kReverse;
-        if(quat) hoodSysIdRoutine.quasistatic(currentDir).schedule();
-        if(dynamic) hoodSysIdRoutine.dynamic(currentDir).schedule();
-  }
+  // public void runHoodSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
+  //       if(toggleF) currentDir = Direction.kForward;
+  //       if(toggleR) currentDir = Direction.kReverse;
+  //       if(quat) hoodSysIdRoutine.quasistatic(currentDir).schedule();
+  //       if(dynamic) hoodSysIdRoutine.dynamic(currentDir).schedule();
+  // }
 
   public AngularVelocity getFlyWheelVel(){
     double targetDist = getVirtualTarget(align.getHubDist()); 
@@ -262,9 +269,9 @@ public class Shooter extends SubsystemBase{
 
   //Hood
   public void manualHoodAdjust(boolean up, boolean down){
-    mainHood.setPosition(Degrees.ofBaseUnits(startingPos));
     hoodIncrementation(up, down);
-    SmartDashboard.putNumber("Hood Angle :", startingVal);
+    hoodController.setSetpoint(startingPos, ControlType.kMAXMotionPositionControl);
+    SmartDashboard.putNumber("Hood Angle :", startingPos);
   }
 
 

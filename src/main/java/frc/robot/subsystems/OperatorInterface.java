@@ -30,15 +30,15 @@ public class OperatorInterface extends SubsystemBase{
     }
 
     private void updateShooter(){
-        ballShooter.shooterInputManager(
-            controller2.getLeftTriggerAxis(), 
-            controller2.getLeftBumperButton(), 
-            controller2.getYButtonPressed(), 
-            controller2.getAButtonPressed(), 
-            controller2.getBButton()
-        );
-
-        ballShooter.manualHoodAdjust(controller1.getYButtonPressed(), controller1.getAButtonPressed());
+        // ballShooter.shooterInputManager(
+        //     controller2.getLeftTriggerAxis(), 
+        //     controller2.getLeftBumperButton(), 
+        //     controller2.getYButtonPressed(), 
+        //     controller2.getAButtonPressed(), 
+        //     controller2.getBButton()
+        // );
+       ballShooter.manualHoodAdjust(controller1.getYButtonPressed(), controller1.getAButtonPressed());
+       //ballShooter.runHoodSysID(controller1.getRightBumperButtonPressed(), controller1.getLeftBumperButtonPressed(), controller1.getAButtonPressed(), controller1.getBButtonPressed());
     }
 
     private void updateVision(){
