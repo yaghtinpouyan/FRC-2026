@@ -4,10 +4,7 @@
 
 package frc.robot;
 
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.LoggedRobot;
-import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -22,29 +19,19 @@ import frc.robot.subsystems.Drive;
 public class Robot extends LoggedRobot {
   public Drive drivetrain;
   public OperatorInterface oi;
-  // public shooter ballShooter;
-  // public intake ballIntake;
-  // public climb climber;
-  // public autoAlign align;
   public RobotContainer rc;
   Command getAutonomousCommand;
-
-  private PowerDistribution pdh = new PowerDistribution(1, ModuleType.kRev);
 
   public Robot() {
     drivetrain = Drive.getInstance();
     oi = OperatorInterface.getInstance();
-    // ballIntake = intake.getInstance();
-    // align = autoAlign.getInstance();
-    // ballShooter = shooter.getInstance();
-    // climber = climb.getInstance();
     rc = new RobotContainer();
     getAutonomousCommand = rc.getAutonomousCommand();
   }
 
   @Override
   public void robotInit() {
-    DataLogManager.start();
+    //DataLogManager.start();
   }
 
   @Override

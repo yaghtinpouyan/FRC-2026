@@ -1,10 +1,20 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.FeedbackSensor;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.RPM;
@@ -28,14 +38,16 @@ public class Intake extends SubsystemBase{
     TalonFX intakeRollers;
     TalonFX indexer;
     SparkMax pivotMotor;
+    RelativeEncoder pivotEncoder;
+    SparkClosedLoopController pivotController;
     private final SmartMotorControllerConfig falconConfig;
     private SmartMotorController indexerSystem;
+
     public boolean isIntaking = false;
     
     private Intake(){
         intakeRollers = new TalonFX(idConstants.falcon500_I1);
         indexer = new TalonFX(idConstants.falcon500_I2);
-        pivotMotor = new SparkMax(idConstants.neo_I3, MotorType.kBrushless);
     
         falconConfig = new SmartMotorControllerConfig(this)
                             .withClosedLoopController(0.0001, 0, 0, RPM.of(6000), RotationsPerSecondPerSecond.of(100))
@@ -52,6 +64,30 @@ public class Intake extends SubsystemBase{
 
         // Arm Mechanism
         indexerSystem = new TalonFXWrapper(indexer, DCMotor.getFalcon500(1), falconConfig);
+
+        //pivot
+        pivotMotor = new SparkMax(idConstants.neo_I3, MotorType.kBrushless);
+        pivotEncoder = pivotMotor.getEncoder();
+        pivotController = pivotMotor.getClosedLoopController();
+        SparkMaxConfig pivotConfig = new SparkMaxConfig();
+
+        pivotConfig.encoder.positionConversionFactor(360.0/47.53)
+        .velocityConversionFactor(360.0/47.53/60.0);
+
+        pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .p(0.1)
+        .i(0)
+        .d(0)
+        .outputRange(-1, 1);
+
+        pivotConfig.closedLoop.maxMotion.cruiseVelocity(6000)
+        .maxAcceleration(6000)
+        .allowedProfileError(0.5)
+        .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
+        
+        pivotConfig.inverted(false);
+        pivotEncoder.setPosition(0);
+        pivotMotor.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     public void runIndexer(){
@@ -78,13 +114,11 @@ public class Intake extends SubsystemBase{
     }
 
     public void setPivot(int pov){
-        if(pov == 0) pivotMotor.setVoltage(3);
-        else if(pov == 180){
-            pivotMotor.setVoltage(-6);
+        if(pov == 0) pivotController.setSetpoint(0,ControlType.kMAXMotionPositionControl);
+        if(pov == 180){
+            pivotController.setSetpoint(115.5,ControlType.kMAXMotionPositionControl);
         }
-        else{
-            pivotMotor.set(0);
-        }
+        SmartDashboard.putNumber("Pivot Angle:", pivotEncoder.getPosition());
     }
 
     public Command runIntakeCommand(){

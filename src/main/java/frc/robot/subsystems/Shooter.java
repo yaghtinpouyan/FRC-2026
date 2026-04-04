@@ -1,19 +1,11 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
-import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
-import static edu.wpi.first.units.Units.Volts;
-
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
@@ -22,21 +14,14 @@ import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.MutAngle;
-import edu.wpi.first.units.measure.MutAngularVelocity;
-import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.constants.Constants;
 import frc.robot.constants.idConstants;
 import frc.robot.constants.velocityMap;
@@ -48,13 +33,10 @@ import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
-import yams.motorcontrollers.local.SparkWrapper;
 import yams.motorcontrollers.remote.TalonFXWrapper;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
-
 
 public class Shooter extends SubsystemBase{
   private static Shooter ballShooter = null;
@@ -87,14 +69,6 @@ public class Shooter extends SubsystemBase{
   private double shootingInc = 50;
   public double startingPos = 20;
   private double posInc = 2.5;
-  private ClosedLoopConfig motionConfig;
-
-  //Temp sysID stuff
-  // private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-  // private final MutAngle m_angle = Radians.mutable(0);
-  // private final MutAngularVelocity m_velocity = RadiansPerSecond.mutable(0);
-  // Direction currentDir = Direction.kForward;
-  // private final SysIdRoutine hoodSysIdRoutine;
 
   private Shooter() {
     //Motor inits
@@ -118,8 +92,8 @@ public class Shooter extends SubsystemBase{
     .d(0)
     .outputRange(-1, 1);
 
-    hoodConfig.closedLoop.maxMotion.cruiseVelocity(6000)
-    .maxAcceleration(5400)
+    hoodConfig.closedLoop.maxMotion.cruiseVelocity(11000)
+    .maxAcceleration(8000)
     .allowedProfileError(0.5)
     .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
     
@@ -158,33 +132,7 @@ public class Shooter extends SubsystemBase{
     shooterMotor2 = new TalonFXWrapper(Lshooter2, DCMotor.getKrakenX60(1), LmotorConfig);
     shooterMotor3 = new TalonFXWrapper(Rshooter1, DCMotor.getKrakenX60(1), RmotorConfig.withLooselyCoupledFollowers(shooterMotor4));
     shooterMotor1 = new TalonFXWrapper(Lshooter1, DCMotor.getKrakenX60(1), LmotorConfig.withLooselyCoupledFollowers(shooterMotor2, shooterMotor3)); 
-
-    //SysID
-    // hoodSysIdRoutine = new SysIdRoutine(
-    //     new SysIdRoutine.Config(),
-    //     new SysIdRoutine.Mechanism(
-    //         voltage -> hoodMotor.setVoltage(voltage),
-    //         log -> {
-    //             log.motor("hood")
-    //                 .voltage(
-    //                     m_appliedVoltage.mut_replace(
-    //                         hoodMotor.getBusVoltage(), Volts))
-    //                 .angularPosition(
-    //                     m_angle.mut_replace(
-    //                         hoodEncoder.getPosition(), Rotations))
-    //                 .angularVelocity(
-    //                     m_velocity.mut_replace(
-    //                         hoodEncoder.getVelocity(), RotationsPerSecond));
-    //         },
-    // this));
   }
-  
-  // public void runHoodSysID(boolean toggleF, boolean toggleR, boolean quat, boolean dynamic){
-  //       if(toggleF) currentDir = Direction.kForward;
-  //       if(toggleR) currentDir = Direction.kReverse;
-  //       if(quat) hoodSysIdRoutine.quasistatic(currentDir).schedule();
-  //       if(dynamic) hoodSysIdRoutine.dynamic(currentDir).schedule();
-  // }
 
   public AngularVelocity getFlyWheelVel(){
     double targetDist = getVirtualTarget(align.getHubDist()); 

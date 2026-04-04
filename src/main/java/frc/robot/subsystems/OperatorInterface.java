@@ -53,7 +53,7 @@ public class OperatorInterface extends SubsystemBase{
     public void periodic(){
         //updateDrive();
         //updateTelemetry();
-        //updateIntake();
+        updateIntake();
         updateShooter();
         //updateVision();
     }
