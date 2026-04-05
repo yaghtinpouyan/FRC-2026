@@ -71,17 +71,19 @@ public class Intake extends SubsystemBase{
         pivotController = pivotMotor.getClosedLoopController();
         SparkMaxConfig pivotConfig = new SparkMaxConfig();
 
-        pivotConfig.encoder.positionConversionFactor(360.0/47.53)
-        .velocityConversionFactor(360.0/47.53/60.0);
+        pivotConfig.encoder.positionConversionFactor(360/47.53)
+        .velocityConversionFactor(360/47.53/60.0);
 
         pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .p(0.01)
+        .p(0.08)
         .i(0)
-        .d(0)
-        .outputRange(-1, 1);
+        .d(0.02)
+        .feedForward.kV(0.02).kCos(0.79);
+        
+        pivotConfig.smartCurrentLimit(40);
 
-        pivotConfig.closedLoop.maxMotion.cruiseVelocity(6400)
-        .maxAcceleration(6400)
+        pivotConfig.closedLoop.maxMotion.cruiseVelocity(500)
+        .maxAcceleration(1000)
         .allowedProfileError(0.5)
         .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         
@@ -122,6 +124,15 @@ public class Intake extends SubsystemBase{
         }
     }
 
+    private double calcTargetAngle(){
+        if(Shooter.getInstance().isShooting){
+            return 80.0;
+        }
+        else{
+            return 0.0;
+        }
+    }
+
     public void setPivot(int pov){
         if(pov == 0){ 
             pivotMotor.setVoltage(calcPivotVolts());
@@ -136,6 +147,14 @@ public class Intake extends SubsystemBase{
             pivotMotor.setVoltage(0);
         }
         
+        SmartDashboard.putNumber("Pivot Angle:", pivotEncoder.getPosition());
+    }
+
+    public void setPivotAngle(int pov){
+        if(pov == 0) pivotController.setSetpoint(calcTargetAngle(),ControlType.kMAXMotionPositionControl);
+        if(pov == 180){
+            pivotController.setSetpoint(-120,ControlType.kMAXMotionPositionControl);
+        }
         SmartDashboard.putNumber("Pivot Angle:", pivotEncoder.getPosition());
     }
 

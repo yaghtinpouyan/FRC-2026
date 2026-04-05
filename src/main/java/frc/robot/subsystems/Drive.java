@@ -49,8 +49,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkMax;
 
 public class Drive extends SubsystemBase
 {
@@ -63,7 +61,6 @@ public class Drive extends SubsystemBase
   private Pose2d startingPose;
   private SlewRateLimiter xLim;
   private SlewRateLimiter yLim;
-  private SlewRateLimiter rotLim;
 
   public Drive()
   { 
@@ -107,7 +104,6 @@ public class Drive extends SubsystemBase
     
     xLim = new SlewRateLimiter(Constants.maxAcceleration);
     yLim = new SlewRateLimiter(Constants.maxAcceleration);
-    rotLim = new SlewRateLimiter(Constants.maxAcceleration);
 
     //Pathplanner config
     try {
@@ -289,19 +285,6 @@ public class Drive extends SubsystemBase
   {
     swerveDrive.zeroGyro();
   }
-
-  // public void zeroGyroWithAlliance()
-  // {
-  //   if (isRedAlliance())
-  //   {
-  //     zeroGyro();
-  //     //Set the pose 180 degrees
-  //     resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
-  //   } else
-  //   {
-  //     zeroGyro();
-  //   }
-  // }
 
   public void setMotorBrake(boolean brake)
   {
