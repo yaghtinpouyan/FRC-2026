@@ -7,7 +7,6 @@ public class hoodMap {
     public InterpolatingDoubleTreeMap mainMap = new InterpolatingDoubleTreeMap();
 
     public hoodMap(){
-        // added 59.69cm offset to center of hub
         mainMap.put(1.45,20.0);
         mainMap.put(1.76,22.0);
         mainMap.put(2.07, 24.0);

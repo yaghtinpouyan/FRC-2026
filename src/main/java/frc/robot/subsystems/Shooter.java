@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.hoodMap;
 import frc.robot.constants.idConstants;
+import frc.robot.constants.tofMap;
 import frc.robot.constants.velocityMap;
 import frc.robot.subsystems.automations.AutoAlign;
 import yams.gearing.GearBox;
@@ -176,7 +177,6 @@ public class Shooter extends SubsystemBase{
     }
 
     if(charge > 0.1){
-        //shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
         AngularVelocity vel = RPM.of(startingVal);
         shooterMotor1.setVelocity(vel);
         isShooting = true;
@@ -236,8 +236,7 @@ public class Shooter extends SubsystemBase{
     ChassisSpeeds chassisVel = telemetry.currentVelocity;
     double xVel = chassisVel.vxMetersPerSecond;
     double yVel = chassisVel.vyMetersPerSecond;
-    //Placeholder use actual flight time from the shooter map
-    double flightTime = hubDistance.in(Meters)*0.4;
+    double flightTime = tofMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude());
 
     double virtualTargetX = hubDistance.in(Meters) - (xVel*flightTime);
     double virtualTargetY = 0 - (yVel * flightTime);
