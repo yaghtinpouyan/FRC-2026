@@ -113,9 +113,18 @@ public class Intake extends SubsystemBase{
         }
     }
 
+    private double calcPivotVolts(){
+        if(Shooter.getInstance().isShooting){
+            return 0.5;
+        }
+        else{
+            return 3;
+        }
+    }
+
     public void setPivot(int pov){
         if(pov == 0){ 
-            pivotMotor.setVoltage(3);
+            pivotMotor.setVoltage(calcPivotVolts());
         //pivotController.setSetpoint(0,ControlType.kMAXMotionPositionControl);
         }
         if(pov == 180){

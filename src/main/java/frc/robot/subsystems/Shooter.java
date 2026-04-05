@@ -171,6 +171,7 @@ public class Shooter extends SubsystemBase{
         kickerMotor.setVoltage(10);
         ballIntake.runIndexer();
         isShooting = true;
+        ballIntake.setPivot(0); //Raise pivot when shooting
     }
 
     if(charge > 0.1){
