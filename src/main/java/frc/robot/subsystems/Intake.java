@@ -87,7 +87,7 @@ public class Intake extends SubsystemBase{
         .allowedProfileError(0.5)
         .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         
-        pivotConfig.inverted(true);
+        pivotConfig.inverted(false);
         pivotEncoder.setPosition(0);
         pivotMotor.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
@@ -134,11 +134,11 @@ public class Intake extends SubsystemBase{
     }
 
     public void setPivot(int pov){
-        if(pov == 0){ 
+        if(pov == 180){ 
             pivotMotor.setVoltage(calcPivotVolts());
         //pivotController.setSetpoint(0,ControlType.kMAXMotionPositionControl);
         }
-        if(pov == 180){
+        if(pov == 0){
             pivotMotor.setVoltage(-3);
             //pivotController.setSetpoint(115.5,ControlType.kMAXMotionPositionControl);
         }
