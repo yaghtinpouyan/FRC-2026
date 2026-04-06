@@ -172,7 +172,7 @@ public class Shooter extends SubsystemBase{
         kickerMotor.setVoltage(10);
         ballIntake.runIndexer();
         isShooting = true;
-        ballIntake.setPivotAngle(180); 
+        ballIntake.setPivotAngle(0); 
         //ballIntake.setPivot(0); //Raise pivot when shooting
     }
 
@@ -196,7 +196,7 @@ public class Shooter extends SubsystemBase{
       kickerMotor.setVoltage(10);
       ballIntake.runIndexer();
       isShooting = true;
-      ballIntake.setPivotAngle(180); 
+      ballIntake.setPivotAngle(0); 
       //ballIntake.setPivot(0); //Raise pivot when shooting
     }
     if(charge > 0.1){
