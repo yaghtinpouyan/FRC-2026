@@ -78,7 +78,7 @@ public class Intake extends SubsystemBase{
         .p(0.08)
         .i(0)
         .d(0.02)
-        .feedForward.kV(0.02).kCos(0.79);
+        .feedForward.kV(0.02).kG(0.79);
         
         pivotConfig.smartCurrentLimit(40);
 
