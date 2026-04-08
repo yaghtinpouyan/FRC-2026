@@ -172,14 +172,13 @@ public class Shooter extends SubsystemBase{
         kickerMotor.setVoltage(10);
         ballIntake.runIndexer();
         isShooting = true;
-        ballIntake.setPivot(0); 
         //ballIntake.setPivot(0); //Raise pivot when shooting
     }
 
     if(charge > 0.1){
         AngularVelocity vel = RPM.of(startingVal);
+         ballIntake.setPivotAngle(270); 
         shooterMotor1.setVelocity(vel);
-        isShooting = true;
     }  
     else{
         shooterMotor1.setVelocity(RPM.of(0));
@@ -195,16 +194,14 @@ public class Shooter extends SubsystemBase{
     if(isAtTargetMapSpeed()){
       kickerMotor.setVoltage(10);
       ballIntake.runIndexer();
-      isShooting = true;
-      ballIntake.setPivot(0); 
+      //ballIntake.setPivotAngle(0); 
       //ballIntake.setPivot(0); //Raise pivot when shooting
     }
     if(charge > 0.1){
-      isShooting = true;
       shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
+      ballIntake.setPivotAngle(270); 
     }  
     else{
-      isShooting = false;
       shooterMotor1.setVelocity(RPM.of(0));
       ballIntake.stopIndexer();
       kickerMotor.set(0);  
