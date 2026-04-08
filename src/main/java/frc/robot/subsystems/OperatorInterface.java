@@ -21,21 +21,21 @@ public class OperatorInterface extends SubsystemBase{
 
     private void updateDrive(){
         drivetrain.driveInputHandler(() -> -controller1.getRawAxis(1), 
-            () -> -controller1.getRawAxis(0), () -> -controller1.getRawAxis(4), controller1.getRightBumperButton());
+            () -> -controller1.getRawAxis(0), () -> -controller1.getRawAxis(4), controller1.getLeftBumperButton());
     }
 
     private void updateIntake(){
-        ballIntake.runRollers(controller1.getLeftTriggerAxis(), controller1.getLeftBumperButton());
-        ballIntake.setPivotAngle(controller1.getPOV());
+        ballIntake.runRollers(controller2.getRawAxis(3), controller2.getRawButton(6));
+        ballIntake.setPivot(controller2.getPOV());
     }
 
     private void updateShooter(){
         ballShooter.shooterInputManager(
-            controller1.getRightTriggerAxis(), 
-            controller1.getLeftBumperButton(), 
-            controller1.getYButtonPressed(), 
-            controller1.getAButtonPressed(), 
-            controller1.getBButton()
+            controller2.getLeftTriggerAxis(), 
+            controller2.getLeftBumperButton(), 
+            controller2.getYButtonPressed(), 
+            controller2.getAButtonPressed(), 
+            controller2.getBButton()
         );
        ballShooter.hoodAdjust();
     }
