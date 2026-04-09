@@ -72,7 +72,7 @@ public class Intake extends SubsystemBase{
         SparkMaxConfig pivotConfig = new SparkMaxConfig();
 
         pivotConfig.encoder.positionConversionFactor(360/47.53)
-        .velocityConversionFactor(360/47.53/60.0);
+        .velocityConversionFactor(360/47.53/60);
 
         pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(0.08)
@@ -81,8 +81,8 @@ public class Intake extends SubsystemBase{
         // .feedForward.kV(0.02);
 
 
-        pivotConfig.closedLoop.maxMotion.cruiseVelocity(10000)
-        .maxAcceleration(10000)
+        pivotConfig.closedLoop.maxMotion.cruiseVelocity(20000)
+        .maxAcceleration(20000)
         .allowedProfileError(0.5)
         .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         

@@ -199,7 +199,8 @@ public class Shooter extends SubsystemBase{
       //ballIntake.setPivot(0); //Raise pivot when shooting
     }
     if(charge > 0.1){
-      shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
+      //shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
+      shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(getVirtualTarget(align.getHubDist()))));
       ballIntake.setPivotAngle(270); 
     }  
     else{
