@@ -81,13 +81,13 @@ public class Intake extends SubsystemBase{
         // .feedForward.kV(0.02);
 
 
-        pivotConfig.closedLoop.maxMotion.cruiseVelocity(20000)
-        .maxAcceleration(20000)
-        .allowedProfileError(0.5)
+        pivotConfig.closedLoop.maxMotion.cruiseVelocity(40000)
+        .maxAcceleration(55000)
+        .allowedProfileError(2)
         .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         
         pivotConfig.inverted(true);
-        pivotEncoder.setPosition(0);
+        pivotEncoder.setPosition(5);
         pivotMotor.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
@@ -112,6 +112,19 @@ public class Intake extends SubsystemBase{
             intakeRollers.setVoltage(0);
             isIntaking = false;
         }
+    }
+
+    public void slowRollers(boolean input1){
+        if(input1) {
+            intakeRollers.setVoltage(-1.5);
+        }
+        else{
+            intakeRollers.setVoltage(0);
+        }
+    }
+
+    public void autoHomeIntake(boolean input1){
+        if(input1) pivotEncoder.setPosition(5);
     }
 
     private double calcPivotVolts(){
@@ -150,8 +163,12 @@ public class Intake extends SubsystemBase{
     }
 
     public void setPivotAngle(int pov){
-        if(pov == 0) pivotController.setSetpoint(5,ControlType.kMAXMotionPositionControl);
-        if(pov == 180) pivotController.setSetpoint(-115,ControlType.kMAXMotionPositionControl);
+        if(pov == 0) {
+            pivotController.setSetpoint(5,ControlType.kMAXMotionPositionControl);
+        }
+        if(pov == 180) {
+            pivotController.setSetpoint(-113,ControlType.kMAXMotionPositionControl);
+        }
         if(pov == 270) pivotController.setSetpoint(-75,ControlType.kMAXMotionPositionControl);
         SmartDashboard.putNumber("Pivot Angle:", pivotEncoder.getPosition());
     }

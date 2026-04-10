@@ -67,6 +67,7 @@ public class Shooter extends SubsystemBase{
   private SmartMotorController shooterMotor3;
   private SmartMotorController shooterMotor4;
   public boolean isShooting = false;
+  public Drive drivetrain = Drive.getInstance();
 
   public double startingVal = 1500;
   private double shootingInc = 50;
@@ -160,7 +161,7 @@ public class Shooter extends SubsystemBase{
   }
 
   public void shooterInputManager(double charge, boolean fire, boolean up, boolean down, boolean manual){
-    if(!manual) manualShooter(charge, fire, up, down);
+    if(manual) manualShooter(charge, fire, up, down);
     else{
       shooterMap(charge, fire);
     }
@@ -172,13 +173,12 @@ public class Shooter extends SubsystemBase{
         kickerMotor.setVoltage(10);
         ballIntake.runIndexer();
         isShooting = true;
-        //ballIntake.setPivot(0); 
-        //ballIntake.setPivot(0); //Raise pivot when shooting
+       // ballIntake.runRollers(0.3, false);
     }
 
     if(charge > 0.1){
         AngularVelocity vel = RPM.of(startingVal);
-         ballIntake.setPivotAngle(270); 
+        ballIntake.setPivotAngle(270); 
         shooterMotor1.setVelocity(vel);
     }  
     else{
@@ -195,12 +195,12 @@ public class Shooter extends SubsystemBase{
     if(isAtTargetMapSpeed()){
       kickerMotor.setVoltage(10);
       ballIntake.runIndexer();
-      //ballIntake.setPivotAngle(0); 
-      //ballIntake.setPivot(0); //Raise pivot when shooting
+      ballIntake.slowRollers(true);
+      drivetrain.lock();
     }
     if(charge > 0.1){
       //shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
-      shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(getVirtualTarget(align.getHubDist()))));
+      shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
       ballIntake.setPivotAngle(270); 
     }  
     else{
@@ -208,6 +208,10 @@ public class Shooter extends SubsystemBase{
       ballIntake.stopIndexer();
       kickerMotor.set(0);  
     }
+  }
+
+  public void getCurrentShooterRPM(){
+    SmartDashboard.putNumber("Live RPM:",shooterMotor1.getRotorVelocity().in(RPM));
   }
 
   public boolean isAtTargetSpeed(){
@@ -229,6 +233,10 @@ public class Shooter extends SubsystemBase{
     SmartDashboard.putNumber("Hood Angle :", targetAngle);
   }
 
+  
+  public void autoHomeHood(boolean input1){
+      if(input1) hoodEncoder.setPosition(20);
+  }
 
   private double getVirtualTarget(Distance hubDistance){
     telemetry = Telemetry.getInstance();
