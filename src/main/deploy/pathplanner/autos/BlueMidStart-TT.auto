@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red mid good"
+            "pathName": "BlueMidStart-TT01"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lowerPivot"
           }
         },
         {
@@ -15,12 +21,24 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "BlueMidStart-TT02"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
-                  "name": "lowerPivot"
+                  "name": "runIntake"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueMidStart-TT03"
           }
         },
         {
@@ -30,22 +48,16 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
+                  "waitTime": 10.0
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "charge"
+                  "name": "shoot"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
           }
         }
       ]

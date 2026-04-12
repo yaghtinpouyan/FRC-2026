@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4283629893238445,
-        "y": 3.97582443653618
+        "x": 3.4610738255033557,
+        "y": 4.045145413870246
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1783631278489746,
-        "y": 3.9760876143200643
+        "x": 3.5016554809824365,
+        "y": 4.8466331096153
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.481553973902729,
-        "y": 3.97582443653618
+        "x": 3.4610738255033557,
+        "y": 5.972774049212615
       },
       "prevControl": {
-        "x": 2.731553945780968,
-        "y": 3.9757058579557203
+        "x": 3.4343594562553315,
+        "y": 5.371700741075697
+      },
+      "nextControl": {
+        "x": 3.481364653241945,
+        "y": 6.429317673373689
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.0,
+        "y": 7.433713646532438
+      },
+      "prevControl": {
+        "x": 3.00453020133848,
+        "y": 7.788803131993307
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BlueTopStart-BT01 (Start)"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +50,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,7 +61,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "BlueMidStart-TT Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

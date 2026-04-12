@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.746834451901567,
+        "y": 3.548020134228188
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.783020134228188,
+        "y": 0.5145413870246083
+      },
+      "isLocked": false,
+      "linkedName": "RedBottomStart-BT01"
+    },
+    {
+      "anchor": {
+        "x": 11.92234899328859,
+        "y": 0.6261409395973159
+      },
+      "prevControl": {
+        "x": 11.090425055928414,
+        "y": 0.5652684563758384
+      },
+      "nextControl": {
+        "x": 12.9291642846645,
+        "y": 0.699810351161408
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 13.545615212527965,
+        "y": 0.9812304250559283
+      },
+      "prevControl": {
+        "x": 12.794854586129754,
+        "y": 0.6768680089485464
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 114.27444113443957
+  },
+  "reversed": false,
+  "folder": "RedBottomStart-BT Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}
