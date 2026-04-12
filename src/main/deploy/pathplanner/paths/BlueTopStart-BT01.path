@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.047081850533809,
-        "y": 4.029620403321471
+        "x": 4.0,
+        "y": 7.433713646532438
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.047081850533813,
-        "y": 4.029620403321471
+        "x": 5.0000000000000036,
+        "y": 7.433713646532438
+      },
+      "isLocked": false,
+      "linkedName": "BlueTopStart-BT01 (Start)"
+    },
+    {
+      "anchor": {
+        "x": 7.41778523489933,
+        "y": 7.06847874720358
+      },
+      "prevControl": {
+        "x": 6.885822699311723,
+        "y": 7.3258799741008085
+      },
+      "nextControl": {
+        "x": 8.046800894854588,
+        "y": 6.764116331096197
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 14.036927639383157,
-        "y": 4.029620403321471
+        "x": 7.793165548098434,
+        "y": 4.521979865771812
       },
       "prevControl": {
-        "x": 13.036927639383157,
-        "y": 4.029620403321471
+        "x": 7.813456375838927,
+        "y": 5.485794183445191
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BlueTopStart-BT01"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -88.66778014613037
   },
   "reversed": false,
-  "folder": "RedMidStart-BT Paths",
+  "folder": "BlueTopStart-TT Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

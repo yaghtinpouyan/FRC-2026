@@ -103,6 +103,7 @@ public class Shooter extends SubsystemBase{
     
     hoodConfig.inverted(true);
     hoodConfig.idleMode(IdleMode.kBrake);
+    hoodConfig.smartCurrentLimit(30);
     hoodEncoder.setPosition(20);
     hoodMotor.configure(hoodConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -216,14 +217,14 @@ public class Shooter extends SubsystemBase{
 
   public boolean isAtTargetSpeed(){
     AngularVelocity current = shooterMotor1.getRotorVelocity();
-    AngularVelocity targetSpeed = RPM.of(startingVal);
-    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence;
+    AngularVelocity targetSpeed = RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude()));
+    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence || current.in(RPM) > targetSpeed.in(RPM);
   }
 
   public boolean isAtTargetMapSpeed(){
     AngularVelocity current = shooterMotor1.getRotorVelocity();
     AngularVelocity targetSpeed = RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude()));
-    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence;
+    return Math.abs(current.in(RPM) - targetSpeed.in(RPM)) < Constants.shootingTolerence || current.in(RPM) > targetSpeed.in(RPM);
   }
 
   //Hood
@@ -232,12 +233,17 @@ public class Shooter extends SubsystemBase{
     hoodController.setSetpoint(targetAngle, ControlType.kMAXMotionPositionControl);
     SmartDashboard.putNumber("Hood Angle :", targetAngle);
   }
-
   
   public void autoHomeHood(boolean input1){
-      if(input1) hoodEncoder.setPosition(20);
-  }
-
+        if(input1) {
+            hoodMotor.setVoltage(-3);
+            if(hoodMotor.getOutputCurrent() > 35){
+                hoodMotor.setVoltage(0);
+                hoodEncoder.setPosition(20);
+                return;
+            }; 
+        }
+    }
   private double getVirtualTarget(Distance hubDistance){
     telemetry = Telemetry.getInstance();
     ChassisSpeeds chassisVel = telemetry.currentVelocity;

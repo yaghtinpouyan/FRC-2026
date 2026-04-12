@@ -3,32 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.047081850533809,
-        "y": 4.029620403321471
+        "x": 8.73668903803132,
+        "y": 3.56831096196868
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.047081850533813,
-        "y": 4.029620403321471
+        "x": 8.391744966442953,
+        "y": -0.1246196868008953
+      },
+      "isLocked": false,
+      "linkedName": "RedMidStart-BT02"
+    },
+    {
+      "anchor": {
+        "x": 11.92234899328859,
+        "y": 0.6058501118568234
+      },
+      "prevControl": {
+        "x": 10.92768553787151,
+        "y": 0.6161043742838042
+      },
+      "nextControl": {
+        "x": 12.906454138702463,
+        "y": 0.5957046979865765
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 14.036927639383157,
-        "y": 4.029620403321471
+        "x": 14.276085011185682,
+        "y": 1.4174832214765103
       },
       "prevControl": {
-        "x": 13.036927639383157,
-        "y": 4.029620403321471
+        "x": 14.032595078299776,
+        "y": 0.5348322147651002
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 127.67359333983046
   },
   "reversed": false,
   "folder": "RedMidStart-BT Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 90.88140399658215
   },
   "useDefaultConstraints": true
 }

@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.047081850533809,
-        "y": 4.029620403321471
+        "x": 13.048489932885907,
+        "y": 4.024854586129754
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.047081850533813,
-        "y": 4.029620403321471
+        "x": 13.697796420580255,
+        "y": 7.190223713647932
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RedMidStart-BT01 (Start)"
     },
     {
       "anchor": {
-        "x": 14.036927639383157,
-        "y": 4.029620403321471
+        "x": 11.90205816555101,
+        "y": 7.484440715883669
       },
       "prevControl": {
-        "x": 13.036927639383157,
-        "y": 4.029620403321471
+        "x": 13.291979865775373,
+        "y": 7.738076062639321
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RedMidStart-TT01"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,10 +47,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -178.7811247648686
   },
   "reversed": false,
-  "folder": "RedMidStart-BT Paths",
+  "folder": "RedMidStart-TT Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

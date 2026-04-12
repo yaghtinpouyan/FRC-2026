@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.047081850533809,
-        "y": 4.029620403321471
+        "x": 12.520928411633111,
+        "y": 7.433713646532438
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.047081850533813,
-        "y": 4.029620403321471
+        "x": 9.223668903803132,
+        "y": 7.616331096196868
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 14.036927639383157,
-        "y": 4.029620403321471
+        "x": 8.68596196868009,
+        "y": 4.521979865771812
       },
       "prevControl": {
-        "x": 13.036927639383157,
-        "y": 4.029620403321471
+        "x": 8.361308724832215,
+        "y": 7.058333333333333
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RedTopStart-TT01"
     }
   ],
   "rotationTargets": [],
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -88.66778014613037
   },
   "reversed": false,
-  "folder": "RedMidStart-BT Paths",
+  "folder": "RedTopStart-TT Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.68596196868009,
+        "y": 4.521979865771812
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 9.25410514541561,
+        "y": 6.5104809843420695
+      },
+      "isLocked": false,
+      "linkedName": "RedTopStart-TT01"
+    },
+    {
+      "anchor": {
+        "x": 11.902058165548098,
+        "y": 7.433713646532438
+      },
+      "prevControl": {
+        "x": 10.907807606265722,
+        "y": 7.433713646534463
+      },
+      "nextControl": {
+        "x": 12.940024056183784,
+        "y": 7.433713646530324
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 13.25139821029257,
+        "y": 7.301823266221264
+      },
+      "prevControl": {
+        "x": 12.358601789710912,
+        "y": 7.484440715885694
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -88.13162870255653
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -105.94539590092279
+  },
+  "reversed": false,
+  "folder": "RedTopStart-TT Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -88.66778014613037
+  },
+  "useDefaultConstraints": true
+}

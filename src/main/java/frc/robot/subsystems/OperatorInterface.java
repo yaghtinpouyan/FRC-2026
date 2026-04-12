@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.XboxController;
 public class OperatorInterface extends SubsystemBase{
     private static OperatorInterface oi = null;
     private XboxController controller1;
-    private XboxController controller2;
     private Drive drivetrain = Drive.getInstance();
     private Vision vision = Vision.getInstance();
     private Intake ballIntake = Intake.getInstance();
@@ -16,7 +15,6 @@ public class OperatorInterface extends SubsystemBase{
 
     private OperatorInterface(){
         controller1 = new XboxController(0);
-        controller2 = new XboxController(1);
     }
 
     private void updateDrive(){

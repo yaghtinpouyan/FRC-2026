@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.047081850533809,
-        "y": 4.029620403321471
+        "x": 13.160089485458613,
+        "y": 0.6565771812080539
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.047081850533813,
-        "y": 4.029620403321471
+        "x": 12.378892617449665,
+        "y": 0.656577181208054
+      },
+      "isLocked": false,
+      "linkedName": "RedMidStart-BT01"
+    },
+    {
+      "anchor": {
+        "x": 10.015011185682326,
+        "y": 0.6565771812080539
+      },
+      "prevControl": {
+        "x": 11.577404921700225,
+        "y": 0.646431767337807
+      },
+      "nextControl": {
+        "x": 8.370361930277737,
+        "y": 0.6672567218275651
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 14.036927639383157,
-        "y": 4.029620403321471
+        "x": 8.73668903803132,
+        "y": 3.56831096196868
       },
       "prevControl": {
-        "x": 13.036927639383157,
-        "y": 4.029620403321471
+        "x": 8.73668903803132,
+        "y": 2.340715883668904
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RedMidStart-BT02"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 90.88140399658215
   },
   "reversed": false,
   "folder": "RedMidStart-BT Paths",

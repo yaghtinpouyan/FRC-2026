@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.793165548098434,
+        "y": 4.521979865771812
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.965637583889437,
+        "y": 6.682953020129336
+      },
+      "isLocked": false,
+      "linkedName": "BlueTopStart-BT01"
+    },
+    {
+      "anchor": {
+        "x": 4.61765100671141,
+        "y": 7.393131991051454
+      },
+      "prevControl": {
+        "x": 6.3865778897126235,
+        "y": 7.515126948499812
+      },
+      "nextControl": {
+        "x": 3.7350000000000003,
+        "y": 7.332259507829978
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.2175838926174496,
+        "y": 7.180078299776286
+      },
+      "prevControl": {
+        "x": 3.897326621923937,
+        "y": 7.372841163310962
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -91.73570458892826
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -55.61965527615519
+  },
+  "reversed": false,
+  "folder": "BlueMidStart-TT Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -88.66778014613037
+  },
+  "useDefaultConstraints": true
+}

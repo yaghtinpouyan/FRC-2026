@@ -81,15 +81,15 @@ public class Intake extends SubsystemBase{
         .p(0.08)
         .i(0)
         .d(0.02);
-        // .feedForward.kV(0.02);
 
-
-        pivotConfig.closedLoop.maxMotion.cruiseVelocity(40000)
+        pivotConfig.closedLoop.maxMotion.cruiseVelocity(55000)
         .maxAcceleration(55000)
         .allowedProfileError(2)
         .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         
         pivotConfig.inverted(true);
+        pivotConfig.smartCurrentLimit(50);
+        pivotConfig.secondaryCurrentLimit(70);
         pivotEncoder.setPosition(5);
         pivotMotor.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
@@ -127,35 +127,23 @@ public class Intake extends SubsystemBase{
     }
 
     public void autoHomeIntake(boolean input1){
-        if(input1) pivotEncoder.setPosition(5);
-    }
-
-    private double calcPivotVolts(){
-        if(Shooter.getInstance().isShooting){
-            return 1.5;
-        }
-        else{
-            return 3;
-        }
-    }
-
-    private double calcTargetAngle(){
-        if(Shooter.getInstance().isShooting){
-            return -80;
-        }
-        else{
-            return 0.0;
+        if(input1) {
+            pivotMotor.setVoltage(3);
+            if(pivotMotor.getOutputCurrent() > 55){
+                pivotMotor.setVoltage(0);
+                pivotEncoder.setPosition(5);
+                return;
+            }; 
         }
     }
 
     public void setPivot(int pov){
         if(pov == 0){ 
-            pivotMotor.setVoltage(calcPivotVolts());
+            pivotMotor.setVoltage(3);
         //pivotController.setSetpoint(0,ControlType.kMAXMotionPositionControl);
         }
         if(pov == 180){
             pivotMotor.setVoltage(-3);
-            //pivotController.setSetpoint(115.5,ControlType.kMAXMotionPositionControl);
         }
 
         if(pov == -1 && (pivotEncoder.getPosition() >= 0 || pivotEncoder.getPosition() <= -120)){
