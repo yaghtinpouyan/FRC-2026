@@ -160,15 +160,15 @@ public class Shooter extends SubsystemBase{
     return velocityMap.getInstance().mainMap.get(distance.baseUnitMagnitude());
   }
 
-  public void shooterInputManager(double charge, boolean fire, boolean up, boolean down, boolean manual){
-    if(manual) manualShooter(charge, fire, up, down);
+  public void shooterInputManager(double charge, boolean up, boolean down, boolean manual){
+    if(manual) manualShooter(charge, up, down);
     else{
-      shooterMap(charge, fire);
+      shooterMap(charge);
     }
   }
 
   //Flywheel
-  public void manualShooter(double charge, boolean fire, boolean up, boolean down){
+  public void manualShooter(double charge, boolean up, boolean down){
     if(isAtTargetSpeed()){
         kickerMotor.setVoltage(10);
         ballIntake.runIndexer();
@@ -191,12 +191,12 @@ public class Shooter extends SubsystemBase{
     SmartDashboard.putNumber("Shooter RPM :", startingVal);
   }
 
-  public void shooterMap(double charge, boolean fire){
+  public void shooterMap(double charge){
     if(isAtTargetMapSpeed()){
       kickerMotor.setVoltage(10);
       ballIntake.runIndexer();
-      ballIntake.slowRollers(true);
-      drivetrain.lock();
+      //ballIntake.slowRollers(true);
+      //drivetrain.lock();
     }
     if(charge > 0.1){
       //shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
@@ -250,8 +250,8 @@ public class Shooter extends SubsystemBase{
     return Math.hypot(virtualTargetX, virtualTargetY);
   }
 
-  public Command shootInAuto(double charge, boolean fire){
-    return run(() -> shooterMap(charge, fire));
+  public Command shootInAuto(double charge){
+    return run(() -> shooterMap(charge));
   }
 
   public static Shooter getInstance(){

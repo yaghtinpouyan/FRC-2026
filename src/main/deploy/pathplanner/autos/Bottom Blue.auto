@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "lowerPivot"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Blue mid good"
+            "pathName": "BB 1"
           }
         },
         {
@@ -15,37 +21,30 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 2.0
+                  "pathName": "BB 2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "lowerPivot"
+                  "name": "runIntake"
                 }
               }
             ]
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 3.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
+            "pathName": "BB 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]

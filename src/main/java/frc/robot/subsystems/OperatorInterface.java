@@ -20,9 +20,10 @@ public class OperatorInterface extends SubsystemBase{
     }
 
     private void updateDrive(){
-        drivetrain.driveInputHandler(() -> -controller1.getRawAxis(1), 
-            () -> -controller1.getRawAxis(0), () -> -controller1.getRawAxis(4), controller1.getRightBumperButton());
+        drivetrain.driveInputHandler(() -> controller1.getRawAxis(1), 
+            () -> controller1.getRawAxis(0), () -> -controller1.getRawAxis(4), controller1.getRightBumperButton());
     }
+    //axis 0 is negative on blue and positive on red
 
     private void updateIntake(){
         ballIntake.runRollers(controller1.getLeftTriggerAxis(), controller1.getLeftBumperButton());
@@ -32,8 +33,7 @@ public class OperatorInterface extends SubsystemBase{
 
     private void updateShooter(){
         ballShooter.shooterInputManager(
-            controller1.getRightTriggerAxis(), 
-            controller1.getXButton(), 
+            controller1.getRightTriggerAxis(),  
             controller1.getYButtonPressed(), 
             controller1.getAButtonPressed(), 
             controller1.getBButton()

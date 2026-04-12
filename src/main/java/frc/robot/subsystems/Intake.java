@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
@@ -73,6 +74,8 @@ public class Intake extends SubsystemBase{
 
         pivotConfig.encoder.positionConversionFactor(360/47.53)
         .velocityConversionFactor(360/47.53/60);
+
+        pivotConfig.smartCurrentLimit(60);
 
         pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(0.08)
@@ -182,11 +185,11 @@ public class Intake extends SubsystemBase{
     }
 
     public Command raisePivot(){
-        return run(() -> pivotMotor.setVoltage(2.4));
+        return run(() -> setPivotAngle(0));
     }
 
     public Command lowerPivot(){
-        return run(() -> pivotMotor.setVoltage(-2.4));
+        return run(() -> setPivotAngle(180));
     }
 
     public static Intake getInstance(){
