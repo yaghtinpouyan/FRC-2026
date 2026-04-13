@@ -118,7 +118,7 @@ public class Vision extends SubsystemBase{
         targetModel = new TargetModel(t_Width, t_Height);
         
         //Pose estimation tools
-        strat = PoseStrategy.AVERAGE_BEST_TARGETS;
+        strat = PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
         poseEstimator1 = new PhotonPoseEstimator(field, strat, cameraPos1);
         poseEstimator2 = new PhotonPoseEstimator(field, strat, cameraPos2);
 

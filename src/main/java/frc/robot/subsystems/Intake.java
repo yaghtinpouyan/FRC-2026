@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
@@ -75,16 +74,18 @@ public class Intake extends SubsystemBase{
         pivotConfig.encoder.positionConversionFactor(360/47.53)
         .velocityConversionFactor(360/47.53/60);
 
-        pivotConfig.smartCurrentLimit(60);
+        pivotConfig.smartCurrentLimit(40);
+        pivotConfig.secondaryCurrentLimit(60);
+
 
         pivotConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(0.08)
         .i(0)
         .d(0.02);
 
-        pivotConfig.closedLoop.maxMotion.cruiseVelocity(55000)
-        .maxAcceleration(55000)
-        .allowedProfileError(2)
+        pivotConfig.closedLoop.maxMotion.cruiseVelocity(45000)
+        .maxAcceleration(65000)
+        .allowedProfileError(5)
         .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
         
         pivotConfig.inverted(true);
@@ -129,7 +130,7 @@ public class Intake extends SubsystemBase{
     public void autoHomeIntake(boolean input1){
         if(input1) {
             pivotMotor.setVoltage(3);
-            if(pivotMotor.getOutputCurrent() > 55){
+            if(pivotMotor.getOutputCurrent() > 35){
                 pivotMotor.setVoltage(0);
                 pivotEncoder.setPosition(5);
                 return;
@@ -143,7 +144,7 @@ public class Intake extends SubsystemBase{
         //pivotController.setSetpoint(0,ControlType.kMAXMotionPositionControl);
         }
         if(pov == 180){
-            pivotMotor.setVoltage(-3);
+            pivotMotor.setVoltage(-6);
         }
 
         if(pov == -1 && (pivotEncoder.getPosition() >= 0 || pivotEncoder.getPosition() <= -120)){
@@ -158,10 +159,14 @@ public class Intake extends SubsystemBase{
             pivotController.setSetpoint(5,ControlType.kMAXMotionPositionControl);
         }
         if(pov == 180) {
-            pivotController.setSetpoint(-113,ControlType.kMAXMotionPositionControl);
+            pivotController.setSetpoint(-115,ControlType.kMAXMotionPositionControl);
         }
         if(pov == 270) pivotController.setSetpoint(-75,ControlType.kMAXMotionPositionControl);
         SmartDashboard.putNumber("Pivot Angle:", pivotEncoder.getPosition());
+    }
+
+    public void shootingAutomation(double rpm){
+        if(rpm > 100) setPivotAngle(180);
     }
 
     public Command runIntakeCommand(){
@@ -173,11 +178,11 @@ public class Intake extends SubsystemBase{
     }
 
     public Command raisePivot(){
-        return run(() -> setPivotAngle(0));
+        return runOnce(() -> setPivotAngle(0));
     }
 
     public Command lowerPivot(){
-        return run(() -> setPivotAngle(180));
+        return runOnce(() -> setPivotAngle(180));
     }
 
     public static Intake getInstance(){

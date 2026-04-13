@@ -97,13 +97,14 @@ public class Shooter extends SubsystemBase{
     .outputRange(-1, 1);
 
     hoodConfig.closedLoop.maxMotion.cruiseVelocity(11000)
-    .maxAcceleration(8000)
+    .maxAcceleration(11000)
     .allowedProfileError(0.5)
     .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
     
     hoodConfig.inverted(true);
     hoodConfig.idleMode(IdleMode.kBrake);
-    hoodConfig.smartCurrentLimit(30);
+    hoodConfig.smartCurrentLimit(15);
+    hoodConfig.smartCurrentLimit(20);
     hoodEncoder.setPosition(20);
     hoodMotor.configure(hoodConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -197,17 +198,20 @@ public class Shooter extends SubsystemBase{
       kickerMotor.setVoltage(10);
       ballIntake.runIndexer();
       //ballIntake.slowRollers(true);
-      //drivetrain.lock();
+      drivetrain.lock();
     }
     if(charge > 0.1){
       //shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
       shooterMotor1.setVelocity(RPM.of(velocityMap.getInstance().mainMap.get(align.getHubDist().baseUnitMagnitude())));
       ballIntake.setPivotAngle(270); 
+      hoodAdjust();
     }  
     else{
       shooterMotor1.setVelocity(RPM.of(0));
+      hoodController.setSetpoint(20, ControlType.kMAXMotionPositionControl);
       ballIntake.stopIndexer();
-      kickerMotor.set(0);  
+      kickerMotor.set(0); 
+      ballIntake.shootingAutomation(shooterMotor1.getRotorVelocity().in(RPM));
     }
   }
 
@@ -237,12 +241,13 @@ public class Shooter extends SubsystemBase{
   public void autoHomeHood(boolean input1){
         if(input1) {
             hoodMotor.setVoltage(-3);
-            if(hoodMotor.getOutputCurrent() > 35){
+            if(hoodMotor.getOutputCurrent() > 0.001){
                 hoodMotor.setVoltage(0);
                 hoodEncoder.setPosition(20);
                 return;
             }; 
         }
+        SmartDashboard.putNumber("hoodCurrent", hoodMotor.getOutputCurrent());
     }
   private double getVirtualTarget(Distance hubDistance){
     telemetry = Telemetry.getInstance();

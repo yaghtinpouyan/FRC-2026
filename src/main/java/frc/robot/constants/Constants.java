@@ -23,7 +23,7 @@ public final class Constants {
   public static final double driveCircumferenceMeters = 0.2393893602;
 
   //YAGSL
-  public static final double maxDriveSpeed = Units.feetToMeters(14);
+  public static final double maxDriveSpeed = Units.feetToMeters(15);
   public static final double maxAcceleration = 5;
   public static final double maxVolts = 12;
   public static final Pose2d blueStartPose = new Pose2d(4, 7.4, Rotation2d.fromDegrees(0));
