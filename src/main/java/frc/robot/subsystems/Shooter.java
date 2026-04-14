@@ -262,7 +262,7 @@ public class Shooter extends SubsystemBase{
   }
 
   public Command shootInAuto(double charge){
-    return runOnce(() -> shooterMap(charge));
+    return run(() -> shooterMap(charge)).withTimeout(5);
   }
 
   public static Shooter getInstance(){

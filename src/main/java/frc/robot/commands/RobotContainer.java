@@ -17,7 +17,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("runIntake", Intake.getInstance().runIntakeCommand());
         NamedCommands.registerCommand("stopIntake", Intake.getInstance().stopIntakeCommand());
         NamedCommands.registerCommand("lowerPivot", Intake.getInstance().lowerPivot());
-        NamedCommands.registerCommand("shoot", Shooter.getInstance().shootInAuto(0.5));
+        NamedCommands.registerCommand("shoot", Shooter.getInstance().shootInAuto(0.9));
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
