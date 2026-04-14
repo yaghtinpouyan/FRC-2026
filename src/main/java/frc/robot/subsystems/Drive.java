@@ -207,6 +207,14 @@ public class Drive extends SubsystemBase
     double xVelocity = MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband);
     double yVelocity = MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband);
     double angularVelocity = MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband);
+
+    // Mirror translation inputs for Red alliance (field-oriented driving)
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+      xVelocity = -xVelocity;
+      yVelocity = -yVelocity;
+    }
+
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
                         Math.pow(xVelocity,3) * swerveDrive.getMaximumChassisVelocity(),
@@ -221,6 +229,14 @@ public class Drive extends SubsystemBase
     AutoAlign align = AutoAlign.getInstance();
     double xVelocity = xLim.calculate(MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband));
     double yVelocity = yLim.calculate(MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband));
+
+    // Mirror translation inputs for Red alliance (field-oriented driving)
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+      xVelocity = -xVelocity;
+      yVelocity = -yVelocity;
+    }
+
     Rotation2d hubHeading = align.getHubHeading();
     double angularVel = swerveDrive.getSwerveController().headingCalculate(swerveDrive.getOdometryHeading().getRadians(), hubHeading.getRadians());
 
