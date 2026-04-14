@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.35,
+    "maxAcceleration": 2.35,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -48,7 +48,7 @@
   "folder": "RedMidStart-TT Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -178.7811247648686
+    "rotation": -178.78112476486862
   },
   "useDefaultConstraints": true
 }

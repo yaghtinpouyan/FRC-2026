@@ -17,7 +17,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -29,9 +28,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-
-//import org.littletonrobotics.junction.Logger;
-
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -44,7 +40,6 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 //Pathplanner
-//Pathplanner imports
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -56,7 +51,6 @@ public class Drive extends SubsystemBase
   private SwerveDrive swerveDrive;
   private File directory = new File(Filesystem.getDeployDirectory(),"swerve2");
   private RobotConfig config;
-  public double scaledSpeed = 0.8;
   public boolean isRed;
   private Pose2d startingPose;
   private SlewRateLimiter xLim;
@@ -64,26 +58,12 @@ public class Drive extends SubsystemBase
 
   public Drive()
   { 
-    //YAGSL config
     var alliance = DriverStation.getAlliance();
-    if(alliance.get() == DriverStation.Alliance.Red){
-      startingPose = new Pose2d(new Translation2d(Meter.of(13.45),
-                                                  Meter.of(4)),
-                                                  Rotation2d.fromDegrees(180));
-    }
-    else if(alliance.isEmpty()){
-      startingPose = new Pose2d(new Translation2d(Meter.of(3.55),
-                                                  Meter.of(4)),
-                                                  Rotation2d.fromDegrees(0));
-    }
-    else{
-      startingPose = new Pose2d(new Translation2d(Meter.of(3.55),
-                                                  Meter.of(4)),
-                                                  Rotation2d.fromDegrees(0));
-    }
+    //YAGSL config
+    setDriverStationPose();
   
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
-    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
       swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.maxDriveSpeed, startingPose);
@@ -144,17 +124,46 @@ public class Drive extends SubsystemBase
     );
   }
 
-  public void scaleSpeed(){
-    if(Intake.getInstance().isIntaking){
-      scaledSpeed = 0.2;
+  private void setDriverStationPose(){
+    var alliance = DriverStation.getAlliance();
+    int location = DriverStation.getLocation().getAsInt();
+
+    if(alliance.get() == DriverStation.Alliance.Red){
+      switch(location){
+        case 1:
+          startingPose = Constants.redStartPose1;
+          break;
+        case 2:
+          startingPose = Constants.redStartPose2;
+          break;
+        case 3:
+          startingPose = Constants.redStartPose3;
+          break;
+        default:
+          startingPose = Constants.redStartPose1;
+          break;
+      }
     }
-    else if(Shooter.getInstance().isShooting){
-      scaledSpeed = 0.2;
-    }
+
     else{
-      scaledSpeed = 0.8;
+      switch(location){
+        case 1:
+          startingPose = Constants.blueStartPose1;
+          break;
+        case 2:
+          startingPose = Constants.blueStartPose2;
+          break;
+        case 3:
+          startingPose = Constants.blueStartPose3;
+          break;
+        default:
+          startingPose = Constants.blueStartPose1;
+          break;
+      }
     }
   }
+
+
 
   public Command sysIdDriveMotorCommand()
   {
@@ -200,8 +209,8 @@ public class Drive extends SubsystemBase
     double angularVelocity = MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband);
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                        Math.pow(xVelocity,1) * swerveDrive.getMaximumChassisVelocity(),
-                        Math.pow(yVelocity,1) * swerveDrive.getMaximumChassisVelocity()), 0.8),
+                        Math.pow(xVelocity,3) * swerveDrive.getMaximumChassisVelocity(),
+                        Math.pow(yVelocity,3) * swerveDrive.getMaximumChassisVelocity()), 0.8),
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);

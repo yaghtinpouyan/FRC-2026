@@ -120,7 +120,7 @@ public class Intake extends SubsystemBase{
 
     public void slowRollers(boolean input1){
         if(input1) {
-            intakeRollers.setVoltage(-1.5);
+            intakeRollers.setVoltage(-3);
         }
         else{
             intakeRollers.setVoltage(0);
@@ -129,7 +129,7 @@ public class Intake extends SubsystemBase{
 
     public void autoHomeIntake(boolean input1){
         if(input1) {
-            pivotMotor.setVoltage(3);
+            pivotMotor.setVoltage(6);
             if(pivotMotor.getOutputCurrent() > 35){
                 pivotMotor.setVoltage(0);
                 pivotEncoder.setPosition(5);

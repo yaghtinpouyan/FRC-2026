@@ -197,7 +197,7 @@ public class Shooter extends SubsystemBase{
     if(isAtTargetMapSpeed()){
       kickerMotor.setVoltage(10);
       ballIntake.runIndexer();
-      //ballIntake.slowRollers(true);
+      ballIntake.slowRollers(true);
       drivetrain.lock();
     }
     if(charge > 0.1){
@@ -262,7 +262,7 @@ public class Shooter extends SubsystemBase{
   }
 
   public Command shootInAuto(double charge){
-    return run(() -> shooterMap(charge));
+    return runOnce(() -> shooterMap(charge));
   }
 
   public static Shooter getInstance(){

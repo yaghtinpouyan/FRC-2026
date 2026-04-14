@@ -10,11 +10,12 @@ public class velocityMap {
         mainMap.put(1.45,1415.0);
         mainMap.put(1.76,1435.0);
         mainMap.put(2.07, 1445.0);
-        mainMap.put(2.38, 1505.0);
-        mainMap.put(2.45, 1510.0);
-        mainMap.put(2.69,1515.0);
-        mainMap.put(3.0,1540.0);
-        mainMap.put(3.31, 1580.0);
+        mainMap.put(2.38, 1490.0);
+        mainMap.put(2.45, 1500.0);
+        mainMap.put(2.69,1510.0);
+        mainMap.put(3.0,1530.0);
+        mainMap.put(3.31, 1550.0);
+        mainMap.put(3.6, 1590.0);
         mainMap.put(4.0, 1660.0);
     }
 
