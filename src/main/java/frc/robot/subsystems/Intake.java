@@ -159,7 +159,7 @@ public class Intake extends SubsystemBase{
             pivotController.setSetpoint(5,ControlType.kMAXMotionPositionControl);
         }
         if(pov == 180) {
-            pivotController.setSetpoint(-115,ControlType.kMAXMotionPositionControl);
+            pivotController.setSetpoint(-130,ControlType.kMAXMotionPositionControl);
         }
         if(pov == 270) pivotController.setSetpoint(-75,ControlType.kMAXMotionPositionControl);
         SmartDashboard.putNumber("Pivot Angle:", pivotEncoder.getPosition());

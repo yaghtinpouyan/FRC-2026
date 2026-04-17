@@ -87,8 +87,8 @@ public class Shooter extends SubsystemBase{
     SparkMaxConfig hoodConfig = new SparkMaxConfig();
     hoodController = hoodMotor.getClosedLoopController();
 
-    hoodConfig.encoder.positionConversionFactor(360.0/1250.0)
-    .velocityConversionFactor(360.0/1250.0/60.0);
+    hoodConfig.encoder.positionConversionFactor(360.0/900.0)
+    .velocityConversionFactor(360.0/900.0/60.0);
 
     hoodConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .p(0.01)

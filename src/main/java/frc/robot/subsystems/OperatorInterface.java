@@ -18,8 +18,8 @@ public class OperatorInterface extends SubsystemBase{
     }
 
     private void updateDrive(){
-        drivetrain.driveInputHandler(() -> -controller1.getRawAxis(1), 
-            () -> -controller1.getRawAxis(0), () -> -controller1.getRawAxis(4), controller1.getRightBumperButton());
+        drivetrain.driveInputHandler(() -> controller1.getRawAxis(1), 
+            () -> controller1.getRawAxis(0), () -> -controller1.getRawAxis(4), controller1.getRightBumperButton());
     }
     //axis 0 is negative on blue and positive on red
 
@@ -27,6 +27,9 @@ public class OperatorInterface extends SubsystemBase{
         ballIntake.runRollers(controller1.getLeftTriggerAxis(), controller1.getLeftBumperButton());
         ballIntake.setPivotAngle(controller1.getPOV());
         ballIntake.autoHomeIntake(controller1.getXButton());
+        // ballIntake.runRollers(controller2.getLeftTriggerAxis(), controller1.getLeftBumperButton());
+        // ballIntake.setPivotAngle(controller2.getPOV());
+        // ballIntake.autoHomeIntake(controller2.getXButton());
     }
 
     private void updateShooter(){
@@ -35,10 +38,13 @@ public class OperatorInterface extends SubsystemBase{
             controller1.getYButtonPressed(), 
             controller1.getAButtonPressed(), 
             controller1.getBButton()
+            // controller2.getRightTriggerAxis(),  
+            // controller2.getYButtonPressed(), 
+            // controller2.getAButtonPressed(), 
+            // controller2.getBButton()
         );
        ballShooter.getCurrentShooterRPM();
-       //ballShooter.hoodAdjust();
-      ballShooter.autoHomeHood(controller1.getRawButtonPressed(8)); 
+       ballShooter.autoHomeHood(controller1.getRawButtonPressed(8)); 
     }
 
     private void updateVision(){

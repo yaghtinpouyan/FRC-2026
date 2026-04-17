@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -55,6 +56,7 @@ public class Drive extends SubsystemBase
   private Pose2d startingPose;
   private SlewRateLimiter xLim;
   private SlewRateLimiter yLim;
+  private double invertDrive = 1;
 
   public Drive()
   { 
@@ -143,6 +145,7 @@ public class Drive extends SubsystemBase
           startingPose = Constants.redStartPose1;
           break;
       }
+      invertDrive = 1.0;
     }
 
     else{
@@ -160,10 +163,9 @@ public class Drive extends SubsystemBase
           startingPose = Constants.blueStartPose1;
           break;
       }
+      invertDrive = -1.0;
     }
   }
-
-
 
   public Command sysIdDriveMotorCommand()
   {
@@ -208,17 +210,10 @@ public class Drive extends SubsystemBase
     double yVelocity = MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband);
     double angularVelocity = MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband);
 
-    // Mirror translation inputs for Red alliance (field-oriented driving)
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      xVelocity = -xVelocity;
-      yVelocity = -yVelocity;
-    }
-
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                        Math.pow(xVelocity,3) * swerveDrive.getMaximumChassisVelocity(),
-                        Math.pow(yVelocity,3) * swerveDrive.getMaximumChassisVelocity()), 0.8),
+                        Math.pow(xVelocity*invertDrive,3) * swerveDrive.getMaximumChassisVelocity(),
+                        Math.pow(yVelocity*invertDrive,3) * swerveDrive.getMaximumChassisVelocity()), 0.8),
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
@@ -230,23 +225,23 @@ public class Drive extends SubsystemBase
     double xVelocity = xLim.calculate(MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband));
     double yVelocity = yLim.calculate(MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband));
 
-    // Mirror translation inputs for Red alliance (field-oriented driving)
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      xVelocity = -xVelocity;
-      yVelocity = -yVelocity;
-    }
-
     Rotation2d hubHeading = align.getHubHeading();
     double angularVel = swerveDrive.getSwerveController().headingCalculate(swerveDrive.getOdometryHeading().getRadians(), hubHeading.getRadians());
 
       // Make the robot move
         swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                            xVelocity * swerveDrive.getMaximumChassisVelocity(),
-                            yVelocity * swerveDrive.getMaximumChassisVelocity()), 0.8),
-                        Math.pow(angularVel, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
+                            xVelocity*invertDrive*swerveDrive.getMaximumChassisVelocity(),
+                            yVelocity*invertDrive*swerveDrive.getMaximumChassisVelocity()), 0.8),
+                        Math.pow(angularVel, 3)*swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
+  }
+
+  public void invertDrive(boolean input1){
+    if(input1){
+      invertDrive = -invertDrive;
+    }
+    SmartDashboard.putBoolean("Inverted", invertDrive < 0);
   }
 
   public void driveInputHandler(DoubleSupplier x, DoubleSupplier y, DoubleSupplier theta, boolean lock){
