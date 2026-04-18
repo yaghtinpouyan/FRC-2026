@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 public class OperatorInterface extends SubsystemBase{
     private static OperatorInterface oi = null;
     private XboxController controller1;
+    private XboxController controller2;
     private Drive drivetrain = Drive.getInstance();
     private Vision vision = Vision.getInstance();
     private Intake ballIntake = Intake.getInstance();
@@ -15,18 +16,21 @@ public class OperatorInterface extends SubsystemBase{
 
     private OperatorInterface(){
         controller1 = new XboxController(0);
+        controller2 = new XboxController(1);
     }
 
     private void updateDrive(){
         drivetrain.driveInputHandler(() -> controller1.getRawAxis(1), 
             () -> controller1.getRawAxis(0), () -> -controller1.getRawAxis(4), controller1.getRightBumperButton());
+
+        drivetrain.invertDrive(controller1.getYButtonPressed());
     }
     //axis 0 is negative on blue and positive on red
 
     private void updateIntake(){
-        ballIntake.runRollers(controller1.getLeftTriggerAxis(), controller1.getLeftBumperButton());
-        ballIntake.setPivotAngle(controller1.getPOV());
-        ballIntake.autoHomeIntake(controller1.getXButton());
+        ballIntake.runRollers(controller2.getLeftTriggerAxis(), controller2.getLeftBumperButton());
+        ballIntake.setPivotAngle(controller2.getPOV());
+        ballIntake.autoHomeIntake(controller2.getXButton());
         // ballIntake.runRollers(controller2.getLeftTriggerAxis(), controller1.getLeftBumperButton());
         // ballIntake.setPivotAngle(controller2.getPOV());
         // ballIntake.autoHomeIntake(controller2.getXButton());
@@ -34,17 +38,17 @@ public class OperatorInterface extends SubsystemBase{
 
     private void updateShooter(){
         ballShooter.shooterInputManager(
-            controller1.getRightTriggerAxis(),  
-            controller1.getYButtonPressed(), 
-            controller1.getAButtonPressed(), 
-            controller1.getBButton()
+            controller2.getRightTriggerAxis(),  
+            controller2.getYButtonPressed(), 
+            controller2.getAButtonPressed(), 
+            controller2.getBButton()
             // controller2.getRightTriggerAxis(),  
             // controller2.getYButtonPressed(), 
             // controller2.getAButtonPressed(), 
             // controller2.getBButton()
         );
        ballShooter.getCurrentShooterRPM();
-       ballShooter.autoHomeHood(controller1.getRawButtonPressed(8)); 
+       ballShooter.autoHomeHood(controller2.getRawButtonPressed(8)); 
     }
 
     private void updateVision(){

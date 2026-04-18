@@ -96,7 +96,7 @@ public class Vision extends SubsystemBase{
         cameraProp.setLatencyStdDevMs(latencySTD);
 
         camera1 = new PhotonCamera("cam1");
-        camera2 = new PhotonCamera("cam2");
+        camera2 = new PhotonCamera("rearCam");
         cameraSim = new PhotonCameraSim(camera1, cameraProp);
         cameraPos1 = new Transform3d(
             new Translation3d(VisionConstants.frontCamPosX, VisionConstants.frontCamPosY, VisionConstants.frontCamPosZ), //Position of camera on the robot

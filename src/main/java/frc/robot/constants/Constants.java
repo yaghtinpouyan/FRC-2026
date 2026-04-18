@@ -23,15 +23,15 @@ public final class Constants {
   public static final double driveCircumferenceMeters = 0.2393893602;
 
   //YAGSL
-  public static final double maxDriveSpeed = Units.feetToMeters(15);
+  public static final double maxDriveSpeed = Units.feetToMeters(13);
   public static final double maxAcceleration = 5;
   public static final double maxVolts = 12;
   public static final Pose2d blueStartPose1 = new Pose2d(4, 7.434, Rotation2d.fromDegrees(0));
   public static final Pose2d blueStartPose2 = new Pose2d(3.428, 3.976, Rotation2d.fromDegrees(0));
   public static final Pose2d blueStartPose3 = new Pose2d(4, 0.646, Rotation2d.fromDegrees(0));
   public static final Pose2d redStartPose1 = new Pose2d(13.047, 3.548, Rotation2d.fromDegrees(180));
-    public static final Pose2d redStartPose2 = new Pose2d(13.047, 4.030, Rotation2d.fromDegrees(180));
-      public static final Pose2d redStartPose3 = new Pose2d(13.047, 3.548, Rotation2d.fromDegrees(180));
+  public static final Pose2d redStartPose2 = new Pose2d(13.1, 4.030, Rotation2d.fromDegrees(180));
+  public static final Pose2d redStartPose3 = new Pose2d(13.047, 3.548, Rotation2d.fromDegrees(180));
   public static final double driveScaling = 0.8;
   public static final double deadband = 0.2;
 

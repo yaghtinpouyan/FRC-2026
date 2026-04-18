@@ -44,7 +44,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     getAutonomousCommand = rc.getAutonomousCommand();
-   getAutonomousCommand.schedule();
+   getAutonomousCommand.execute();
   }
 
   @Override
@@ -53,9 +53,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    if (getAutonomousCommand != null){
-      getAutonomousCommand.cancel();
-    }
   }
 
   @Override
