@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.automations.AutoAlign;
+import frc.robot.subsystems.Boundary;
 
 //Yagsl
 import java.io.File;
@@ -207,17 +208,30 @@ public class Drive extends SubsystemBase
 
   public void driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
   {
-    double xVelocity = MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband);
-    double yVelocity = MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband);
+    double xVelocity       = MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband);
+    double yVelocity       = MathUtil.applyDeadband(translationY.getAsDouble(), Constants.deadband);
     double angularVelocity = MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband);
 
-      // Make the robot move
-        swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                        Math.pow(xVelocity*invertDrive,3) * swerveDrive.getMaximumChassisVelocity(),
-                        Math.pow(yVelocity*invertDrive,3) * swerveDrive.getMaximumChassisVelocity()), 0.8),
-                        Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
-                        true,
-                        false);
+    Boundary boundary = Boundary.getInstance();
+
+    // Predictive wheel lock: if the joystick input would push the robot past
+    // the boundary wall, lock wheels immediately to prevent odometry drift
+    // (encoders would otherwise count movement that isn't actually happening).
+    // The driver can still rotate freely.
+    if (boundary.shouldLockWheels(xVelocity * invertDrive, yVelocity * invertDrive)) {
+      swerveDrive.lockPose();
+      return;
+    }
+
+    // Soft slowdown scalar when approaching a wall
+    double boundaryScalar = boundary.getSpeedScalar();
+
+    swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
+                      Math.pow(xVelocity * invertDrive, 3) * swerveDrive.getMaximumChassisVelocity() * boundaryScalar,
+                      Math.pow(yVelocity * invertDrive, 3) * swerveDrive.getMaximumChassisVelocity() * boundaryScalar), 0.8),
+                      Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
+                      true,
+                      false);
   }
   
   public void driveAlignedHub(DoubleSupplier translationX, DoubleSupplier translationY)
@@ -229,13 +243,22 @@ public class Drive extends SubsystemBase
     Rotation2d hubHeading = align.getHubHeading();
     double angularVel = swerveDrive.getSwerveController().headingCalculate(swerveDrive.getOdometryHeading().getRadians(), hubHeading.getRadians());
 
-      // Make the robot move
-        swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
-                            xVelocity*invertDrive*swerveDrive.getMaximumChassisVelocity(),
-                            yVelocity*invertDrive*swerveDrive.getMaximumChassisVelocity()), 0.8),
-                        Math.pow(angularVel, 3)*swerveDrive.getMaximumChassisAngularVelocity(),
-                        true,
-                        false);
+    Boundary boundary = Boundary.getInstance();
+
+    // Predictive wheel lock — same protection as driveCommand
+    if (boundary.shouldLockWheels(xVelocity * invertDrive, yVelocity * invertDrive)) {
+      swerveDrive.lockPose();
+      return;
+    }
+
+    double boundaryScalar = boundary.getSpeedScalar();
+
+    swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
+                          xVelocity * invertDrive * swerveDrive.getMaximumChassisVelocity() * boundaryScalar,
+                          yVelocity * invertDrive * swerveDrive.getMaximumChassisVelocity() * boundaryScalar), 0.8),
+                      Math.pow(angularVel, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
+                      true,
+                      false);
   }
 
   public void invertDrive(boolean input1){
