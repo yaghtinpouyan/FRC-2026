@@ -144,7 +144,8 @@ public class Drive extends SubsystemBase
           startingPose = Constants.redStartPose3;
           break;
         default:
-          startingPose = Constants.redStartPose1;
+          //startingPose = Constants.redStartPose1;
+          startingPose = new Pose2d(1.9812, 1.9812, Rotation2d.fromDegrees(0.0));
           break;
       }
       invertDrive = 1.0;
@@ -162,7 +163,8 @@ public class Drive extends SubsystemBase
           startingPose = Constants.blueStartPose3;
           break;
         default:
-          startingPose = Constants.blueStartPose1;
+          //startingPose = Constants.blueStartPose1;
+          startingPose = new Pose2d(1.9812, 1.9812, Rotation2d.fromDegrees(0.0));
           break;
       }
       invertDrive = -1.0;
