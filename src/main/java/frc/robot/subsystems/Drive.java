@@ -213,22 +213,22 @@ public class Drive extends SubsystemBase
     driveCommand(() -> {
       //vx is the X Velocity
       double vx = translationX.getAsDouble();
-      if (getPose().getX() > Units.inchesToMeters(6.4) && vx >= 0){
-        vx = restrictPid.calculate(getPose().getX(), Units.inchesToMeters(6.4));
+      if (getPose().getX() > Units.feetToMeters(6.4) && vx >= 0){
+        vx = restrictPid.calculate(getPose().getX(), Units.feetToMeters(6.4));
 
-      }else if (getPose().getX() < Units.inchesToMeters(-6.4) && vx <= 0){
-        vx = restrictPid.calculate(getPose().getX(), Units.inchesToMeters(-6.4));
+      }else if (getPose().getX() < Units.feetToMeters(-6.4) && vx <= 0){
+        vx = restrictPid.calculate(getPose().getX(), Units.feetToMeters(-6.4));
       }
       return vx;
     }, 
     () -> {
       //vy is the Y Velocit
       double vy = translationY.getAsDouble();
-      if (getPose().getY() > Units.inchesToMeters(6.4) && vy >= 0){
-        vy = restrictPid.calculate(getPose().getY(), Units.inchesToMeters(6.4));
+      if (getPose().getY() > Units.feetToMeters(6.4) && vy >= 0){
+        vy = restrictPid.calculate(getPose().getY(), Units.feetToMeters(6.4));
 
-      }else if (getPose().getY() < Units.inchesToMeters(-6.4) && vy <= 0){
-        vy = restrictPid.calculate(getPose().getY(), Units.inchesToMeters(-6.4));
+      }else if (getPose().getY() < Units.feetToMeters(-6.4) && vy <= 0){
+        vy = restrictPid.calculate(getPose().getY(), Units.feetToMeters(-6.4));
       }
 
       return vy;
@@ -250,6 +250,7 @@ public class Drive extends SubsystemBase
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
+    restrictDriveCmd(translationX, translationY, angularRotationX);
   }
   
   public void driveAlignedHub(DoubleSupplier translationX, DoubleSupplier translationY)
