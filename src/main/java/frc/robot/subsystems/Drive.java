@@ -250,7 +250,6 @@ public class Drive extends SubsystemBase
                         Math.pow(angularVelocity, 3) * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
-    restrictDriveCmd(translationX, translationY, angularRotationX);
   }
   
   public void driveAlignedHub(DoubleSupplier translationX, DoubleSupplier translationY)
@@ -281,7 +280,7 @@ public class Drive extends SubsystemBase
   public void driveInputHandler(DoubleSupplier x, DoubleSupplier y, DoubleSupplier theta, boolean lock){
     if(lock) driveAlignedHub(x,y);
     else{
-      driveCommand(x,y,theta);
+      restrictDriveCmd(x, y, theta);
     }
   }
 
