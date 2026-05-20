@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Meter;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,6 +60,7 @@ public class Drive extends SubsystemBase
   private SlewRateLimiter xLim;
   private SlewRateLimiter yLim;
   private double invertDrive = 1;
+  private PIDController restrictPid = new PIDController(0.1, 0, 0);
 
   public Drive()
   { 
@@ -208,6 +211,34 @@ public class Drive extends SubsystemBase
     swerveDrive.replaceSwerveModuleFeedforward(new SimpleMotorFeedforward(kS, kV, kA));
   }
 
+  public void restrictDriveCmd(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX){
+    
+    driveCommand(() -> {
+      //vx is the X Velocity
+      double vx = translationX.getAsDouble();
+      if (getPose().getX() > Units.inchesToMeters(6.4) && vx >= 0){
+        vx = restrictPid.calculate(getPose().getX(), Units.inchesToMeters(6.4));
+
+      }else if (getPose().getX() < Units.inchesToMeters(-6.4) && vx <= 0){
+        vx = restrictPid.calculate(getPose().getX(), Units.inchesToMeters(-6.4));
+      }
+      return vx;
+    }, 
+    () -> {
+      //vy is the Y Velocit
+      double vy = translationY.getAsDouble();
+      if (getPose().getY() > Units.inchesToMeters(6.4) && vy >= 0){
+        vy = restrictPid.calculate(getPose().getY(), Units.inchesToMeters(6.4));
+
+      }else if (getPose().getY() < Units.inchesToMeters(-6.4) && vy <= 0){
+        vy = restrictPid.calculate(getPose().getY(), Units.inchesToMeters(-6.4));
+      }
+
+      return vy;
+    }, 
+    angularRotationX);
+  }
+
   public void driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
   {
     double xVelocity       = MathUtil.applyDeadband(translationX.getAsDouble(), Constants.deadband);
@@ -215,7 +246,7 @@ public class Drive extends SubsystemBase
     double angularVelocity = MathUtil.applyDeadband(angularRotationX.getAsDouble(), Constants.deadband);
 
     Boundary boundary = Boundary.getInstance();
-
+  
     // Predictive wheel lock: if the joystick input would push the robot past
     // the boundary wall, lock wheels immediately to prevent odometry drift
     // (encoders would otherwise count movement that isn't actually happening).
