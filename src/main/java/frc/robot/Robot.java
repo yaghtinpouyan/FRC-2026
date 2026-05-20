@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.RobotContainer;
 import frc.robot.subsystems.OperatorInterface;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Boundary;
 
 public class Robot extends LoggedRobot {
   public Drive drivetrain;

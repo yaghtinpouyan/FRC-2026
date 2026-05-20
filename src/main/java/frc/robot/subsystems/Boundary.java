@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,6 +23,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * Prediction logic:
  *   predictedPos = currentPos + (inputDir * maxSpeed * PREDICT_DT)
  *   If that point is outside the boundary, the input is heading out → lock.
+ *
+ * NOTE — no circular init:
+ *   Drive calls Boundary.getInstance() from driveCommand().
+ *   Boundary MUST NOT call Drive.getInstance() in its constructor, or the two
+ *   singletons will deadlock each other during construction.
+ *   Drive is resolved lazily via getDrive() on the first actual method call,
+ *   by which point Drive is fully constructed.
  */
 public class Boundary extends SubsystemBase {
 
@@ -54,10 +60,15 @@ public class Boundary extends SubsystemBase {
 
   // ── Internal state ────────────────────────────────────────────────────────────
 
-  private final Drive drive;
+  /** Resolved lazily — DO NOT touch Drive in the constructor. */
+  private Drive drive = null;
 
-  /** Boundary centre in field coordinates, fixed at construction time. */
-  private final Translation2d centre;
+  /**
+   * Boundary centre in field coordinates.
+   * Set once on the first getDrive() call (i.e. first time a drive method runs),
+   * which is after Drive is fully constructed.
+   */
+  private Translation2d centre = null;
 
   /** Half-side length for wall-distance math. */
   private final double half = BOUNDARY_SIZE_M / 2.0;
@@ -68,11 +79,25 @@ public class Boundary extends SubsystemBase {
   // ── Constructor ───────────────────────────────────────────────────────────────
 
   public Boundary() {
-    drive = Drive.getInstance();
+    // Intentionally empty — Drive must not be accessed here.
+    // Drive() → Boundary.getInstance() → new Boundary() → Drive.getInstance()
+    // would create an infinite construction loop.
+    // getDrive() handles lazy init safely.
+  }
 
-    // Anchor the box to the robot's starting pose so it doesn't need
-    // hardcoded field coordinates.
-    centre = drive.getPose().getTranslation();
+  // ── Lazy Drive accessor ───────────────────────────────────────────────────────
+
+  /**
+   * Returns the Drive singleton, resolving it (and anchoring the boundary
+   * centre) on the very first call.  Safe to call any time after Drive's
+   * constructor has finished.
+   */
+  private Drive getDrive() {
+    if (drive == null) {
+      drive  = Drive.getInstance();
+      centre = drive.getPose().getTranslation();
+    }
+    return drive;
   }
 
   // ── SubsystemBase ─────────────────────────────────────────────────────────────
@@ -121,12 +146,12 @@ public class Boundary extends SubsystemBase {
     //   direction = (inputX, inputY) normalised
     //   magnitude = inputMag * maxSpeed (joystick [-1,1] maps to [0, maxSpeed])
     //   displacement = direction * magnitude * dt
-    double maxSpeed = drive.getSwerveDrive().getMaximumChassisVelocity();
+    double maxSpeed = getDrive().getSwerveDrive().getMaximumChassisVelocity();
     double scale    = inputMag * maxSpeed * PREDICT_DT;
     double dx = (fieldRelInputX / inputMag) * scale;
     double dy = (fieldRelInputY / inputMag) * scale;
 
-    Translation2d current   = drive.getPose().getTranslation();
+    Translation2d current   = getDrive().getPose().getTranslation();
     Translation2d predicted = new Translation2d(current.getX() + dx, current.getY() + dy);
 
     // Lock if the predicted point lands outside the boundary on either axis
@@ -146,7 +171,7 @@ public class Boundary extends SubsystemBase {
     double dist = getDistanceToNearestWall();
     if (dist >= SLOWDOWN_ZONE_M) return 1.0;
     if (dist <= 0.0)             return MIN_SCALAR;
-    double t = dist / SLOWDOWN_ZONE_M; // 0 → 1 as dist goes 0 → SLOWDOWN_ZONE_M
+    double t = dist / SLOWDOWN_ZONE_M;
     return MIN_SCALAR + t * (1.0 - MIN_SCALAR);
   }
 
@@ -155,7 +180,7 @@ public class Boundary extends SubsystemBase {
    * Positive = inside boundary; negative = already outside.
    */
   public double getDistanceToNearestWall() {
-    Translation2d pos = drive.getPose().getTranslation();
+    Translation2d pos = getDrive().getPose().getTranslation();
     double distLeft   = (pos.getX() - centre.getX()) + half;
     double distRight  = half - (pos.getX() - centre.getX());
     double distBottom = (pos.getY() - centre.getY()) + half;
@@ -165,7 +190,7 @@ public class Boundary extends SubsystemBase {
 
   /** True when the robot is fully inside the boundary box. */
   public boolean isInsideBoundary() {
-    Translation2d pos = drive.getPose().getTranslation();
+    Translation2d pos = getDrive().getPose().getTranslation();
     return Math.abs(pos.getX() - centre.getX()) <= half
         && Math.abs(pos.getY() - centre.getY()) <= half;
   }
