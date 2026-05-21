@@ -59,7 +59,7 @@ public class Drive extends SubsystemBase
   private SlewRateLimiter yLim;
   private double invertDrive = 1;
 
-  private PIDController restrictPid = new PIDController(0.1, 0, 0);
+  private PIDController restrictPid = new PIDController(0.01, 0, 0);
 
   public Drive()
   { 
